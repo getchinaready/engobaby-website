@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>英歌宝 2026 暑期课程表 · Engo Baby Summer Schedule</title>
+<meta name="description" content="英歌宝 Engo Baby 2026 暑期课程表 — 海豚组 / 企鹅组专属日历与每日排课时段。">
+<link rel="icon" href="logo.png">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Poppins:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --red:#EF4A4A;--yellow:#F4A81B;--green:#7BA84A;--blue:#3090D8;--blue-d:#1F6FB0;
+    --ink:#2B3A4A;--cream:#F7F3EC;--sky:#EAF5FD;
+    --morn:#F59E0B;--morn-bg:#FFF6E9;--morn-bd:#F8D49A;--morn-tx:#B45309;
+    --aft:#3090D8;--aft-bg:#EEF6FF;--aft-bd:#B6D8F6;--aft-tx:#1F6FB0;
+    --eve:#8B5CF6;--eve-bg:#F4F1FF;--eve-bd:#D6CDFB;--eve-tx:#6D28D9;
+    --trial-bg:#E6F8EC;--trial-tx:#15803D;--trial-bd:#9FE3B4;
+    --holi-bg:#FBF1DC;--holi-tx:#9A6512;--holi-bd:#EAD3A0;
+    --fz:"Poppins","Noto Sans SC",system-ui,sans-serif;
+    --fh:"Baloo 2","Noto Sans SC",system-ui,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:var(--fz);color:var(--ink);background:linear-gradient(180deg,#E9F4FC,#F3FAFE 340px,#F8FBFD);line-height:1.6;min-height:100vh}
+  h1,h2,h3,.fh{font-family:var(--fh)}
+  img{display:block;max-width:100%}
+  a{color:inherit;text-decoration:none}
+  .wrap{max-width:1200px;margin:0 auto;padding:0 18px}
+  .en{display:none}
+  html[lang="en"] .zh{display:none}
+  html[lang="en"] .en{display:inline}
+  html[lang="en"] .en.block{display:block}
+
+  header{position:sticky;top:0;background:rgba(255,255,255,.92);backdrop-filter:blur(10px);border-bottom:1px solid #e6edf2;z-index:30}
+  nav{display:flex;align-items:center;justify-content:space-between;height:66px}
+  .logo img{height:42px}
+  .navr{display:flex;gap:14px;align-items:center}
+  .back{font-weight:600;color:var(--blue)}
+  .lang{border:2px solid var(--blue);color:var(--blue);background:none;border-radius:99px;padding:6px 14px;font-weight:700;cursor:pointer;font-size:.85rem}
+  .lang:hover{background:var(--blue);color:#fff}
+
+  .hero{text-align:center;padding:52px 18px 8px}
+  .hero .summer{display:inline-block;background:linear-gradient(135deg,var(--yellow),#F6943A);color:#fff;font-weight:700;padding:6px 20px;border-radius:99px;font-size:.88rem;margin-bottom:16px;box-shadow:0 8px 18px rgba(244,168,27,.32)}
+  .hero h1{font-size:2.6rem;font-weight:800;color:var(--blue-d)}
+  .hero .term{display:inline-flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-top:18px}
+  .hero .term b{background:#fff;border:1px solid #e0ebf3;border-radius:99px;padding:9px 20px;font-size:.98rem;font-weight:600;color:#46586a;box-shadow:0 6px 16px rgba(31,111,176,.08)}
+  .hero .term b i{font-style:normal;color:var(--blue);font-weight:700}
+
+  /* TABS */
+  .tabwrap{display:flex;justify-content:center;margin:34px 0 24px}
+  .tabs{display:inline-flex;gap:6px;background:#fff;padding:8px;border-radius:99px;box-shadow:0 12px 30px rgba(31,111,176,.13);border:1px solid #e6edf2}
+  .tab{background:none;border:none;border-radius:99px;padding:13px 30px;font-weight:700;font-family:var(--fh);cursor:pointer;color:#7c8b98;transition:all .2s;font-size:1.1rem;white-space:nowrap}
+  .tab:hover{color:var(--blue-d);background:var(--sky)}
+  .tab.active{color:#fff}
+  .tab[data-panel="daily"].active{background:linear-gradient(135deg,#46A6E8,var(--blue));box-shadow:0 8px 18px rgba(48,144,216,.34)}
+  .tab[data-panel="dolphin"].active{background:linear-gradient(135deg,#46A6E8,#2879C4);box-shadow:0 8px 18px rgba(40,121,196,.34)}
+  .tab[data-panel="penguin"].active{background:linear-gradient(135deg,#3A4654,var(--ink));box-shadow:0 8px 18px rgba(43,58,74,.34)}
+
+  /* FILTER */
+  .filterbar{display:flex;align-items:center;justify-content:center;gap:14px;flex-wrap:wrap;background:#fff;border:1px solid #e6edf2;border-radius:18px;padding:18px 22px;margin-bottom:24px;box-shadow:0 10px 26px rgba(31,111,176,.09)}
+  .filterbar .fl{font-family:var(--fh);font-weight:700;font-size:1.08rem;color:var(--ink)}
+  .sectsel{font-family:var(--fz);font-weight:700;font-size:1.04rem;color:var(--blue-d);background:var(--sky);border:2px solid var(--blue);border-radius:13px;padding:11px 44px 11px 20px;cursor:pointer;outline:none;appearance:none;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%231F6FB0' stroke-width='3'><path d='M6 9l6 6 6-6'/></svg>");background-repeat:no-repeat;background-position:right 16px center}
+  .penguin-panel .sectsel{color:var(--ink);border-color:var(--ink);background-color:#eef0f2;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%232B3A4A' stroke-width='3'><path d='M6 9l6 6 6-6'/></svg>")}
+
+  /* LEGEND */
+  .legendbox{max-width:980px;margin:0 auto 26px;background:rgba(255,255,255,.72);border:1px dashed #cdddea;border-radius:16px;padding:13px 20px;display:flex;align-items:center;gap:16px;flex-wrap:wrap;justify-content:center}
+  .legendbox .cap{font-family:var(--fh);font-weight:700;color:#8a98a4;font-size:.86rem;letter-spacing:.05em}
+  .legendbox span.lg{display:inline-flex;align-items:center;gap:6px;font-size:.86rem;font-weight:600;color:#5b6b7a}
+  .sw{width:14px;height:14px;border-radius:5px;display:inline-block;flex:none}
+
+  .panel{display:none}
+  .panel.active{display:block;animation:fade .3s ease}
+  @keyframes fade{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:none}}
+
+  /* CALENDAR (week-rail layout, horizontal scroll keeps cells roomy) */
+  .month{background:#fff;border-radius:24px;box-shadow:0 18px 44px rgba(31,111,176,.11);margin-bottom:30px;overflow:hidden}
+  .mhead{padding:20px 28px;font-family:var(--fh);font-weight:800;font-size:1.5rem;color:#fff;letter-spacing:.02em}
+  .dolphin .mhead{background:linear-gradient(120deg,#4EAAE9,#2778C2)}
+  .penguin .mhead{background:linear-gradient(120deg,#3D4A58,#212c38)}
+  .calscroll{overflow-x:auto;padding:18px}
+  .calgrid{min-width:900px}
+  .calhead,.weekrow{display:grid;grid-template-columns:104px repeat(7,minmax(0,1fr));gap:8px}
+  .calhead{margin-bottom:8px}
+  .hcell{text-align:center;font-weight:700;font-size:.95rem;padding:8px 0;color:#8a98a4}
+  .hcell.we{color:var(--red)}
+  .hcell.rail{font-family:var(--fh);font-size:.9rem}
+  .dolphin .hcell.rail,.dolphin .hcell{color:#5B8FBF}
+  .penguin .hcell.rail,.penguin .hcell{color:#6b7682}
+  .weekrow{margin-bottom:8px}
+
+  .rail{border-radius:14px;padding:10px 8px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:9px;text-align:center}
+  .dolphin .rail{background:#EEF6FD}
+  .penguin .rail{background:#F0F2F4}
+  .rail .wk{font-family:var(--fh);font-weight:800;font-size:1rem;width:100%;padding-bottom:5px;border-bottom:2px solid rgba(0,0,0,.07)}
+  .dolphin .rail .wk{color:#2778C2}
+  .penguin .rail .wk{color:var(--ink)}
+  .rail .mini{display:flex;flex-direction:column;gap:6px;width:100%}
+  .rail .lm{font-size:11.5px;font-weight:800;border-radius:7px;padding:4px 2px;border:1px solid}
+  .lm.morning{background:var(--morn-bg);color:var(--morn-tx);border-color:var(--morn-bd)}
+  .lm.afternoon{background:var(--aft-bg);color:var(--aft-tx);border-color:var(--aft-bd)}
+  .lm.evening{background:var(--eve-bg);color:var(--eve-tx);border-color:var(--eve-bd)}
+  .rail .rng{font-family:var(--fh);font-weight:800;font-size:.92rem}
+  .rail .dash{color:#cdd6de;font-weight:700;font-size:1.1rem}
+
+  .cell{min-height:130px;background:#fbfcfd;border:1px solid #eef2f5;border-radius:14px;padding:9px;display:flex;flex-direction:column;gap:5px;transition:transform .14s,box-shadow .14s}
+  .cell.has:hover{transform:translateY(-3px);box-shadow:0 12px 24px rgba(31,111,176,.14);z-index:2}
+  .cell.empty{background:transparent;border:none}
+  .cell .top{display:flex;align-items:center;justify-content:space-between;gap:4px}
+  .cell .dnum{font-weight:700;font-size:1rem;color:#aeb9c2;line-height:1}
+  .cell.has .dnum{color:var(--ink)}
+  .cell .stag{font-size:10px;font-weight:800;color:#fff;border-radius:6px;padding:2px 7px;letter-spacing:.01em}
+  .dolphin .stag{background:#3FA0E4}
+  .penguin .stag{background:#46525F}
+  .cell.trial{background:var(--trial-bg);border-color:var(--trial-bd)}
+  .cell.trial .dnum{color:var(--trial-tx)}
+  .cell.holi{background:var(--holi-bg);border-color:var(--holi-bd)}
+  .cell.holi .dnum{color:var(--holi-tx)}
+  .rangelabel{font-family:var(--fh);font-weight:800;font-size:.96rem;line-height:1.2;margin-top:auto;margin-bottom:auto}
+  .cell.trial .rangelabel{color:var(--trial-tx)}
+  .cell.holi .rangelabel{color:var(--holi-tx)}
+  .rangelabel small{display:block;font-size:.78rem;font-weight:600;opacity:.85;margin-top:1px}
+
+  .cb{display:flex;align-items:center;justify-content:center;gap:5px;border-radius:9px;font-size:12.5px;font-weight:800;padding:5px 4px;border:1px solid}
+  .cb .k{background:rgba(255,255,255,.75);border-radius:5px;padding:1px 7px}
+  .cb .amp{opacity:.4;font-size:10px}
+  .cb.morning{background:var(--morn-bg);color:var(--morn-tx);border-color:var(--morn-bd)}
+  .cb.afternoon{background:var(--aft-bg);color:var(--aft-tx);border-color:var(--aft-bd)}
+  .cb.evening{background:var(--eve-bg);color:var(--eve-tx);border-color:var(--eve-bd)}
+  .badge{font-size:11.5px;font-weight:700;border-radius:8px;padding:4px 8px;line-height:1.3;text-align:center}
+  .badge.opening{background:linear-gradient(120deg,#FDE3EE,#FBD8E6);color:#BE185D}
+  .badge.closing{background:linear-gradient(120deg,#FEEFC8,#FBE2BD);color:#B45309}
+  .badge.camp{background:linear-gradient(120deg,#E7DAFB,#F7D9EC);color:#7C3AED;box-shadow:0 3px 8px rgba(124,58,237,.18)}
+  .badge.note{background:#F1F5F9;color:#7c8b98;font-weight:600;font-size:10.5px}
+
+  /* DAILY TABLE */
+  .daycard{background:#fff;border-radius:24px;box-shadow:0 18px 44px rgba(31,111,176,.11);overflow:hidden;margin-bottom:24px}
+  .dayhead{padding:22px 28px;font-family:var(--fh);font-weight:800;font-size:1.5rem;display:flex;align-items:center;gap:12px}
+  .dayhead.morning{background:linear-gradient(120deg,#FFF2E0,#FFE7CC);color:var(--morn-tx)}
+  .dayhead.afternoon{background:linear-gradient(120deg,#E9F3FF,#D9E9FB);color:var(--aft-tx)}
+  .dayhead.evening{background:linear-gradient(120deg,#F2EFFF,#E7E1FE);color:var(--eve-tx)}
+  .dayhead .tt{margin-left:auto;font-size:1.05rem;font-weight:600;opacity:.85;font-family:var(--fz)}
+  table{width:100%;border-collapse:collapse}
+  th,td{padding:17px 24px;text-align:left;font-size:1.12rem;border-bottom:1px solid #eef2f5}
+  th{font-size:.92rem;text-transform:uppercase;letter-spacing:.05em;color:#8a98a4;background:#fafbfc;font-weight:700}
+  tr:last-child td{border-bottom:none}
+  td.time{font-weight:700;color:var(--ink);white-space:nowrap;font-size:1.1rem}
+  .seg{font-weight:600;color:#5b6b7a}
+  .brk{color:#9aa7b2;font-style:italic}
+  .cp{display:inline-flex;align-items:center;gap:4px;border-radius:99px;padding:7px 17px;font-weight:800;font-size:1.05rem;margin:3px 7px 3px 0;box-shadow:0 2px 6px rgba(0,0,0,.05)}
+  .cp.d{border:1px solid #B6D8F6;background:var(--aft-bg);color:var(--aft-tx)}
+  .cp.p{border:1px solid #d3d9df;background:#f4f6f8;color:var(--ink)}
+  .note-foot{text-align:center;color:#6c7d8a;font-size:1rem;margin:18px auto 0;max-width:860px;line-height:1.75}
+  footer{background:#101b26;color:#7d8d9a;text-align:center;padding:32px;font-size:.86rem}
+
+  @media(max-width:760px){
+    .hero h1{font-size:1.7rem}
+    .tab{padding:11px 18px;font-size:.96rem}
+    .cell{min-height:118px}
+    th,td{padding:13px 13px;font-size:.98rem}
+    td.time{font-size:.95rem}
+    .cp{font-size:.96rem;padding:6px 13px}
+    .dayhead{font-size:1.25rem}
+    .dayhead .tt{display:none}
+    .filterbar .fl{font-size:1rem}
+  }
+</style>
+</head>
+<body>
+<header><div class="wrap"><nav>
+  <a href="index.html" class="logo"><img src="logo.png" alt="英歌宝 Engo Baby"></a>
+  <div class="navr">
+    <a href="index.html" class="back">← <span class="zh">返回首页</span><span class="en">Home</span></a>
+    <button class="lang" id="langBtn">EN</button>
+  </div>
+</nav></div></header>
+
+<div class="hero">
+  <span class="summer"><span class="zh">2026 暑期</span><span class="en">Summer 2026</span></span>
+  <h1><span class="zh">英歌宝暑期课程表</span><span class="en">Engo Baby Summer Schedule</span></h1>
+  <div class="term">
+    <b><span class="zh">🗓️ 课程时段：</span><span class="en">🗓️ Term: </span><i>7.13 – 8.23</i></b>
+    <b><span class="zh">🏖️ 放假：</span><span class="en">🏖️ Break: </span><i>8.4 – 8.10</i></b>
+    <b><span class="zh">⏱️ 共 36 课时</span><span class="en">36 sessions</span></b>
+  </div>
+</div>
+
+<div class="wrap">
+  <div class="tabwrap">
+    <div class="tabs">
+      <button class="tab active" data-panel="daily"><span class="zh">⏰ 每日时段</span><span class="en">⏰ Daily Slots</span></button>
+      <button class="tab" data-panel="dolphin"><span class="zh">🐬 海豚组</span><span class="en">🐬 Dolphin</span></button>
+      <button class="tab" data-panel="penguin"><span class="zh">🐧 企鹅组</span><span class="en">🐧 Penguin</span></button>
+    </div>
+  </div>
+
+  <div class="legendbox" id="legendCal">
+    <span class="cap"><span class="zh">图例</span><span class="en">LEGEND</span></span>
+    <span class="lg"><i class="sw" style="background:var(--morn)"></i><span class="zh">上午 1-2班</span><span class="en">Morning 1-2</span></span>
+    <span class="lg"><i class="sw" style="background:var(--aft)"></i><span class="zh">下午 3-4班</span><span class="en">Afternoon 3-4</span></span>
+    <span class="lg"><i class="sw" style="background:var(--eve)"></i><span class="zh">晚间 5-6班</span><span class="en">Evening 5-6</span></span>
+    <span class="lg"><i class="sw" style="background:var(--trial-bd)"></i><span class="zh">试听周</span><span class="en">Trial week</span></span>
+    <span class="lg"><i class="sw" style="background:var(--holi-bd)"></i><span class="zh">放假</span><span class="en">Break</span></span>
+    <span class="lg"><i class="sw" style="background:#F4A6C6"></i><span class="zh">开学典礼</span><span class="en">Opening</span></span>
+    <span class="lg"><i class="sw" style="background:#F3C778"></i><span class="zh">结课典礼</span><span class="en">Closing</span></span>
+    <span class="lg"><i class="sw" style="background:#C4A6F0"></i><span class="zh">户外营</span><span class="en">Camp</span></span>
+  </div>
+
+  <div class="panel active" id="panel-daily"></div>
+  <div class="panel" id="panel-dolphin"></div>
+  <div class="panel penguin-panel" id="panel-penguin"></div>
+</div>
+
+<footer>© 2026 Engo Baby 英歌宝　·　engobaby.com　·　<span class="zh">排班数据以学校最新通知为准</span><span class="en">Scheduling subject to the school's latest notice</span></footer>
+
+<script>
+/* ============== DATA ==============
+   🐬 dolphin = old apple group; 🐧 penguin = old orange group
+   class day -> session index (1..18); session text = 第(2n-1)-(2n)次 */
+var dolphinDays = {7:{13:1,15:2,17:3,20:4,22:5,24:6,26:7,27:8,29:9,31:10}, 8:{3:11,12:12,14:13,17:15,19:16,21:17,23:18}};
+var penguinDays = {7:{14:1,16:2,18:3,19:4,21:5,23:6,25:7,28:8,30:9}, 8:{1:10,2:11,11:12,13:13,15:14,18:16,20:17,22:18}};
+
+/* week markers (Mondays) -> shown in the left rail */
+var weekMarks = {'7-13':{zh:'第一周',en:'Week 1'},'7-20':{zh:'第二周',en:'Week 2'},'7-27':{zh:'第三周',en:'Week 3'},'8-3':{zh:'第四周',en:'Week 4'},'8-10':{zh:'第五周',en:'Week 5'},'8-17':{zh:'第六周',en:'Week 6'}};
+
+/* events shown inside day cells (camp + group ceremonies); notes kept subtle */
+var sharedEvents = {
+  '8-16':[{t:{zh:'🏕️ 外教户外营',en:'🏕️ Outdoor Camp'},c:'camp'}]
+};
+var groupEvents = {
+  dolphin:{'7-13':[{t:{zh:'🎉 开学典礼',en:'🎉 Opening'},c:'opening'}], '8-23':[{t:{zh:'🎓 结课典礼',en:'🎓 Closing'},c:'closing'}]},
+  penguin:{'7-14':[{t:{zh:'🎉 开学典礼',en:'🎉 Opening'},c:'opening'}], '8-22':[{t:{zh:'🎓 结课典礼',en:'🎓 Closing'},c:'closing'}]}
+};
+
+/* continuous colored ranges */
+var ranges = [
+  {m:7,from:6,to:12,cls:'trial',label:{zh:'暑期试听课',en:'Trial Classes'},note:{zh:'7.6 – 7.12',en:'Jul 6–12'},rail:{zh:'试听周',en:'Trial'}},
+  {m:8,from:4,to:10,cls:'holi',label:{zh:'全校休假',en:'School Break'},note:{zh:'8.4 – 8.10',en:'Aug 4–10'},rail:{zh:'放假',en:'Break'}}
+];
+
+var SECTIONS=[
+  {v:'all',zh:'全部班级',en:'All classes'},
+  {v:'morning',zh:'1–2 班 · 上午场',en:'Class 1–2 · Morning'},
+  {v:'afternoon',zh:'3–4 班 · 下午场',en:'Class 3–4 · Afternoon'},
+  {v:'evening',zh:'5–6 班 · 晚间场',en:'Class 5–6 · Evening'}
+];
+var SLOTS=[{key:'morning',c:['1','2'],lab:{zh:'上午',en:'AM'}},{key:'afternoon',c:['3','4'],lab:{zh:'下午',en:'PM'}},{key:'evening',c:['5','6'],lab:{zh:'晚间',en:'EVE'}}];
+var filters={dolphin:'all',penguin:'all'};
+
+var daily = [
+  {period:{zh:'上午场',en:'Morning'},cls:'morning',icon:'☀️',tt:'10:00 – 11:45',rows:[
+    {time:'10:00 - 10:45',seg:{zh:'第一节',en:'Lesson 1'},c:['1','2']},
+    {time:'10:45 - 11:00',seg:{zh:'课间',en:'Break'},brk:{zh:'休息 / 换教室',en:'Rest / change room'}},
+    {time:'11:00 - 11:45',seg:{zh:'第二节',en:'Lesson 2'},c:['1','2']}
+  ]},
+  {period:{zh:'下午场',en:'Afternoon'},cls:'afternoon',icon:'🌤️',tt:'16:00 – 17:45',rows:[
+    {time:'16:00 - 16:45',seg:{zh:'第一节',en:'Lesson 1'},c:['3','4']},
+    {time:'16:45 - 17:00',seg:{zh:'课间',en:'Break'},brk:{zh:'休息 / 换教室',en:'Rest / change room'}},
+    {time:'17:00 - 17:45',seg:{zh:'第二节',en:'Lesson 2'},c:['3','4']}
+  ]},
+  {period:{zh:'晚间场',en:'Evening'},cls:'evening',icon:'🌙',tt:'18:45 – 20:30',rows:[
+    {time:'18:45 - 19:30',seg:{zh:'第一节',en:'Lesson 1'},c:['5','6']},
+    {time:'19:30 - 19:45',seg:{zh:'课间',en:'Break'},brk:{zh:'休息 / 换教室',en:'Rest / change room'}},
+    {time:'19:45 - 20:30',seg:{zh:'第二节',en:'Lesson 2'},c:['5','6']}
+  ]}
+];
+
+var DOW=[{zh:'周一',en:'Mon'},{zh:'周二',en:'Tue'},{zh:'周三',en:'Wed'},{zh:'周四',en:'Thu'},{zh:'周五',en:'Fri'},{zh:'周六',en:'Sat',we:1},{zh:'周日',en:'Sun',we:1}];
+/* Mon-first offsets: July 1 2026 = Wed -> 2 blanks; Aug 1 = Sat -> 5 blanks */
+var months=[{m:7,name:{zh:'2026 年 7 月',en:'July 2026'},days:31,offset:2},{m:8,name:{zh:'2026 年 8 月',en:'August 2026'},days:31,offset:5}];
+
+function lang(){return document.documentElement.getAttribute('lang')==='en'?'en':'zh';}
+function L(o){return '<span class="zh">'+o.zh+'</span><span class="en">'+o.en+'</span>';}
+function rangeFor(m,day){for(var i=0;i<ranges.length;i++){var r=ranges[i];if(r.m===m&&day>=r.from&&day<=r.to)return r;}return null;}
+function classBadge(slot){return '<div class="cb '+slot.key+'"><span class="k">'+slot.c[0]+'<span class="zh">班</span></span><span class="amp">&</span><span class="k">'+slot.c[1]+'<span class="zh">班</span></span></div>';}
+
+window.setFilter=function(group,val){filters[group]=val;renderCalendar(group);};
+
+function renderCalendar(group){
+  var dayMap=group==='dolphin'?dolphinDays:penguinDays;
+  var gEv=groupEvents[group];
+  var f=filters[group];
+  var lg=lang();
+  var visSlots=SLOTS.filter(function(s){return f==='all'||f===s.key;});
+
+  var opts='';
+  SECTIONS.forEach(function(s){opts+='<option value="'+s.v+'"'+(s.v===f?' selected':'')+'>'+(lg==='en'?s.en:s.zh)+'</option>';});
+  var glabel=group==='dolphin'?{zh:'🐬 海豚组 · 选择班级查看：',en:'🐬 Dolphin · view by class:'}:{zh:'🐧 企鹅组 · 选择班级查看：',en:'🐧 Penguin · view by class:'};
+  var html='<div class="filterbar"><span class="fl">'+L(glabel)+'</span><select class="sectsel" onchange="setFilter(\''+group+'\',this.value)">'+opts+'</select></div>';
+
+  months.forEach(function(mo){
+    /* build day list with leading blanks, pad to full weeks */
+    var cells=[];
+    for(var i=0;i<mo.offset;i++) cells.push(null);
+    for(var d=1;d<=mo.days;d++) cells.push(d);
+    while(cells.length%7) cells.push(null);
+
+    html+='<div class="month '+group+'"><div class="mhead">'+(group==='dolphin'?'🐬 ':'🐧 ')+L(mo.name)+'</div>'+
+      '<div class="calscroll"><div class="calgrid">';
+    /* header */
+    html+='<div class="calhead"><div class="hcell rail">'+L({zh:'周次排期',en:'Week'})+'</div>';
+    DOW.forEach(function(d){html+='<div class="hcell'+(d.we?' we':'')+'">'+L(d)+'</div>';});
+    html+='</div>';
+
+    for(var w=0;w<cells.length;w+=7){
+      var week=cells.slice(w,w+7);
+      /* rail content */
+      var wk=null, rngLabel=null, hasClass=false;
+      week.forEach(function(day){
+        if(!day) return;
+        var key=mo.m+'-'+day;
+        if(weekMarks[key]) wk=weekMarks[key];
+        var rg=rangeFor(mo.m,day); if(rg) rngLabel=rg.rail;
+        if((dayMap[mo.m]||{})[day]) hasClass=true;
+      });
+      html+='<div class="weekrow"><div class="rail">';
+      if(wk) html+='<div class="wk">🚩 '+L(wk)+'</div>';
+      if(hasClass){
+        html+='<div class="mini">';
+        visSlots.forEach(function(s){html+='<div class="lm '+s.key+'">'+L(s.lab)+'</div>';});
+        html+='</div>';
+      } else if(rngLabel){ html+='<div class="rng">'+L(rngLabel)+'</div>'; }
+      if(!wk && !hasClass && !rngLabel) html+='<div class="dash">·</div>';
+      html+='</div>';
+      /* day cells */
+      week.forEach(function(day){
+        if(!day){html+='<div class="cell empty"></div>';return;}
+        var key=mo.m+'-'+day;
+        var rng=rangeFor(mo.m,day);
+        var ev=(sharedEvents[key]||[]).concat(gEv[key]||[]);
+        var s=(dayMap[mo.m]||{})[day];
+        var cls='cell'+((s||ev.length||rng)?' has':'')+(rng?' '+rng.cls:'');
+        html+='<div class="'+cls+'"><div class="top"><span class="dnum">'+day+'</span>';
+        if(s){html+='<span class="stag"><span class="zh">第'+(s*2-1)+'-'+(s*2)+'次</span><span class="en">No.'+(s*2-1)+'-'+(s*2)+'</span></span>';}
+        html+='</div>';
+        if(rng){
+          if(day===rng.from) html+='<div class="rangelabel">'+L(rng.label)+'<small>'+L(rng.note)+'</small></div>';
+        }
+        ev.forEach(function(e){html+='<div class="badge '+e.c+'">'+L(e.t)+'</div>';});
+        if(s){ visSlots.forEach(function(sl){html+=classBadge(sl);}); }
+        html+='</div>';
+      });
+      html+='</div>';
+    }
+    html+='</div></div></div>';
+  });
+  document.getElementById('panel-'+group).innerHTML=html;
+}
+
+function renderDaily(){
+  var html='';
+  daily.forEach(function(p){
+    html+='<div class="daycard"><div class="dayhead '+p.cls+'">'+p.icon+' '+L(p.period)+'<span class="tt">'+p.tt+'</span></div>'+
+      '<table><thead><tr><th>'+L({zh:'时间',en:'Time'})+'</th><th>'+L({zh:'节次',en:'Segment'})+'</th>'+
+      '<th>🐬 '+L({zh:'海豚组',en:'Dolphin'})+'</th><th>🐧 '+L({zh:'企鹅组',en:'Penguin'})+'</th></tr></thead><tbody>';
+    p.rows.forEach(function(r){
+      if(r.brk){
+        html+='<tr><td class="time">'+r.time+'</td><td class="seg">'+L(r.seg)+'</td><td colspan="2" class="brk">'+L(r.brk)+'</td></tr>';
+      }else{
+        var d=r.c.map(function(x){return '<span class="cp d">'+x+'<span class="zh">班</span></span>';}).join('');
+        var p2=r.c.map(function(x){return '<span class="cp p">'+x+'<span class="zh">班</span></span>';}).join('');
+        html+='<tr><td class="time">'+r.time+'</td><td class="seg">'+L(r.seg)+'</td><td>'+d+'</td><td>'+p2+'</td></tr>';
+      }
+    });
+    html+='</tbody></table></div>';
+  });
+  html+='<p class="note-foot">'+L({zh:'* 海豚组上课日：周一·三·五·日；企鹅组：周二·四·六·日。每次到校 2 课时（英语启蒙 1 节 + STEAM 1 节），每课时 45 分钟，具体以学校通知为准。',en:'* Dolphin: Mon·Wed·Fri·Sun; Penguin: Tue·Thu·Sat·Sun. Each visit = 2 sessions (English + STEAM), 45 min each. Times per school notice.'})+'</p>';
+  document.getElementById('panel-daily').innerHTML=html;
+}
+
+/* ============== INIT ============== */
+renderDaily(); renderCalendar('dolphin'); renderCalendar('penguin');
+var legend=document.getElementById('legendCal');
+var tabs=document.querySelectorAll('.tab');
+tabs.forEach(function(t){t.addEventListener('click',function(){
+  tabs.forEach(function(x){x.classList.remove('active');});
+  document.querySelectorAll('.panel').forEach(function(x){x.classList.remove('active');});
+  t.classList.add('active');
+  document.getElementById('panel-'+t.dataset.panel).classList.add('active');
+  legend.style.display=(t.dataset.panel==='daily')?'none':'flex';
+});});
+legend.style.display='none';
+var langBtn=document.getElementById('langBtn'),htmlEl=document.documentElement;
+langBtn.addEventListener('click',function(){
+  if(htmlEl.getAttribute('lang')==='zh'){htmlEl.setAttribute('lang','en');langBtn.textContent='中';}
+  else{htmlEl.setAttribute('lang','zh');langBtn.textContent='EN';}
+  renderCalendar('dolphin'); renderCalendar('penguin');
+});
+</script>
+</body>
+</html>
