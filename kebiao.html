@@ -151,16 +151,51 @@
   .note-foot{text-align:center;color:#6c7d8a;font-size:1rem;margin:18px auto 0;max-width:860px;line-height:1.75}
   footer{background:#101b26;color:#7d8d9a;text-align:center;padding:32px;font-size:.86rem}
 
+  /* MOBILE LIST VIEW (group calendars become a vertical list on phones) */
+  .cal-mobile{display:none}
+  .mob-month{font-family:var(--fh);font-weight:800;font-size:1.2rem;color:#fff;padding:13px 18px;border-radius:14px;margin:4px 0 14px}
+  .mob-month.dolphin{background:linear-gradient(120deg,#4EAAE9,#2778C2)}
+  .mob-month.penguin{background:linear-gradient(120deg,#3D4A58,#212c38)}
+  .mob-week{font-family:var(--fh);font-weight:800;color:#92400E;background:#FEF3C7;border-radius:10px;padding:7px 15px;margin:16px 0 8px;display:inline-block;font-size:.98rem}
+  .mob-range{border-radius:13px;padding:13px 16px;margin:10px 0;font-family:var(--fh);font-weight:800;font-size:1rem;line-height:1.3}
+  .mob-range.trial{background:var(--trial-bg);color:var(--trial-tx);border:1px solid var(--trial-bd)}
+  .mob-range.holi{background:var(--holi-bg);color:var(--holi-tx);border:1px solid var(--holi-bd)}
+  .mob-range.camp{background:linear-gradient(120deg,#E7DAFB,#F7D9EC);color:#7C3AED}
+  .mob-day{background:#fff;border:1px solid #eef2f5;border-radius:15px;padding:14px 15px;margin:9px 0;box-shadow:0 5px 14px rgba(31,111,176,.07)}
+  .mob-dh{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px}
+  .mob-date{font-family:var(--fh);font-weight:800;font-size:1.12rem;color:var(--ink)}
+  .mob-sess{font-size:13px;font-weight:800;color:#fff;border-radius:7px;padding:4px 11px;white-space:nowrap}
+  .mob-day.dolphin .mob-sess{background:#2879C4}
+  .mob-day.penguin .mob-sess{background:#46525F}
+  .mob-evs{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:10px}
+  .mob-evs .badge{font-size:13px;padding:5px 11px}
+  .mob-slots{display:flex;flex-direction:column;gap:8px}
+  .mslot{border-radius:11px;padding:11px 14px;font-weight:800;font-size:1.02rem;border:1px solid;display:flex;align-items:center;gap:8px}
+  .mslot b{font-weight:800}
+  .mslot.morning{background:var(--morn-bg);color:var(--morn-tx);border-color:var(--morn-bd)}
+  .mslot.afternoon{background:var(--aft-bg);color:var(--aft-tx);border-color:var(--aft-bd)}
+  .mslot.evening{background:var(--eve-bg);color:var(--eve-tx);border-color:var(--eve-bd)}
+
   @media(max-width:760px){
     .hero h1{font-size:1.7rem}
-    .tab{padding:11px 18px;font-size:.96rem}
-    .cell{min-height:118px}
-    th,td{padding:13px 13px;font-size:.98rem}
-    td.time{font-size:.95rem}
-    .cp{font-size:.96rem;padding:6px 13px}
-    .dayhead{font-size:1.25rem}
+    .tab{padding:11px 16px;font-size:.95rem}
+    .cal-desktop{display:none}
+    .cal-mobile{display:block}
+    .month{box-shadow:none;background:transparent;overflow:visible;margin-bottom:18px}
+    /* daily time-slot table: stack groups so nothing is cramped */
+    .daily-table thead{display:none}
+    .daily-table, .daily-table tbody, .daily-table tr, .daily-table td{display:block;width:100%}
+    .daily-table tr{padding:12px 16px;border-bottom:1px solid #eef2f5}
+    .daily-table td{border:none;padding:3px 0}
+    .daily-table td.time{font-size:1.05rem}
+    .daily-table td.grp::before{content:attr(data-g);font-weight:700;color:#8a98a4;margin-right:8px}
+    .cp{font-size:1rem;padding:7px 14px}
+    .dayhead{font-size:1.3rem}
     .dayhead .tt{display:none}
-    .filterbar .fl{font-size:1rem}
+    .legendbox{font-size:.9rem}
+    .filterbar{flex-direction:column;align-items:stretch}
+    .filterbar .fl{font-size:1.02rem;text-align:center}
+    .sectsel{width:100%}
   }
 </style>
 </head>
@@ -286,6 +321,7 @@ function renderCalendar(group){
   var glabel=group==='dolphin'?{zh:'🐬 海豚组 · 选择班级查看：',en:'🐬 Dolphin · view by class:'}:{zh:'🐧 企鹅组 · 选择班级查看：',en:'🐧 Penguin · view by class:'};
   var html='<div class="filterbar"><span class="fl">'+L(glabel)+'</span><select class="sectsel" onchange="setFilter(\''+group+'\',this.value)">'+opts+'</select></div>';
 
+  html+='<div class="cal-desktop">';
   months.forEach(function(mo){
     /* build day list with leading blanks, pad to full weeks */
     var cells=[];
@@ -342,14 +378,50 @@ function renderCalendar(group){
     }
     html+='</div></div></div>';
   });
+  html+='</div>'; /* close cal-desktop */
+  html+=buildMobileList(group);
   document.getElementById('panel-'+group).innerHTML=html;
+}
+
+var WD=[{zh:'周日',en:'Sun'},{zh:'周一',en:'Mon'},{zh:'周二',en:'Tue'},{zh:'周三',en:'Wed'},{zh:'周四',en:'Thu'},{zh:'周五',en:'Fri'},{zh:'周六',en:'Sat'}];
+function weekday(m,day){return WD[new Date(2026,m-1,day).getDay()];}
+function buildMobileList(group){
+  var dayMap=group==='dolphin'?dolphinDays:penguinDays;
+  var gEv=groupEvents[group];
+  var f=filters[group];
+  var vis=SLOTS.filter(function(s){return f==='all'||f===s.key;});
+  var ICON={morning:'☀️',afternoon:'🌤️',evening:'🌙'};
+  var html='<div class="cal-mobile">';
+  months.forEach(function(mo){
+    html+='<div class="mob-month '+group+'">'+(group==='dolphin'?'🐬 ':'🐧 ')+L(mo.name)+'</div>';
+    for(var day=1;day<=mo.days;day++){
+      var key=mo.m+'-'+day;
+      var rng=rangeFor(mo.m,day);
+      if(rng && day===rng.from) html+='<div class="mob-range '+rng.cls+'">'+L(rng.label)+'　·　'+L(rng.note)+'</div>';
+      if(weekMarks[key]) html+='<div class="mob-week">🚩 '+L(weekMarks[key])+'</div>';
+      var s=(dayMap[mo.m]||{})[day];
+      var shared=sharedEvents[key]||[];
+      if(!s){ shared.filter(function(e){return e.c==='camp';}).forEach(function(e){ html+='<div class="mob-range camp">'+L(e.t)+'　·　'+mo.m+'/'+day+'</div>'; }); }
+      if(s){
+        html+='<div class="mob-day '+group+'"><div class="mob-dh"><span class="mob-date">'+mo.m+'/'+day+'　'+L(weekday(mo.m,day))+'</span>'+
+          '<span class="mob-sess"><span class="zh">第'+(s*2-1)+'-'+(s*2)+'次</span><span class="en">No.'+(s*2-1)+'-'+(s*2)+'</span></span></div>';
+        var evs=shared.filter(function(e){return e.c!=='camp';}).concat(gEv[key]||[]);
+        if(evs.length){ html+='<div class="mob-evs">'; evs.forEach(function(e){html+='<span class="badge '+e.c+'">'+L(e.t)+'</span>';}); html+='</div>'; }
+        html+='<div class="mob-slots">';
+        vis.forEach(function(sl){ html+='<span class="mslot '+sl.key+'">'+ICON[sl.key]+' <b>'+L(sl.lab)+'</b> '+sl.c[0]+'·'+sl.c[1]+'<span class="zh">班</span></span>'; });
+        html+='</div></div>';
+      }
+    }
+  });
+  html+='</div>';
+  return html;
 }
 
 function renderDaily(){
   var html='';
   daily.forEach(function(p){
     html+='<div class="daycard"><div class="dayhead '+p.cls+'">'+p.icon+' '+L(p.period)+'<span class="tt">'+p.tt+'</span></div>'+
-      '<table><thead><tr><th>'+L({zh:'时间',en:'Time'})+'</th><th>'+L({zh:'节次',en:'Segment'})+'</th>'+
+      '<table class="daily-table"><thead><tr><th>'+L({zh:'时间',en:'Time'})+'</th><th>'+L({zh:'节次',en:'Segment'})+'</th>'+
       '<th>🐬 '+L({zh:'海豚组',en:'Dolphin'})+'</th><th>🐧 '+L({zh:'企鹅组',en:'Penguin'})+'</th></tr></thead><tbody>';
     p.rows.forEach(function(r){
       if(r.brk){
@@ -357,7 +429,7 @@ function renderDaily(){
       }else{
         var d=r.c.map(function(x){return '<span class="cp d">'+x+'<span class="zh">班</span></span>';}).join('');
         var p2=r.c.map(function(x){return '<span class="cp p">'+x+'<span class="zh">班</span></span>';}).join('');
-        html+='<tr><td class="time">'+r.time+'</td><td class="seg">'+L(r.seg)+'</td><td>'+d+'</td><td>'+p2+'</td></tr>';
+        html+='<tr><td class="time">'+r.time+'</td><td class="seg">'+L(r.seg)+'</td><td class="grp" data-g="🐬">'+d+'</td><td class="grp" data-g="🐧">'+p2+'</td></tr>';
       }
     });
     html+='</tbody></table></div>';
