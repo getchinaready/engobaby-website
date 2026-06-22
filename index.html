@@ -103,6 +103,20 @@
   .lv span{font-size:.9rem;color:#6b7a88}
   .units{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px}
   .units span{background:var(--sky);color:var(--blue-d);font-size:.82rem;font-weight:600;padding:6px 12px;border-radius:99px}
+  /* Level 1 units overview (shared, symmetric) */
+  .unit-overview{margin-top:30px;background:#fff;border:1px solid #eef2f5;border-radius:24px;padding:30px 32px;box-shadow:var(--shadow)}
+  .uo-title{font-family:var(--fh);font-weight:800;font-size:1.35rem;color:var(--ink);text-align:center;margin-bottom:4px}
+  .uo-sub{text-align:center;color:#8a98a4;font-size:.92rem;margin-bottom:22px}
+  .uo-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+  .uo-card{display:flex;align-items:center;gap:13px;background:var(--cream);border-radius:16px;padding:13px 16px}
+  .uo-n{flex:none;font-family:var(--fh);font-weight:800;font-size:.8rem;color:#fff;background:var(--blue-d);border-radius:9px;padding:7px 8px;min-width:58px;text-align:center;line-height:1.1}
+  .uo-themes{display:flex;flex-direction:column;gap:4px;min-width:0}
+  .uo-en,.uo-st{font-size:.95rem;font-weight:700;display:flex;align-items:center;gap:7px;line-height:1.25}
+  .uo-en{color:var(--blue-d)}
+  .uo-st{color:#5f8a2f}
+  .uo-en i,.uo-st i{font-style:normal;font-size:.66rem;font-weight:800;border-radius:6px;padding:2px 6px;flex:none}
+  .uo-en i{background:var(--sky);color:var(--blue-d)}
+  .uo-st i{background:#eef6e3;color:#5f8a2f}
 
   /* PROGRAM & PRICING */
   .setup-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;margin-top:42px}
@@ -193,7 +207,8 @@
 
   @media(max-width:900px){
     .hero .wrap,.about-grid,.cards2,.foot,.price-grid,.fac-grid{grid-template-columns:1fr}
-    .setup-grid,.why{grid-template-columns:1fr 1fr}
+    .setup-grid,.why,.uo-grid{grid-template-columns:1fr 1fr}
+    .unit-overview{padding:22px 18px}
     .hero-art{order:-1}
     .hero h1{font-size:2.5rem}
     h2.sec{font-size:1.9rem}
@@ -309,21 +324,30 @@
         </div>
       </div>
       <div class="ccard steam">
-        <div class="tag"><span class="zh">STEAM 全英文创新工坊</span><span class="en">All-English STEAM Workshop</span></div>
+        <div class="tag"><span class="zh">STEAM 创新工坊 · Level 1–3</span><span class="en">STEAM Workshop · L1–3</span></div>
         <p class="one"><span class="zh">在英文引导下动手实验、搭建、分类、观察与创作，理解世界并自然使用英语。</span><span class="en">Hands-on experiments, building, sorting, observing & creating — in English.</span></p>
         <p style="font-size:.86rem;color:var(--green);font-weight:600;margin-bottom:14px">👨‍🏫 <span class="zh">Devin 老师 · STEAM 创新工坊</span><span class="en">Teacher Devin · STEAM workshop</span></p>
-        <p style="font-size:.92rem;color:#6b7a88;margin-bottom:8px"><span class="zh">Level 1 共 9 个主题单元（每单元 3 课）：</span><span class="en">Level 1 — 9 themed units (3 lessons each):</span></p>
-        <div class="units">
-          <span><span class="zh">认识自我与他人</span><span class="en">Self & Others</span></span>
-          <span><span class="zh">身体计数</span><span class="en">Body & Counting</span></span>
-          <span><span class="zh">高矮排序</span><span class="en">Sorting by Height</span></span>
-          <span><span class="zh">颜色分类</span><span class="en">Color Sorting</span></span>
-          <span><span class="zh">形状识别与搭建</span><span class="en">Shapes & Building</span></span>
-          <span><span class="zh">比较与推理</span><span class="en">Compare & Reason</span></span>
-          <span><span class="zh">物质变化</span><span class="en">Material Change</span></span>
-          <span><span class="zh">空间思维</span><span class="en">Spatial Thinking</span></span>
-          <span><span class="zh">观察成长规律</span><span class="en">Growth Patterns</span></span>
+        <div class="levels">
+          <div class="lv"><span class="chip">Level 1</span><div><b><span class="zh">观察 · 分类 · 搭建</span><span class="en">Observe · Sort · Build</span></b><span class="zh">观察、配对、排序与简单搭建，自然输出单词与短语。</span><span class="en block">Observe, match, sort & simple building; output words & phrases.</span></div></div>
+          <div class="lv"><span class="chip">Level 2</span><div><b><span class="zh">实验 · 比较 · 记录</span><span class="en">Experiment · Compare · Record</span></b><span class="zh">测量、比较、预测与简单实验，能用短语做出判断。</span><span class="en block">Measure, compare, predict & simple experiments; judge with phrases.</span></div></div>
+          <div class="lv"><span class="chip">Level 3</span><div><b><span class="zh">设计 · 测试 · 展示</span><span class="en">Design · Test · Showcase</span></b><span class="zh">设计、测试、改进并展示作品，能说简单完整句。</span><span class="en block">Design, test, improve & present work; simple full sentences.</span></div></div>
         </div>
+      </div>
+    </div>
+
+    <div class="unit-overview">
+      <h3 class="uo-title"><span class="zh">Level 1 单元一览</span><span class="en">Level 1 Units at a Glance</span></h3>
+      <p class="uo-sub"><span class="zh">英语启蒙主题 × STEAM 探索主题 · 同步推进（每单元 3 课）</span><span class="en block">English theme × STEAM theme, advancing in sync (3 lessons each)</span></p>
+      <div class="uo-grid">
+        <div class="uo-card"><span class="uo-n">Intro</span><div class="uo-themes"><span class="uo-en"><i>启蒙</i><span class="zh">问候与介绍</span><span class="en">Greetings</span></span><span class="uo-st"><i>STEAM</i><span class="zh">认识自我与他人</span><span class="en">Self & Others</span></span></div></div>
+        <div class="uo-card"><span class="uo-n">Unit 1</span><div class="uo-themes"><span class="uo-en"><i>启蒙</i><span class="zh">我的身体</span><span class="en">My Body</span></span><span class="uo-st"><i>STEAM</i><span class="zh">身体计数</span><span class="en">Body & Counting</span></span></div></div>
+        <div class="uo-card"><span class="uo-n">Unit 2</span><div class="uo-themes"><span class="uo-en"><i>启蒙</i><span class="zh">我的家庭</span><span class="en">My Family</span></span><span class="uo-st"><i>STEAM</i><span class="zh">高矮排序</span><span class="en">Sorting by Height</span></span></div></div>
+        <div class="uo-card"><span class="uo-n">Unit 3</span><div class="uo-themes"><span class="uo-en"><i>启蒙</i><span class="zh">日常衣物</span><span class="en">Clothes</span></span><span class="uo-st"><i>STEAM</i><span class="zh">颜色分类</span><span class="en">Color Sorting</span></span></div></div>
+        <div class="uo-card"><span class="uo-n">Unit 4</span><div class="uo-themes"><span class="uo-en"><i>启蒙</i><span class="zh">我的玩具</span><span class="en">My Toys</span></span><span class="uo-st"><i>STEAM</i><span class="zh">形状识别与搭建</span><span class="en">Shapes & Building</span></span></div></div>
+        <div class="uo-card"><span class="uo-n">Unit 5</span><div class="uo-themes"><span class="uo-en"><i>启蒙</i><span class="zh">动物世界</span><span class="en">Animals</span></span><span class="uo-st"><i>STEAM</i><span class="zh">比较与推理</span><span class="en">Compare & Reason</span></span></div></div>
+        <div class="uo-card"><span class="uo-n">Unit 6</span><div class="uo-themes"><span class="uo-en"><i>启蒙</i><span class="zh">日常食物</span><span class="en">Food</span></span><span class="uo-st"><i>STEAM</i><span class="zh">物质变化</span><span class="en">Material Change</span></span></div></div>
+        <div class="uo-card"><span class="uo-n">Unit 7</span><div class="uo-themes"><span class="uo-en"><i>启蒙</i><span class="zh">家与教室</span><span class="en">Home & Class</span></span><span class="uo-st"><i>STEAM</i><span class="zh">空间思维</span><span class="en">Spatial Thinking</span></span></div></div>
+        <div class="uo-card"><span class="uo-n">Unit 8</span><div class="uo-themes"><span class="uo-en"><i>启蒙</i><span class="zh">自然与公园</span><span class="en">Nature & Park</span></span><span class="uo-st"><i>STEAM</i><span class="zh">观察成长规律</span><span class="en">Growth Patterns</span></span></div></div>
       </div>
     </div>
   </div>
