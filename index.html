@@ -135,6 +135,16 @@
   .pc-old{font-size:1.1rem;color:#aab4bd;text-decoration:line-through;font-weight:600}
   .pc p{font-size:.9rem;color:#6b7a88;margin-bottom:20px}
   .pc-ribbon{position:absolute;top:18px;right:-2px;background:var(--red);color:#fff;font-weight:700;font-size:.78rem;padding:5px 14px;border-radius:99px 0 0 99px}
+  /* PERKS / 优惠 */
+  .perks{margin-top:30px;background:linear-gradient(150deg,#FFF7E9,#FFF1F0);border:1px solid #FCE0C2;border-radius:24px;padding:30px 30px 24px}
+  .perks-head{text-align:center;font-family:var(--fh);font-weight:800;font-size:1.32rem;color:var(--red);margin-bottom:24px}
+  .perks-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+  .perk{background:#fff;border-radius:18px;padding:22px 20px;box-shadow:0 6px 16px rgba(244,168,27,.13);position:relative}
+  .perk-n{position:absolute;top:-13px;left:20px;width:34px;height:34px;border-radius:50%;background:var(--red);color:#fff;font-family:var(--fh);font-weight:800;font-size:1.05rem;display:grid;place-items:center;box-shadow:0 5px 12px rgba(239,74,74,.36)}
+  .perk b{display:block;font-family:var(--fh);font-size:1.08rem;color:var(--ink);margin:8px 0 8px}
+  .perk p{font-size:.92rem;color:#5b6b7a;line-height:1.6;margin:0}
+  .perk p b{display:inline;color:var(--red);font-size:1.04rem;margin:0}
+  .perks-note{text-align:center;color:#9a8a72;font-size:.84rem;margin:18px 0 0}
 
   /* SCHEDULE */
   .legend{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;margin:34px 0 40px}
@@ -206,9 +216,10 @@
   .copy{border-top:1px solid #21303d;margin-top:34px;padding-top:20px;text-align:center;font-size:.82rem;color:#6d7d8a}
 
   @media(max-width:900px){
-    .hero .wrap,.about-grid,.cards2,.foot,.price-grid,.fac-grid{grid-template-columns:1fr}
+    .hero .wrap,.about-grid,.cards2,.foot,.price-grid,.fac-grid,.perks-grid{grid-template-columns:1fr}
     .setup-grid,.why,.uo-grid{grid-template-columns:1fr 1fr}
     .unit-overview{padding:22px 18px}
+    .perks{padding:24px 18px}
     .hero-art{order:-1}
     .hero h1{font-size:2.5rem}
     h2.sec{font-size:1.9rem}
@@ -219,6 +230,7 @@
     .pro{padding:26px}
     section{padding:60px 0}
   }
+  @media(max-width:620px){.uo-grid{grid-template-columns:1fr}}
   @media(max-width:520px){.why{grid-template-columns:1fr}}
 </style>
 </head>
@@ -383,6 +395,29 @@
         <a href="#signup" class="btn" style="margin-top:auto"><span class="zh">立即报名</span><span class="en">Enroll Now</span></a>
       </div>
     </div>
+
+    <div class="perks">
+      <div class="perks-head"><span class="zh">🎁 先试听 · 再决定 · 三重福利省到底</span><span class="en block">🎁 Try first, then decide — three ways to save</span></div>
+      <div class="perks-grid">
+        <div class="perk">
+          <span class="perk-n">1</span>
+          <b><span class="zh">锁定名额</span><span class="en">Lock your spot</span></b>
+          <p><span class="zh">¥49.9 报名费锁试听名额；或 ¥400 定金锁正课名额（含试听，定金全额抵扣学费）。</span><span class="en block">¥49.9 holds a trial seat; or a ¥400 deposit reserves a class seat (incl. trial, fully credited to tuition).</span></p>
+        </div>
+        <div class="perk">
+          <span class="perk-n">2</span>
+          <b><span class="zh">现场报名再减 ¥100</span><span class="en">¥100 off on the spot</span></b>
+          <p><span class="zh">试听当天报名，早鸟价 ¥3999 立减 ¥100，到手价 <b>¥3899</b>。</span><span class="en block">Enroll on trial day: early-bird ¥3999 − ¥100 = <b>¥3899</b>.</span></p>
+        </div>
+        <div class="perk">
+          <span class="perk-n">3</span>
+          <b><span class="zh">同行推荐返现</span><span class="en">Referral cashback</span></b>
+          <p><span class="zh">带 1 / 2 / 3 名同行成功报名，双方各返 <b>¥100 / ¥200 / ¥300</b>。</span><span class="en block">Refer 1 / 2 / 3 friends who enroll — both sides get <b>¥100 / ¥200 / ¥300</b> each.</span></p>
+        </div>
+      </div>
+      <p class="perks-note"><span class="zh">* 具体优惠以最新招生通知为准，详情请添加微信 engo2026 咨询。</span><span class="en">* Offers subject to the latest enrollment notice; contact WeChat engo2026 for details.</span></p>
+    </div>
+
     <p class="slot-note"><span class="zh">* 报名即享 36 课时全部内容，含外教户外营与结课展示。名额有限，先到先得。</span><span class="en">* Enrollment includes all 36 sessions, the outdoor camp and the showcase. Limited seats.</span></p>
   </div>
 </section>
