@@ -40,7 +40,7 @@
 
   .hero{text-align:center;padding:52px 18px 8px}
   .hero .summer{display:inline-block;background:linear-gradient(135deg,var(--yellow),#F6943A);color:#fff;font-weight:700;padding:6px 20px;border-radius:99px;font-size:.88rem;margin-bottom:16px;box-shadow:0 8px 18px rgba(244,168,27,.32)}
-  .hero h1{font-size:2.6rem;font-weight:800;color:var(--blue-d)}
+  .hero h1{font-size:clamp(1.6rem,6.6vw,2.6rem);font-weight:800;color:var(--blue-d);text-wrap:balance}
   .hero .term{display:inline-flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-top:18px}
   .hero .term b{background:#fff;border:1px solid #e0ebf3;border-radius:99px;padding:9px 20px;font-size:.98rem;font-weight:600;color:#46586a;box-shadow:0 6px 16px rgba(31,111,176,.08)}
   .hero .term b i{font-style:normal;color:var(--blue);font-weight:700}
@@ -177,7 +177,6 @@
   .mslot.evening{background:var(--eve-bg);color:var(--eve-tx);border-color:var(--eve-bd)}
 
   @media(max-width:760px){
-    .hero h1{font-size:1.7rem}
     .tab{padding:11px 16px;font-size:.95rem}
     .cal-desktop{display:none}
     .cal-mobile{display:block}
