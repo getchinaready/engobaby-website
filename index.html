@@ -31,6 +31,7 @@
   html{scroll-behavior:smooth}
   body{font-family:var(--fz);color:var(--ink);background:var(--white);line-height:1.7;-webkit-font-smoothing:antialiased}
   h1,h2,h3,.brandfont{font-family:var(--fh);line-height:1.2}
+  h1,h2,h3,.eyebrow,.pc-tag,.su b,.perk b,.lv b,.fname,.ftitle,.tag,.slogan-strip{text-wrap:balance}
   img{max-width:100%;display:block}
   a{color:inherit;text-decoration:none}
   .wrap{max-width:1140px;margin:0 auto;padding:0 22px}
@@ -113,7 +114,7 @@
   .units span{background:var(--sky);color:var(--blue-d);font-size:.82rem;font-weight:600;padding:6px 12px;border-radius:99px}
   /* Level 1 units overview (shared, symmetric) */
   .unit-overview{margin-top:30px;background:#fff;border:1px solid #eef2f5;border-radius:24px;padding:30px 32px;box-shadow:var(--shadow)}
-  .uo-title{font-family:var(--fh);font-weight:800;font-size:1.35rem;color:var(--ink);text-align:center;margin-bottom:4px}
+  .uo-title{font-family:var(--fh);font-weight:800;font-size:1.35rem;color:var(--ink);text-align:center;margin-bottom:4px;text-wrap:balance}
   .uo-sub{text-align:center;color:#8a98a4;font-size:.92rem;margin-bottom:22px}
   .uo-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
   .uo-card{display:flex;align-items:center;gap:13px;background:var(--cream);border-radius:16px;padding:13px 16px}
@@ -145,7 +146,7 @@
   .pc-ribbon{position:absolute;top:18px;right:-2px;background:var(--red);color:#fff;font-weight:700;font-size:.78rem;padding:5px 14px;border-radius:99px 0 0 99px}
   /* PERKS / 优惠 */
   .perks{margin-top:30px;background:linear-gradient(150deg,#FFF7E9,#FFF1F0);border:1px solid #FCE0C2;border-radius:24px;padding:30px 30px 24px}
-  .perks-head{text-align:center;font-family:var(--fh);font-weight:800;font-size:1.32rem;color:var(--red);margin-bottom:24px}
+  .perks-head{text-align:center;font-family:var(--fh);font-weight:800;font-size:clamp(1.06rem,4.7vw,1.32rem);color:var(--red);margin-bottom:24px;text-wrap:balance}
   .perks-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
   .perk{background:#fff;border-radius:18px;padding:22px 20px;box-shadow:0 6px 16px rgba(244,168,27,.13);position:relative}
   .perk-n{position:absolute;top:-13px;left:20px;width:34px;height:34px;border-radius:50%;background:var(--red);color:#fff;font-family:var(--fh);font-weight:800;font-size:1.05rem;display:grid;place-items:center;box-shadow:0 5px 12px rgba(239,74,74,.36)}
@@ -202,7 +203,7 @@
 
   /* CTA / SIGNUP */
   .signup{background:linear-gradient(150deg,var(--blue),var(--blue-d));color:#fff;border-radius:28px;padding:56px;text-align:center;position:relative;overflow:hidden}
-  .signup h2{font-size:2.1rem;font-weight:800;margin-bottom:12px}
+  .signup h2{font-size:clamp(1.5rem,5.2vw,2.1rem);font-weight:800;margin-bottom:12px;text-wrap:balance}
   .signup p{opacity:.92;max-width:540px;margin:0 auto 26px}
   .signup .btn{background:#fff;color:var(--blue-d)}
   .signup .btn:hover{background:var(--yellow);color:#fff}
@@ -371,65 +372,8 @@
   </div>
 </section>
 
-<!-- PROGRAM & PRICING -->
-<section id="program">
-  <div class="wrap center">
-    <span class="eyebrow"><span class="zh">暑期成长营</span><span class="en">Summer Camp</span></span>
-    <h2 class="sec"><span class="zh">36 课时 · 英语启蒙 × STEAM 创新工坊</span><span class="en">36 Sessions · English × STEAM</span></h2>
-    <p class="sub"><span class="zh">3–6 岁专属 · 3–5 人精品小班 · 全英教学</span><span class="en block">Ages 3–6 · small classes of 3–5 · fully in English</span></p>
-  </div>
-  <div class="wrap">
-    <div class="setup-grid">
-      <div class="su"><div class="suic">📚</div><b><span class="zh">36 课时</span><span class="en">36 sessions</span></b><span class="zh">每课时 45 分钟</span><span class="en block">45 min each</span></div>
-      <div class="su"><div class="suic">📅</div><b><span class="zh">18 次到校</span><span class="en">18 visits</span></b><span class="zh">每次 2 课时：英语启蒙 + STEAM 各 1 节</span><span class="en block">2 sessions each: English + STEAM</span></div>
-      <div class="su"><div class="suic">⛺</div><b><span class="zh">外教户外营</span><span class="en">Outdoor camp</span></b><span class="zh">含 1 次外教户外体验营</span><span class="en block">1 outdoor session with foreign teacher</span></div>
-      <div class="su"><div class="suic">🎤</div><b><span class="zh">结课展示</span><span class="en">Showcase</span></b><span class="zh">含 1 次结课展示 · 自信表达</span><span class="en block">1 closing showcase · confident expression</span></div>
-    </div>
-    <div class="price-grid">
-      <div class="pc trial">
-        <div class="pc-tag"><span class="zh">试听课</span><span class="en">Trial Class</span></div>
-        <div class="pc-num">¥49.9<small>/<span class="zh">次</span><span class="en">session</span></small></div>
-        <p><span class="zh">30 分钟试听课，同步测评基础、科学分班。</span><span class="en block">30-min trial with placement assessment.</span></p>
-        <a href="#signup" class="btn blue" style="margin-top:auto"><span class="zh">预约试听</span><span class="en">Book Trial</span></a>
-      </div>
-      <div class="pc featured">
-        <div class="pc-ribbon"><span class="zh">早鸟价</span><span class="en">Early Bird</span></div>
-        <div class="pc-tag"><span class="zh">暑期成长营</span><span class="en">Summer Camp</span></div>
-        <div class="pc-old">¥4999</div>
-        <div class="pc-num">¥3999</div>
-        <p><span class="zh">折合约 ¥111 / 课时 · 7.12 之后报名为原价。</span><span class="en block">≈ ¥111 per session · full price after Jul 12.</span></p>
-        <a href="#signup" class="btn" style="margin-top:auto"><span class="zh">立即报名</span><span class="en">Enroll Now</span></a>
-      </div>
-    </div>
-
-    <div class="perks">
-      <div class="perks-head"><span class="zh">🎁 先试听 · 再决定 · 三重福利省到底</span><span class="en block">🎁 Try first, then decide — three ways to save</span></div>
-      <div class="perks-grid">
-        <div class="perk">
-          <span class="perk-n">1</span>
-          <b><span class="zh">锁定名额</span><span class="en">Lock your spot</span></b>
-          <p><span class="zh">¥49.9 报名费锁试听名额；或 ¥400 定金锁正课名额（含试听，定金全额抵扣学费）。</span><span class="en block">¥49.9 holds a trial seat; or a ¥400 deposit reserves a class seat (incl. trial, fully credited to tuition).</span></p>
-        </div>
-        <div class="perk">
-          <span class="perk-n">2</span>
-          <b><span class="zh">现场报名再减 ¥100</span><span class="en">¥100 off on the spot</span></b>
-          <p><span class="zh">试听当天报名，早鸟价 ¥3999 立减 ¥100，到手价 <b>¥3899</b>。</span><span class="en block">Enroll on trial day: early-bird ¥3999 − ¥100 = <b>¥3899</b>.</span></p>
-        </div>
-        <div class="perk">
-          <span class="perk-n">3</span>
-          <b><span class="zh">同行推荐返现</span><span class="en">Referral cashback</span></b>
-          <p><span class="zh">带 1 / 2 / 3 名同行成功报名，双方各返 <b>¥100 / ¥200 / ¥300</b>。</span><span class="en block">Refer 1 / 2 / 3 friends who enroll — both sides get <b>¥100 / ¥200 / ¥300</b> each.</span></p>
-        </div>
-      </div>
-      <p class="perks-note"><span class="zh">* 具体优惠以最新招生通知为准，详情请添加微信 engo2026 咨询。</span><span class="en">* Offers subject to the latest enrollment notice; contact WeChat engo2026 for details.</span></p>
-    </div>
-
-    <p class="slot-note"><span class="zh">* 报名即享 36 课时全部内容，含外教户外营与结课展示。名额有限，先到先得。</span><span class="en">* Enrollment includes all 36 sessions, the outdoor camp and the showcase. Limited seats.</span></p>
-  </div>
-</section>
-
 <!-- FACULTY -->
-<section id="faculty" class="alt">
+<section id="faculty">
   <div class="wrap center">
     <span class="eyebrow"><span class="zh">师资团队</span><span class="en">Our Teachers</span></span>
     <h2 class="sec"><span class="zh">海归名师，把世界带进课堂</span><span class="en">World-class teachers, right in the classroom</span></h2>
@@ -484,7 +428,7 @@
 </section>
 
 <!-- SCHEDULE -->
-<section id="schedule">
+<section id="schedule" class="alt">
   <div class="wrap center">
     <span class="eyebrow"><span class="zh">2026 暑期</span><span class="en">Summer 2026</span></span>
     <h2 class="sec"><span class="zh">缤纷夏日 · 快乐学习</span><span class="en">A Colorful Summer of Learning</span></h2>
@@ -517,7 +461,7 @@
 </section>
 
 <!-- WHY -->
-<section id="why" class="alt">
+<section id="why">
   <div class="wrap center">
     <span class="eyebrow"><span class="zh">为什么选英歌宝</span><span class="en">Why Engo Baby</span></span>
     <h2 class="sec"><span class="zh">让每个孩子被看见、被听见</span><span class="en">Every child seen and heard</span></h2>
@@ -529,6 +473,63 @@
       <div class="w"><div class="ic">🎓</div><h3><span class="zh">海归教研团队</span><span class="en">Returnee Team</span></h3><p><span class="zh">留学归乡团队，国际视野，本土用心。</span><span class="en">A study-abroad team with global vision and local heart.</span></p></div>
       <div class="w"><div class="ic">🚀</div><h3><span class="zh">分级 + 跨学科</span><span class="en">Leveled + STEAM</span></h3><p><span class="zh">L1–L3 科学进阶，英语与思维一起成长。</span><span class="en">L1–L3 progression where language and thinking grow together.</span></p></div>
     </div>
+  </div>
+</section>
+
+<!-- PROGRAM & PRICING -->
+<section id="program" class="alt">
+  <div class="wrap center">
+    <span class="eyebrow"><span class="zh">暑期成长营</span><span class="en">Summer Camp</span></span>
+    <h2 class="sec"><span class="zh">36 课时 · 英语启蒙 × STEAM 创新工坊</span><span class="en">36 Sessions · English × STEAM</span></h2>
+    <p class="sub"><span class="zh">3–6 岁专属 · 3–5 人精品小班 · 全英教学</span><span class="en block">Ages 3–6 · small classes of 3–5 · fully in English</span></p>
+  </div>
+  <div class="wrap">
+    <div class="setup-grid">
+      <div class="su"><div class="suic">📚</div><b><span class="zh">36 课时</span><span class="en">36 sessions</span></b><span class="zh">每课时 45 分钟</span><span class="en block">45 min each</span></div>
+      <div class="su"><div class="suic">📅</div><b><span class="zh">18 次到校</span><span class="en">18 visits</span></b><span class="zh">每次 2 课时：英语启蒙 + STEAM 各 1 节</span><span class="en block">2 sessions each: English + STEAM</span></div>
+      <div class="su"><div class="suic">⛺</div><b><span class="zh">外教户外营</span><span class="en">Outdoor camp</span></b><span class="zh">含 1 次外教户外体验营</span><span class="en block">1 outdoor session with foreign teacher</span></div>
+      <div class="su"><div class="suic">🎤</div><b><span class="zh">结课展示</span><span class="en">Showcase</span></b><span class="zh">含 1 次结课展示 · 自信表达</span><span class="en block">1 closing showcase · confident expression</span></div>
+    </div>
+    <div class="price-grid">
+      <div class="pc trial">
+        <div class="pc-tag"><span class="zh">试听课</span><span class="en">Trial Class</span></div>
+        <div class="pc-num">¥49.9<small>/<span class="zh">次</span><span class="en">session</span></small></div>
+        <p><span class="zh">30 分钟试听课，同步测评基础、科学分班。</span><span class="en block">30-min trial with placement assessment.</span></p>
+        <a href="#signup" class="btn blue" style="margin-top:auto"><span class="zh">预约试听</span><span class="en">Book Trial</span></a>
+      </div>
+      <div class="pc featured">
+        <div class="pc-ribbon"><span class="zh">早鸟价</span><span class="en">Early Bird</span></div>
+        <div class="pc-tag"><span class="zh">暑期成长营</span><span class="en">Summer Camp</span></div>
+        <div class="pc-old">¥4999</div>
+        <div class="pc-num">¥3999</div>
+        <p><span class="zh">折合约 ¥111 / 课时 · 7.12 之后报名为原价。</span><span class="en block">≈ ¥111 per session · full price after Jul 12.</span></p>
+        <a href="#signup" class="btn" style="margin-top:auto"><span class="zh">立即报名</span><span class="en">Enroll Now</span></a>
+      </div>
+    </div>
+
+    <div class="perks">
+      <div class="perks-head"><span class="zh">🎁 先试听 · 再决定 · 三重福利省到底</span><span class="en block">🎁 Try first, then decide — three ways to save</span></div>
+      <div class="perks-grid">
+        <div class="perk">
+          <span class="perk-n">1</span>
+          <b><span class="zh">锁定名额</span><span class="en">Lock your spot</span></b>
+          <p><span class="zh">¥49.9 报名费锁试听名额；或 ¥400 定金锁正课名额（含试听，定金全额抵扣学费）。</span><span class="en block">¥49.9 holds a trial seat; or a ¥400 deposit reserves a class seat (incl. trial, fully credited to tuition).</span></p>
+        </div>
+        <div class="perk">
+          <span class="perk-n">2</span>
+          <b><span class="zh">现场报名再减 ¥100</span><span class="en">¥100 off on the spot</span></b>
+          <p><span class="zh">试听当天报名，早鸟价 ¥3999 立减 ¥100，到手价 <b>¥3899</b>。</span><span class="en block">Enroll on trial day: early-bird ¥3999 − ¥100 = <b>¥3899</b>.</span></p>
+        </div>
+        <div class="perk">
+          <span class="perk-n">3</span>
+          <b><span class="zh">同行推荐返现</span><span class="en">Referral cashback</span></b>
+          <p><span class="zh">带 1 / 2 / 3 名同行成功报名，双方各返 <b>¥100 / ¥200 / ¥300</b>。</span><span class="en block">Refer 1 / 2 / 3 friends who enroll — both sides get <b>¥100 / ¥200 / ¥300</b> each.</span></p>
+        </div>
+      </div>
+      <p class="perks-note"><span class="zh">* 具体优惠以最新招生通知为准，详情请添加微信 engo2026 咨询。</span><span class="en">* Offers subject to the latest enrollment notice; contact WeChat engo2026 for details.</span></p>
+    </div>
+
+    <p class="slot-note"><span class="zh">* 报名即享 36 课时全部内容，含外教户外营与结课展示。名额有限，先到先得。</span><span class="en">* Enrollment includes all 36 sessions, the outdoor camp and the showcase. Limited seats.</span></p>
   </div>
 </section>
 
