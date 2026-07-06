@@ -1,0 +1,715 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>英歌宝成人英语 · 自适应水平测评</title>
+<style>
+  :root{
+    --navy:#0A2E4D; --deep:#0B3D5C; --teal:#1B7A8C; --ltteal:#4FB0AE;
+    --coral:#F2884B; --ice:#F2F7FB; --ink:#1E2A33; --muted:#5A6B75;
+    --line:#DCE6EC; --white:#fff;
+    --sans:"Segoe UI",-apple-system,BlinkMacSystemFont,"Microsoft YaHei","PingFang SC","Hiragino Sans GB",sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{font-family:var(--sans);color:var(--ink);background:var(--ice);line-height:1.6;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:820px;margin:0 auto;padding:0 18px}
+  .hidden{display:none!important}
+  button{font-family:inherit;cursor:pointer;border:none}
+
+  .topbar{position:sticky;top:0;z-index:20;background:var(--navy);color:#fff}
+  .topbar .wrap{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:11px 18px}
+  .brand{display:flex;align-items:center;gap:9px;font-weight:700;font-size:15px;letter-spacing:.3px}
+  .brand .boat{width:22px;height:22px;flex:0 0 auto}
+  .timer{font-variant-numeric:tabular-nums;font-weight:700;font-size:16px;background:rgba(255,255,255,.12);padding:5px 12px;border-radius:20px}
+  .timer.warn{background:var(--coral);color:#fff}
+  .progress{height:4px;background:rgba(255,255,255,.15)}
+  .progress > i{display:block;height:100%;background:var(--coral);width:0;transition:width .4s ease}
+
+  .hero{padding:56px 0 40px;text-align:center}
+  .eyebrow{color:var(--teal);font-weight:700;letter-spacing:2px;font-size:12px;text-transform:uppercase}
+  .hero h1{font-size:38px;line-height:1.15;margin:14px 0 6px;color:var(--navy);letter-spacing:-.5px}
+  .hero .en{color:var(--coral);font-weight:700;font-size:19px;letter-spacing:.5px}
+  .hero p.lead{color:var(--muted);max-width:560px;margin:18px auto 0;font-size:16px}
+  .card{background:#fff;border:1px solid var(--line);border-radius:16px;box-shadow:0 8px 24px rgba(10,46,77,.06)}
+  .startcard{margin-top:30px;padding:26px}
+  .facts{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:4px 0 22px}
+  .fact{background:var(--ice);border-radius:12px;padding:14px 10px;text-align:center}
+  .fact b{display:block;font-size:20px;color:var(--navy)}
+  .fact span{font-size:12px;color:var(--muted)}
+  .field{display:flex;gap:10px;align-items:center;margin:0 0 16px;justify-content:center}
+  .field input{border:1px solid var(--line);border-radius:10px;padding:11px 14px;font-size:15px;width:240px;font-family:inherit}
+  .note{font-size:13px;color:var(--muted);background:#FFF6EE;border:1px solid #F6D9C2;border-radius:12px;padding:12px 14px;margin:16px 0}
+  .btn{background:var(--coral);color:#fff;font-weight:700;font-size:17px;padding:14px 34px;border-radius:30px;transition:transform .12s ease, box-shadow .2s;box-shadow:0 6px 16px rgba(242,136,75,.32)}
+  .btn:hover{transform:translateY(-1px)}
+  .btn:disabled{opacity:.45;cursor:not-allowed;transform:none}
+  .btn.ghost{background:transparent;color:var(--navy);box-shadow:none;border:1.5px solid var(--line)}
+  .btn.small{font-size:14px;padding:9px 18px}
+  .center{text-align:center}
+
+  .section{padding:24px 0 96px}
+  .sec-head{display:flex;align-items:baseline;gap:10px;margin-bottom:4px}
+  .sec-head .num{font-size:13px;font-weight:700;color:var(--coral);letter-spacing:1px}
+  .sec-head h2{font-size:24px;color:var(--navy)}
+  .sec-sub{color:var(--muted);font-size:14px;margin-bottom:18px}
+  .qcount{font-size:13px;color:var(--muted);margin-bottom:14px}
+
+  .q{background:#fff;border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin-bottom:12px}
+  .q .stem{font-size:16px;margin-bottom:12px}
+  .q .stem .qn{color:var(--teal);font-weight:700;margin-right:6px}
+  .opts{display:grid;gap:8px}
+  .opt{display:flex;align-items:center;gap:10px;border:1.5px solid var(--line);border-radius:10px;padding:10px 13px;font-size:15px;transition:border-color .15s, background .15s}
+  .opt:hover{border-color:var(--teal)}
+  .opt input{accent-color:var(--teal);width:17px;height:17px;flex:0 0 auto}
+  .opt .lab{font-weight:700;color:var(--muted);margin-right:2px}
+  .opt.sel{border-color:var(--teal);background:#EAF4F5}
+  .opt-unsure{margin-top:6px;border-style:dashed;color:var(--muted);background:#FbFcFd}
+  .opt-unsure .lab{color:var(--muted)}
+  .opt-unsure.sel{border-color:var(--muted);background:#EEF2F5;color:var(--ink)}
+
+  .vgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:9px}
+  .chip{border:1.5px solid var(--line);border-radius:10px;padding:11px 8px;text-align:center;font-size:15px;user-select:none;background:#fff;transition:all .12s}
+  .chip:hover{border-color:var(--teal)}
+  .chip.on{background:var(--teal);border-color:var(--teal);color:#fff;font-weight:600}
+
+  .passage{background:var(--ice);border-left:4px solid var(--teal);border-radius:0 12px 12px 0;padding:14px 16px;margin-bottom:14px;font-size:15px;color:#26333c}
+  .passage .plabel{font-size:12px;font-weight:700;letter-spacing:1px;color:var(--teal);text-transform:uppercase;display:block;margin-bottom:6px}
+  .player{display:flex;align-items:center;gap:12px;flex-wrap:wrap;background:#fff;border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin-bottom:12px}
+  .play{display:flex;align-items:center;gap:8px;background:var(--teal);color:#fff;font-weight:700;border-radius:24px;padding:9px 18px;font-size:15px}
+  .play:disabled{background:#B9C6cf;cursor:not-allowed}
+  .plays-left{font-size:13px;color:var(--muted)}
+  .slowtoggle{display:flex;align-items:center;gap:6px;font-size:13px;color:var(--muted);margin-left:auto}
+
+  .navbar{position:fixed;left:0;right:0;bottom:0;background:#fff;border-top:1px solid var(--line);z-index:15}
+  .navbar .wrap{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 18px}
+  .steps{display:flex;gap:7px;align-items:center}
+  .dot{width:9px;height:9px;border-radius:50%;background:var(--line)}
+  .dot.done{background:var(--teal)} .dot.cur{background:var(--coral);transform:scale(1.25)}
+  .navhint{font-size:12px;color:var(--muted)}
+
+  .results{padding:36px 0 60px}
+  .verdict{background:linear-gradient(135deg,var(--navy),var(--deep));color:#fff;border-radius:20px;padding:30px 28px;text-align:center;position:relative;overflow:hidden}
+  .verdict .lvlkey{font-size:14px;letter-spacing:2px;color:#9FC2DA;text-transform:uppercase}
+  .verdict h2{font-size:40px;margin:6px 0 2px}
+  .verdict .meta{color:#CFE0EC;font-size:15px}
+  .verdict .vocab{margin-top:16px;display:inline-block;background:rgba(255,255,255,.1);border-radius:24px;padding:8px 18px;font-size:15px}
+  .verdict .vocab b{color:var(--coral)}
+
+  .ladder{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:22px 0}
+  .rung{border-radius:12px;padding:14px 8px;text-align:center;color:#fff;opacity:.5;transition:opacity .3s, transform .3s}
+  .rung small{display:block;font-size:11px;opacity:.9}
+  .rung b{font-size:16px}
+  .rung.on{opacity:1;transform:translateY(-4px);box-shadow:0 10px 22px rgba(10,46,77,.22)}
+  .rung.on::after{content:"★ 你在这里";display:block;font-size:11px;margin-top:4px;font-weight:700}
+
+  .profile{margin-top:8px}
+  .profile h3{font-size:16px;color:var(--navy);margin-bottom:12px}
+  .prow{display:flex;align-items:center;gap:12px;margin-bottom:10px}
+  .prow .plab{width:56px;font-size:14px;font-weight:700;color:var(--navy)}
+  .pbar{flex:1;height:26px;background:var(--ice);border-radius:8px;display:flex;overflow:hidden;gap:2px}
+  .pseg{flex:1;background:#E1E9EF;border-radius:4px}
+  .pseg.fill{background:var(--teal)}
+  .prow .pcefr{width:74px;text-align:right;font-size:13px;color:var(--muted);font-weight:600}
+
+  .flag{background:#FFF6EE;border:1px solid #F6D9C2;border-radius:12px;padding:13px 15px;margin:18px 0;font-size:14px;color:#8a5a33}
+  .flag.warn{background:#FDECEC;border-color:#F3C2C2;color:#9a3b3b}
+  .teacher{margin-top:16px}
+  .teacher summary{cursor:pointer;font-weight:700;color:var(--navy);padding:10px 0}
+  .tgrid{width:100%;border-collapse:collapse;font-size:14px}
+  .tgrid th,.tgrid td{border:1px solid var(--line);padding:8px 10px;text-align:left;vertical-align:top}
+  .tgrid th{background:var(--navy);color:#fff}
+  .actions{display:flex;gap:12px;justify-content:center;margin-top:26px;flex-wrap:wrap}
+
+  .foot{text-align:center;color:var(--muted);font-size:12px;padding:20px 0 30px}
+
+  @media (max-width:600px){
+    .hero h1{font-size:30px}
+    .facts{grid-template-columns:repeat(2,1fr)}
+    .vgrid{grid-template-columns:repeat(2,1fr)}
+    .ladder{grid-template-columns:repeat(2,1fr)}
+    .field input{width:100%}
+  }
+  @media (prefers-reduced-motion:reduce){*{transition:none!important}}
+  @media print{
+    .topbar,.navbar,.actions,.note{display:none!important}
+    body{background:#fff}
+    .verdict{background:var(--navy)!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar" id="topbar">
+  <div class="wrap">
+    <a class="brand" href="engo-pro.html" style="color:#fff;text-decoration:none" title="返回英歌派成人英语">
+      <svg class="boat" viewBox="0 0 24 24" fill="#F2884B"><path d="M4 15h16l-2 4H6l-2-4zm8-13l6 11H6L12 2z"/></svg>
+      英歌宝成人英语 · 自适应测评
+    </a>
+    <div class="timer" id="timer">20:00</div>
+  </div>
+  <div class="progress"><i id="progressbar"></i></div>
+</div>
+
+<!-- ===== START ===== -->
+<main id="start" class="wrap">
+  <div class="hero">
+    <div class="eyebrow">Adaptive Placement · CEFR A1–B1</div>
+    <h1>英语水平测评</h1>
+    <div class="en">Adaptive English Placement Test</div>
+    <p class="lead">约 20 分钟的<strong>自适应</strong>测评：题目难度会根据你的作答实时调整，答对上探、答错下探，用更少的题目精准判断你的真实水平。</p>
+  </div>
+  <div class="card startcard">
+    <div class="facts">
+      <div class="fact"><b>4</b><span>测评部分</span></div>
+      <div class="fact"><b>约20′</b><span>限时 20 分钟</span></div>
+      <div class="fact"><b>自适应</b><span>难度自调</span></div>
+      <div class="fact"><b>即时</b><span>自动定级</span></div>
+    </div>
+    <div class="field">
+      <input id="name" type="text" placeholder="你的名字（选填）" aria-label="姓名">
+    </div>
+    <div class="note">🎧 <b>听力部分需要声音</b>：请在安静环境、开启扬声器或戴耳机作答，并使用 Chrome、Edge 或 Safari 浏览器。每段录音最多播放 2 次。</div>
+    <div class="center"><button class="btn" id="startBtn">开始测评</button></div>
+    <p class="center" style="margin-top:14px;font-size:12px;color:var(--muted)">选项顺序随机 · 难度自适应 · 定级保守（宁可偏低）· 口语由老师面谈确认</p>
+  </div>
+  <div class="foot">© 英歌宝成人英语 ENGO · 剑桥 Interchange 分级体系</div>
+</main>
+
+<!-- ===== TEST ===== -->
+<main id="test" class="wrap hidden"></main>
+
+<nav class="navbar hidden" id="navbar">
+  <div class="wrap">
+    <span class="navhint" id="navhint">难度会根据你的作答自动调整</span>
+    <div class="steps" id="steps"></div>
+    <button class="btn small" id="nextBtn" disabled>下一题</button>
+  </div>
+</nav>
+
+<!-- ===== RESULTS ===== -->
+<main id="results" class="wrap hidden"></main>
+
+<script>
+"use strict";
+
+/* =========================================================================
+   ADAPTIVE PLACEMENT TEST v4
+   Key changes vs v3:
+   - Reading & listening are now ONE-QUESTION-PER-ITEM (each stem has its own
+     mini passage / mini clip). No level names shown anywhere (neutral labels).
+     Adaptivity is item-level -> visibly changes difficulty every question.
+   - Vocabulary is now MULTI-FORMAT: (A) yes/no self-report with pseudo-words,
+     (B) meaning-match MCQ, (C) collocation/usage MCQ, (D) word-in-context MCQ.
+   Levels: 1 Intro(A1) · 2 Level1(A2) · 3 Level2(A2-B1) · 4 Level3(B1)
+   Bands: a1 / a2 / b1 / b1p. Conservative scoring (round down; anchors pull down).
+   ========================================================================= */
+
+const BAND_SEQ=["a1","a2","b1","b1p"];
+const BAND2LVL={a1:1,a2:2,b1:3,b1p:4};
+
+/* ---------------- GRAMMAR pool ---------------- (correct = index 0, shuffled at render) */
+const GBANK={
+  a1:[
+    ["She ___ a teacher.",["is","am","are","be"]],
+    ["I have two ___.",["children","childs","child","childrens"]],
+    ["He ___ to work by bus every day.",["goes","go","going","is go"]],
+    ["My keys are ___ the table.",["on","in","of","to"]],
+    ["___ you like coffee?",["Do","Does","Are","Is"]],
+    ["They ___ from Canada.",["are","is","am","be"]]
+  ],
+  a2:[
+    ["Yesterday we ___ a great movie.",["watched","watch","watching","watches"]],
+    ["Listen! The baby ___.",["is crying","cries","cry","cried"]],
+    ["This box is ___ than that one.",["heavier","heavy","heaviest","more heavy"]],
+    ["There isn't ___ milk in the fridge.",["any","some","a","much of"]],
+    ["She ___ like fish when she was a child.",["didn't","doesn't","wasn't","not"]],
+    ["How ___ people came to the party?",["many","much","some","lot of"]]
+  ],
+  b1:[
+    ["I ___ in this city since 2019.",["have lived","live","lived","am living"]],
+    ["If it rains tomorrow, we ___ the trip.",["will cancel","cancel","cancelled","would cancel"]],
+    ["That's the man ___ helped me yesterday.",["who","which","whose","where"]],
+    ["I enjoy ___ to music in my free time.",["listening","to listen","listen","listened"]],
+    ["While I ___ dinner, the phone rang.",["was cooking","cooked","cook","have cooked"]],
+    ["The report ___ by the manager last week.",["was written","wrote","was writing","is written"]]
+  ],
+  b1p:[
+    ["I'm exhausted. I ___ all day.",["have been working","work","am working","worked"]],
+    ["If I ___ rich, I would travel the world.",["were","am","will be","have been"]],
+    ["She said she ___ call me the next day.",["would","will","is going","shall"]],
+    ["When we lived by the sea, we ___ swim every morning.",["used to","use to","are used to","would used to"]]
+  ]
+};
+
+/* ---------------- VOCABULARY (multi-format) ---------------- */
+/* (A) self-report chips */
+const VSELF={
+  a1:["water","happy","family","open","eat","big","book","house"],
+  a2:["airport","borrow","weather","invite","careful","arrive","crowded","recipe"],
+  b1:["schedule","income","achieve","reliable","deadline","argue","apply","afford"],
+  b2:["thorough","tremendous","allocate","subtle","inevitable","prominent"],
+  pseudo:["mancel","plimp","quolt","blorse","fentic","drassim","yolpetch"]
+};
+/* (B) meaning match: word -> which option means the same. correct index 0. band. */
+const VMEAN=[
+  ["big",["large","fast","clean","late"],"a1"],
+  ["happy",["glad","tired","angry","hungry"],"a1"],
+  ["begin",["start","stop","close","lose"],"a2"],
+  ["arrive",["get somewhere","leave","forget","repeat"],"a2"],
+  ["reliable",["can be trusted","very cheap","very old","hard to find"],"b1"],
+  ["afford",["have enough money for","dislike","borrow quickly","give away"],"b1"],
+  ["reluctant",["unwilling","excited","careless","generous"],"b1p"],
+  ["inevitable",["certain to happen","easy to avoid","rarely true","very rare"],"b1p"]
+];
+/* (C) collocation / usage: pick the natural combination. correct index 0. band. */
+const VCOLL=[
+  ["___ a photo",["take","make","do","give"],"a1"],
+  ["___ breakfast",["have","make a","do the","take a"],"a1"],
+  ["___ a decision",["make","do","take","give"],"a2"],
+  ["heavy ___",["rain","water","food","air"],"a2"],
+  ["meet a ___",["deadline","time","hour","clock"],"b1"],
+  ["___ progress",["make","do","take","build"],"b1"],
+  ["___ an opportunity",["seize","catch a","hold the","win a"],"b1p"],
+  ["a ___ difference",["significant","strong","tall","loud"],"b1p"]
+];
+/* (D) word in context: choose the word that fits the sentence. correct index 0. band. */
+const VCTX=[
+  ["I'm ___ — can we eat soon?",["hungry","happy","open","early"],"a1"],
+  ["Please ___ the door; it's cold.",["close","cook","clean","call"],"a1"],
+  ["We need to ___ some money before the trip.",["save","spend fast","lose","drop"],"a2"],
+  ["The train was ___, so we waited an hour.",["delayed","arrived","quick","early"],"a2"],
+  ["She felt ___ after failing the exam again.",["frustrated","delighted","curious","generous"],"b1"],
+  ["The company had to ___ its budget carefully.",["allocate","borrow loudly","forget","open"],"b1"],
+  ["His argument was ___ and hard to disagree with.",["convincing","empty","silent","narrow"],"b1p"],
+  ["The changes had a ___ impact on the whole team.",["profound","tiny quiet","late","flat"],"b1p"]
+];
+
+/* ---------------- READING: ONE mini-passage + ONE question each ---------------- */
+/* item: [passageText, question, [correct, d, d], band]. correct = index 0. */
+const RITEMS=[
+  // a1
+  ["Tom gets up at seven o'clock. He has breakfast and then goes to work by bus.",
+   "How does Tom go to work?",["By bus","On foot","By car"],"a1"],
+  ["Lisa has a cat and a dog. The cat is black and the dog is white.",
+   "What color is the dog?",["White","Black","Brown"],"a1"],
+  ["The shop opens at nine in the morning and closes at six in the evening.",
+   "What time does the shop close?",["Six","Nine","Seven"],"a1"],
+  // a2
+  ["Last night I couldn't sleep because my neighbours had a loud party. I was very tired at work today.",
+   "Why was the writer tired?",["A noisy party kept them awake","They worked all night","They drank too much coffee"],"a2"],
+  ["We wanted to have a picnic, but it started to rain, so we ate our sandwiches in the car instead.",
+   "Where did they eat?",["In the car","On the grass","At a café"],"a2"],
+  ["The museum is free on Sundays. On other days, tickets cost ten dollars for adults.",
+   "When can you enter without paying?",["On Sundays","Every day","On weekdays"],"a2"],
+  // b1
+  ["Although the new phone was more expensive than the others, Marta bought it because the battery lasted much longer.",
+   "Why did Marta choose that phone?",["Its battery lasts longer","It was the cheapest","It was the smallest"],"b1"],
+  ["The café was always busy in the mornings, but by mid-afternoon it was nearly empty, which was when Sam liked to study there.",
+   "When did Sam prefer the café?",["Mid-afternoon","Early morning","Late at night"],"b1"],
+  ["Many people believe that reading before bed helps them relax, though some experts say screens should be avoided at that time.",
+   "What do some experts advise?",["Avoiding screens before bed","Reading nothing at all","Sleeping less"],"b1"],
+  // b1p
+  ["Dan had always assumed he would take over the family business, so when he decided to become a musician instead, his relatives were stunned.",
+   "Why were his relatives surprised?",["They expected him to run the business","He had no musical talent","He moved abroad suddenly"],"b1p"],
+  ["The report was thorough, but its conclusions were so cautiously worded that readers struggled to tell what the author actually recommended.",
+   "What was the problem with the report?",["Its advice was unclear","It was far too short","It contained many errors"],"b1p"],
+  ["Rather than confronting the issue directly, the manager kept postponing the difficult conversation, which only made the tension worse.",
+   "What did the manager do?",["Kept avoiding the conversation","Solved the problem quickly","Blamed the whole team"],"b1p"]
+];
+
+/* ---------------- LISTENING: ONE short clip + ONE question each ---------------- */
+/* item: [script, question, [correct,d,d], band]. correct = index 0. */
+const LITEMS=[
+  // a1
+  ["Hi, I'm Ben. I'm from Australia. I have a sister and a brother.",
+   "Where is Ben from?",["Australia","America","Austria"],"a1"],
+  ["The meeting is on Tuesday at ten o'clock in room five.",
+   "What day is the meeting?",["Tuesday","Thursday","Monday"],"a1"],
+  ["I'd like a coffee and a cheese sandwich, please. No sugar.",
+   "What does the speaker order?",["Coffee and a sandwich","Tea and cake","Juice and a sandwich"],"a1"],
+  // a2
+  ["I usually cycle to work, but this morning my bike had a flat tyre, so I had to take the bus.",
+   "How did the speaker travel this morning?",["By bus","By bike","On foot"],"a2"],
+  ["We're going to the beach on Saturday if the weather is nice. If it rains, we'll go to the cinema.",
+   "What will they do if it rains?",["Go to the cinema","Go to the beach","Stay home"],"a2"],
+  ["I ordered a blue jacket online, but they sent me a green one, so I have to return it.",
+   "What is the problem?",["The wrong colour arrived","The jacket is too small","It never arrived"],"a2"],
+  // b1
+  ["I was going to sign up for the gym, but when I saw how much the monthly fee was, I changed my mind.",
+   "Why didn't the speaker join the gym?",["It was too expensive","It was too far","It was closed"],"b1"],
+  ["The presentation went well overall, though I wish I'd practised the ending a bit more.",
+   "How does the speaker feel about the presentation?",["Mostly positive, with one regret","Completely disappointed","Totally satisfied"],"b1"],
+  ["We can either leave early and beat the traffic, or have breakfast first and risk arriving late. I'd rather not rush.",
+   "What does the speaker prefer?",["Having breakfast, even if late","Leaving early","Skipping the trip"],"b1"],
+  // b1p
+  ["Honestly, I had my doubts about moving to a smaller office, but it's actually brought the team closer together.",
+   "What is the speaker's view now?",["The move turned out well","It was a clear mistake","Nothing has changed"],"b1p"],
+  ["She didn't exactly refuse to help, but she made so many excuses that in the end I did it myself.",
+   "What does the speaker suggest about the woman?",["She avoided helping","She helped a lot","She was too busy to be asked"],"b1p"],
+  ["The plan looks impressive on paper, but I'm not convinced it will survive contact with real customers.",
+   "What is the speaker's attitude to the plan?",["Doubtful about it working","Fully confident","Completely uninterested"],"b1p"]
+];
+
+const LEVELS=[null,
+  {key:"Intro",cn:"入门预备级",cefr:"A1",ielts:"雅思 2.0–3.0",color:"#4FB0AE"},
+  {key:"Level 1",cn:"初级",cefr:"A2",ielts:"雅思 3.0–3.5",color:"#2E86AB"},
+  {key:"Level 2",cn:"中级",cefr:"A2–B1",ielts:"雅思 3.5–4.5",color:"#1B5E8C"},
+  {key:"Level 3",cn:"中高级",cefr:"B1",ielts:"雅思 4.0–5.0",color:"#0A3D62"}
+];
+
+/* ---------------- helpers ---------------- */
+const $=id=>document.getElementById(id);
+function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+
+const state={name:"",self:{},plays:{}};
+let section=0;            // 0 vocab, 1 grammar, 2 reading, 3 listening
+let endTime=0,timerId=null;
+let vocabOrder=[];        // self-report chips
+let vMcq=null;            // vocab MCQ engine (formats B/C/D)
+let gEngine=null,rEngine=null,lEngine=null;
+
+/* ---------------- START ---------------- */
+$("startBtn").addEventListener("click",start);
+function start(){
+  state.name=$("name").value.trim();
+  vocabOrder=[]; ["a1","a2","b1","b2","pseudo"].forEach(b=>VSELF[b].forEach(w=>vocabOrder.push({w,b}))); shuffle(vocabOrder);
+  vMcq=makeVocabMcqEngine();
+  gEngine=makeItemEngine(GBANK,"grammar");
+  rEngine=makeReadListEngine(RITEMS);
+  lEngine=makeReadListEngine(LITEMS);
+  $("start").classList.add("hidden"); $("test").classList.remove("hidden"); $("navbar").classList.remove("hidden");
+  section=0; renderSection();
+  endTime=Date.now()+20*60*1000; tick(); timerId=setInterval(tick,1000);
+}
+function tick(){
+  const left=Math.max(0,Math.round((endTime-Date.now())/1000));
+  const m=String(Math.floor(left/60)).padStart(2,"0"),s=String(left%60).padStart(2,"0");
+  const t=$("timer"); if(t){t.textContent=m+":"+s;t.classList.toggle("warn",left<=180);}
+  if(left<=0){clearInterval(timerId);finishAll();}
+}
+
+/* =========================================================================
+   ADAPTIVE ENGINES
+   ========================================================================= */
+
+/* Generic item-level staircase over a pool keyed by band (grammar & vocab-MCQ). */
+function makeItemEngine(bankByBand, tag){
+  const pools={}; for(const b of BAND_SEQ) pools[b]=shuffle((bankByBand[b]||[]).map((it)=>it));
+  const used={a1:0,a2:0,b1:0,b1p:0};
+  const res={a1:[],a2:[],b1:[],b1p:[]};
+  let ptr=1, asked=0; const MAX=(tag==="grammar")?11:8, MIN=(tag==="grammar")?8:6;
+  let current=null;
+  function bandScore(b){const a=res[b];if(!a.length)return null;const c=a.filter(Boolean).length;return{c,n:a.length};}
+  function confident(){for(let i=3;i>=1;i--){const s=bandScore(BAND_SEQ[i]);if(s&&s.n>=2&&(s.n-s.c)>=2)return true;}return false;}
+  function nextBand(){let b=BAND_SEQ[ptr];
+    if(used[b]>=pools[b].length){for(let d=0;d<4;d++){for(const cand of[ptr-d,ptr+d]){if(cand>=0&&cand<4){const bb=BAND_SEQ[cand];if(used[bb]<pools[bb].length){ptr=cand;return bb;}}}}return null;}
+    return b;}
+  function serve(){
+    if(asked>=MAX)return null;
+    if(asked>=MIN&&confident())return null;
+    const b=nextBand(); if(!b)return null;
+    const it=pools[b][used[b]++];
+    const order=shuffle(it[1].map((_,k)=>k));
+    current={band:b, stem:it[0], opts:it[1], order}; asked++;
+    return current;
+  }
+  function answer(origIdx){const ok=origIdx===0; res[current.band].push(ok); if(ok)ptr=Math.min(3,ptr+1); else ptr=Math.max(0,ptr-1);}
+  function level(){
+    let lvl=1,anchorFail=false; const a1=bandScore("a1");
+    if(a1&&a1.n>=2&&a1.c<=a1.n-2)anchorFail=true;
+    for(const b of BAND_SEQ){const s=bandScore(b);if(!s)continue;const passed=s.c>=2&&s.c>=Math.ceil(s.n*0.6)&&(s.c*2>=s.n);if(passed)lvl=Math.max(lvl,BAND2LVL[b]);}
+    return {lvl,anchorFail};
+  }
+  return {serve,answer,level,get asked(){return asked;},summary:()=>({a1:bandScore("a1"),a2:bandScore("a2"),b1:bandScore("b1"),b1p:bandScore("b1p")})};
+}
+
+/* Vocab-MCQ engine: mixes formats B/C/D into one adaptive staircase.
+   Build a combined bank per band, tag each item with its format for display. */
+function makeVocabMcqEngine(){
+  const bank={a1:[],a2:[],b1:[],b1p:[]};
+  VMEAN.forEach(it=>bank[it[2]].push({fmt:"mean",word:it[0],opts:it[1]}));
+  VCOLL.forEach(it=>bank[it[2]].push({fmt:"coll",word:it[0],opts:it[1]}));
+  VCTX.forEach(it=>bank[it[2]].push({fmt:"ctx",word:it[0],opts:it[1]}));
+  for(const b of BAND_SEQ) shuffle(bank[b]);
+  // reuse item engine but items shaped as [stemPlaceholder, opts]; we keep meta separately
+  const pools=bank; const used={a1:0,a2:0,b1:0,b1p:0}; const res={a1:[],a2:[],b1:[],b1p:[]};
+  let ptr=1, asked=0; const MAX=8, MIN=6; let current=null;
+  function bandScore(b){const a=res[b];if(!a.length)return null;const c=a.filter(Boolean).length;return{c,n:a.length};}
+  function confident(){for(let i=3;i>=1;i--){const s=bandScore(BAND_SEQ[i]);if(s&&s.n>=2&&(s.n-s.c)>=2)return true;}return false;}
+  function nextBand(){let b=BAND_SEQ[ptr];
+    if(used[b]>=pools[b].length){for(let d=0;d<4;d++){for(const cand of[ptr-d,ptr+d]){if(cand>=0&&cand<4){const bb=BAND_SEQ[cand];if(used[bb]<pools[bb].length){ptr=cand;return bb;}}}}return null;}
+    return b;}
+  function stemFor(it){
+    if(it.fmt==="mean")return `选出与 <b>“${it.word}”</b> 意思最接近的词：`;
+    if(it.fmt==="coll")return `选出最自然的搭配： <b>${it.word.replace("___","____")}</b>`;
+    return `选出最合适的词填入句子： <b>${it.word}</b>`;
+  }
+  function serve(){
+    if(asked>=MAX)return null;
+    if(asked>=MIN&&confident())return null;
+    const b=nextBand(); if(!b)return null;
+    const it=pools[b][used[b]++];
+    const order=shuffle(it.opts.map((_,k)=>k));
+    current={band:b, stem:stemFor(it), opts:it.opts, order}; asked++;
+    return current;
+  }
+  function answer(origIdx){const ok=origIdx===0;res[current.band].push(ok);if(ok)ptr=Math.min(3,ptr+1);else ptr=Math.max(0,ptr-1);}
+  function level(){let lvl=1,anchorFail=false;const a1=bandScore("a1");if(a1&&a1.n>=2&&a1.c<=a1.n-2)anchorFail=true;
+    for(const b of BAND_SEQ){const s=bandScore(b);if(!s)continue;const passed=s.c>=2&&s.c>=Math.ceil(s.n*0.6)&&(s.c*2>=s.n);if(passed)lvl=Math.max(lvl,BAND2LVL[b]);}return {lvl,anchorFail};}
+  return {serve,answer,level,get asked(){return asked;},summary:()=>({a1:bandScore("a1"),a2:bandScore("a2"),b1:bandScore("b1"),b1p:bandScore("b1p")})};
+}
+
+/* Reading/Listening item-level staircase: each item = one mini passage/clip + one Q. */
+function makeReadListEngine(items){
+  const pools={a1:[],a2:[],b1:[],b1p:[]};
+  items.forEach(it=>pools[it[3]].push(it));
+  for(const b of BAND_SEQ) shuffle(pools[b]);
+  const used={a1:0,a2:0,b1:0,b1p:0}; const res={a1:[],a2:[],b1:[],b1p:[]};
+  let ptr=1, asked=0; const MAX=8, MIN=6; let current=null;
+  function bandScore(b){const a=res[b];if(!a.length)return null;const c=a.filter(Boolean).length;return{c,n:a.length};}
+  function confident(){for(let i=3;i>=1;i--){const s=bandScore(BAND_SEQ[i]);if(s&&s.n>=2&&(s.n-s.c)>=2)return true;}return false;}
+  function nextBand(){let b=BAND_SEQ[ptr];
+    if(used[b]>=pools[b].length){for(let d=0;d<4;d++){for(const cand of[ptr-d,ptr+d]){if(cand>=0&&cand<4){const bb=BAND_SEQ[cand];if(used[bb]<pools[bb].length){ptr=cand;return bb;}}}}return null;}
+    return b;}
+  function serve(){
+    if(asked>=MAX)return null;
+    if(asked>=MIN&&confident())return null;
+    const b=nextBand(); if(!b)return null;
+    const it=pools[b][used[b]++];
+    const order=shuffle(it[2].map((_,k)=>k));
+    current={band:b, passage:it[0], stem:it[1], opts:it[2], order, idx:asked}; asked++;
+    return current;
+  }
+  function answer(origIdx){const ok=origIdx===0;res[current.band].push(ok);if(ok)ptr=Math.min(3,ptr+1);else ptr=Math.max(0,ptr-1);}
+  function level(){let lvl=1,anchorFail=false;const a1=bandScore("a1");if(a1&&a1.n>=2&&a1.c<=a1.n-2)anchorFail=true;
+    for(const b of BAND_SEQ){const s=bandScore(b);if(!s)continue;const passed=s.c>=2&&s.c>=Math.ceil(s.n*0.6)&&(s.c*2>=s.n);if(passed)lvl=Math.max(lvl,BAND2LVL[b]);}return {lvl,anchorFail};}
+  return {serve,answer,level,get asked(){return asked;},get current(){return current;},summary:()=>({a1:bandScore("a1"),a2:bandScore("a2"),b1:bandScore("b1"),b1p:bandScore("b1p")})};
+}
+
+/* =========================================================================
+   RENDERING
+   ========================================================================= */
+const SEC=["词汇","语法","阅读","听力"];
+let pendingChoice=null;
+let vocabPhase=0;   // 0 = self-report chips, 1 = MCQ items
+
+function renderSection(){
+  window.scrollTo(0,0);
+  $("steps").innerHTML=SEC.map((_,i)=>`<span class="dot ${i<section?'done':''} ${i===section?'cur':''}"></span>`).join("");
+  $("progressbar").style.width=(section/4*100)+"%";
+  if(section===0){ vocabPhase===0 ? renderVocabSelf() : renderVocabMcq(); }
+  else if(section===1) renderGrammar();
+  else if(section===2) renderReading();
+  else if(section===3) renderListening();
+}
+
+/* shared MCQ card */
+function mcqCard(qn,stem,opts,order){
+  pendingChoice=null;
+  const os=order.map((origK,disp)=>`
+    <label class="opt" data-j="${origK}"><input type="radio" name="cur">
+      <span class="lab">${"ABCD"[disp]}</span><span>${opts[origK]}</span></label>`).join("");
+  // Fixed "not sure" option, always last, never shuffled. Value -1 => counted as wrong.
+  const unsure=`
+    <label class="opt opt-unsure" data-j="-1"><input type="radio" name="cur">
+      <span class="lab">?</span><span>我不确定 / I'm not sure</span></label>`;
+  return `<div class="q"><div class="stem"><span class="qn">${qn}</span>${stem}</div><div class="opts">${os}${unsure}</div></div>`;
+}
+function bindMCQ(){
+  document.querySelectorAll(".opt").forEach(o=>o.addEventListener("click",()=>{
+    document.querySelectorAll(".opt").forEach(x=>x.classList.remove("sel"));
+    o.classList.add("sel"); const inp=o.querySelector("input"); if(inp)inp.checked=true;
+    pendingChoice=+o.dataset.j; $("nextBtn").disabled=false;
+  }));
+}
+
+/* ---- Vocab phase 0: self-report ---- */
+function renderVocabSelf(){
+  const chips=vocabOrder.map((it,i)=>`<div class="chip ${state.self[i]?'on':''}" data-i="${i}">${it.w}</div>`).join("");
+  $("test").innerHTML=`<div class="section">
+    <div class="sec-head"><span class="num">第一部分 / VOCABULARY</span><h2>词汇 · 认词自评</h2></div>
+    <p class="sec-sub">第一步：点选你<strong>真正认识</strong>的单词（不确定就别选）。列表混有不存在的“校准词”，选中会降低可信度，请诚实作答。稍后还有几道词义与用法小题。</p>
+    <div class="vgrid">${chips}</div></div>`;
+  document.querySelectorAll(".chip").forEach(c=>c.addEventListener("click",()=>{const i=+c.dataset.i;state.self[i]=!state.self[i];c.classList.toggle("on",state.self[i]);}));
+  $("navhint").textContent="选完认识的词后继续";
+  setNext("继续（词义题）",true,()=>{ vocabPhase=1; renderSection(); });
+}
+
+/* ---- Vocab phase 1: adaptive MCQ (meaning / collocation / context) ---- */
+function renderVocabMcq(){
+  const item=vMcq.serve();
+  if(!item){ section=1; vocabPhase=0; renderSection(); return; }
+  $("test").innerHTML=`<div class="section">
+    <div class="sec-head"><span class="num">第一部分 / VOCABULARY</span><h2>词汇 · 词义与用法</h2></div>
+    <p class="sec-sub">选出最合适的答案（选项随机，难度自适应）。</p>
+    <div class="qcount">第 ${vMcq.asked} 题</div>
+    ${mcqCard(vMcq.asked+".",item.stem,item.opts,item.order)}</div>`;
+  bindMCQ();
+  $("navhint").textContent="答对上探、答错下探";
+  setNext("下一题",false,()=>{ vMcq.answer(pendingChoice); renderVocabMcq(); });
+}
+
+/* ---- Grammar ---- */
+function renderGrammar(){
+  const item=gEngine.serve();
+  if(!item){ section=2; renderSection(); return; }
+  $("test").innerHTML=`<div class="section">
+    <div class="sec-head"><span class="num">第二部分 / GRAMMAR</span><h2>语法与用法</h2></div>
+    <p class="sec-sub">选出最合适的答案（选项随机，难度自适应）。</p>
+    <div class="qcount">第 ${gEngine.asked} 题</div>
+    ${mcqCard("Q"+gEngine.asked+".",item.stem,item.opts,item.order)}</div>`;
+  bindMCQ();
+  $("navhint").textContent="答对上探、答错下探";
+  setNext("下一题",false,()=>{ gEngine.answer(pendingChoice); renderGrammar(); });
+}
+
+/* ---- Reading: one mini-passage + one question ---- */
+function renderReading(){
+  const item=rEngine.serve();
+  if(!item){ section=3; renderSection(); return; }
+  $("test").innerHTML=`<div class="section">
+    <div class="sec-head"><span class="num">第三部分 / READING</span><h2>阅读</h2></div>
+    <p class="sec-sub">读这段短文并回答（每题一段，难度自适应）。</p>
+    <div class="qcount">第 ${rEngine.asked} 段</div>
+    <div class="passage"><span class="plabel">Passage ${rEngine.asked}</span>${item.passage}</div>
+    ${mcqCard((rEngine.asked)+".",item.stem,item.opts,item.order)}</div>`;
+  bindMCQ();
+  $("navhint").textContent="难度会根据你的作答调整";
+  setNext("下一题",false,()=>{ rEngine.answer(pendingChoice); renderReading(); });
+}
+
+/* ---- Listening: one short clip + one question ---- */
+let curClipScript=null;
+function renderListening(){
+  const item=lEngine.serve();
+  if(!item){ finishAll(); return; }
+  curClipScript=item.passage;
+  const pi="clip"+lEngine.asked; const used=state.plays[pi]||0; const left=2-used;
+  $("test").innerHTML=`<div class="section">
+    <div class="sec-head"><span class="num">第四部分 / LISTENING</span><h2>听力</h2></div>
+    <p class="sec-sub">点播放听录音（每段最多 2 次），然后作答（每题一段，难度自适应）。</p>
+    <div class="qcount">第 ${lEngine.asked} 段</div>
+    <div class="player">
+      <button class="play" id="playBtn" ${left<=0?'disabled':''}>▶ 播放 Clip ${lEngine.asked}</button>
+      <span class="plays-left" id="plLeft">还可播放 ${left} 次</span>
+      <label class="slowtoggle"><input type="checkbox" id="slowchk"> 慢速</label></div>
+    ${mcqCard((lEngine.asked)+".",item.stem,item.opts,item.order)}</div>`;
+  bindMCQ();
+  const pk=pi;
+  $("playBtn")&&$("playBtn").addEventListener("click",()=>{
+    const u=state.plays[pk]||0; if(u>=2)return;
+    speak(curClipScript,$("slowchk").checked?0.78:0.95);
+    state.plays[pk]=u+1; const lf=2-state.plays[pk];
+    $("plLeft").textContent="还可播放 "+lf+" 次"; if(lf<=0)$("playBtn").disabled=true;
+  });
+  $("navhint").textContent="难度会根据你的作答调整";
+  setNext("下一题",false,()=>{ if(window.speechSynthesis)speechSynthesis.cancel(); lEngine.answer(pendingChoice); renderListening(); });
+}
+
+/* Next-button wiring */
+let nextHandler=null;
+function setNext(label,enabled,handler){
+  const b=$("nextBtn"); b.textContent=label; b.disabled=!enabled;
+  if(nextHandler)b.removeEventListener("click",nextHandler);
+  nextHandler=()=>{ if(b.disabled)return; b.disabled=true; handler(); };
+  b.addEventListener("click",nextHandler);
+}
+
+/* TTS */
+let voiceEN=null;
+function pickVoice(){const vs=window.speechSynthesis?speechSynthesis.getVoices():[];
+  voiceEN=vs.find(v=>/en[-_]GB/i.test(v.lang))||vs.find(v=>/en[-_]US/i.test(v.lang))||vs.find(v=>/^en/i.test(v.lang))||null;}
+if('speechSynthesis'in window){pickVoice();speechSynthesis.onvoiceschanged=pickVoice;}
+function speak(text,rate){if(!('speechSynthesis'in window))return;speechSynthesis.cancel();
+  const u=new SpeechSynthesisUtterance(text);u.lang="en-US";u.rate=rate;u.pitch=1;if(voiceEN)u.voice=voiceEN;speechSynthesis.speak(u);}
+
+/* =========================================================================
+   SCORING & RESULTS
+   ========================================================================= */
+function scoreVocabSelf(){
+  const hit={a1:0,a2:0,b1:0,b2:0,pseudo:0};
+  vocabOrder.forEach((it,i)=>{if(state.self[i])hit[it.b]++;});
+  const fa=hit.pseudo/VSELF.pseudo.length;
+  const widths={a1:500,a2:750,b1:1250,b2:2500}; let est=0;
+  ["a1","a2","b1","b2"].forEach(b=>{est+=Math.max(0,(hit[b]/VSELF[b].length)-fa)*widths[b];});
+  est=Math.round(est/50)*50;
+  const lvl=est<650?1:est<1300?2:est<2200?3:4;
+  return {est,lvl,hit,unreliable:hit.pseudo>=3};
+}
+
+function finishAll(){
+  clearInterval(timerId); if(window.speechSynthesis)speechSynthesis.cancel();
+  const VS=scoreVocabSelf();        // self-report -> est + level
+  const VM=vMcq.level();            // vocab MCQ -> level
+  // combined vocab level: average of the two, round down (conservative)
+  const vLvl=Math.max(1,Math.floor((VS.lvl+VM.lvl)/2 + 0.34));
+  const G=gEngine.level(), R=rEngine.level(), L=lEngine.level();
+
+  // weights: grammar/reading/listening ×2, vocab ×1; round DOWN.
+  const weighted=(2*G.lvl+2*R.lvl+2*L.lvl+1*vLvl)/7;
+  let rec=Math.floor(weighted+0.34); rec=Math.min(4,Math.max(1,rec));
+  const anchorFails=[G.anchorFail,R.anchorFail,L.anchorFail,VM.anchorFail].filter(Boolean).length;
+  const unreliable=VS.unreliable||anchorFails>=2;
+  if(anchorFails>=2)rec=1; else if(anchorFails===1)rec=Math.max(1,rec-1);
+
+  const lvls=[vLvl,G.lvl,R.lvl,L.lvl];
+  const spread=Math.max(...lvls)-Math.min(...lvls);
+  renderResults({VS,VM,vLvl,G,R,L,rec,spread,unreliable,anchorFails});
+}
+
+function ladderRung(i,rec){const L=LEVELS[i];
+  return `<div class="rung ${i===rec?'on':''}" style="background:${L.color}"><small>${L.cefr}</small><b>${L.key}</b><small>${L.cn}</small></div>`;}
+function segBar(lvl){let s="";for(let i=1;i<=4;i++)s+=`<span class="pseg ${i<=lvl?'fill':''}"></span>`;return s;}
+function bsum(s){return ["a1","a2","b1","b1p"].map(b=>{const x=s[b];return b.toUpperCase()+" "+(x?`${x.c}/${x.n}`:"—");}).join(" · ");}
+
+function renderResults(r){
+  $("test").classList.add("hidden"); $("navbar").classList.add("hidden");
+  $("progressbar").style.width="100%";
+  const L=LEVELS[r.rec]; const hi=state.name?`${state.name}，`:"";
+  let flag="";
+  if(r.unreliable)flag=`<div class="flag warn">⚠️ 本次结果可信度偏低（校准词误选过多，或最简单题目出错）。建议老师当面复测，本报告仅供初步参考。</div>`;
+  else if(r.spread>=2)flag=`<div class="flag">📌 你各项能力差异较明显（常见于“读得懂但说不出”）。以上为参考级别，最终入班将结合老师口语面谈确定。</div>`;
+
+  const rows=[["词汇",r.vLvl],["语法",r.G.lvl],["阅读",r.R.lvl],["听力",r.L.lvl]]
+    .map(([lab,lv])=>`<div class="prow"><span class="plab">${lab}</span><div class="pbar">${segBar(lv)}</div><span class="pcefr">${LEVELS[lv].cefr}</span></div>`).join("");
+
+  $("results").classList.remove("hidden");
+  $("results").innerHTML=`<div class="results">
+    <div class="verdict">
+      <div class="lvlkey">建议入班级别 · Recommended level</div>
+      <h2>${L.key} · ${L.cn}</h2>
+      <div class="meta">CEFR ${L.cefr}　·　${L.ielts}</div>
+      <div class="vocab">估算词汇量　<b>≈ ${r.VS.est.toLocaleString()}</b> 词${r.VS.unreliable?'（校准词偏多，仅供参考）':''}</div>
+    </div>
+    <div class="ladder">${[1,2,3,4].map(i=>ladderRung(i,r.rec)).join("")}</div>
+    <div class="card" style="padding:20px 22px"><div class="profile"><h3>${hi}这是你的能力画像</h3>${rows}</div></div>
+    ${flag}
+    <details class="teacher"><summary>详细得分（教师用）</summary>
+      <table class="tgrid">
+        <tr><th>部分</th><th>作答情况</th><th>判定</th></tr>
+        <tr><td>词汇 · 认词自评</td><td>≈${r.VS.est}词（真词 A1 ${r.VS.hit.a1}/${VSELF.a1.length}·A2 ${r.VS.hit.a2}/${VSELF.a2.length}·B1 ${r.VS.hit.b1}/${VSELF.b1.length}·B2 ${r.VS.hit.b2}/${VSELF.b2.length}；校准词误选 ${r.VS.hit.pseudo}/${VSELF.pseudo.length}）</td><td>${LEVELS[r.VS.lvl].key}</td></tr>
+        <tr><td>词汇 · 词义/用法（自适应）</td><td>${bsum(vMcq.summary())}</td><td>${LEVELS[r.VM.lvl].key}</td></tr>
+        <tr><td>语法（自适应）</td><td>${bsum(gEngine.summary())}</td><td>${LEVELS[r.G.lvl].key}</td></tr>
+        <tr><td>阅读（自适应）</td><td>${bsum(rEngine.summary())}</td><td>${LEVELS[r.R.lvl].key}</td></tr>
+        <tr><td>听力（自适应）</td><td>${bsum(lEngine.summary())}</td><td>${LEVELS[r.L.lvl].key}</td></tr>
+      </table>
+      <p style="font-size:13px;color:var(--muted);margin-top:10px">权重：语法/阅读/听力各×2、词汇×1，向下取整以避免高估。锚定题失败数：${r.anchorFails}。词汇综合级别取自评与词义题的均值（向下取整）。口语由教师面谈补充确认。</p>
+    </details>
+    <div class="cta-book" style="margin-top:26px;background:linear-gradient(150deg,#0B3D5C,#0A2E4D);border-radius:16px;padding:28px 24px;text-align:center;color:#fff">
+      <h3 style="font-size:20px;margin-bottom:8px">想让老师帮你精准定级、定制学习计划？</h3>
+      <p style="opacity:.9;margin:0 auto 18px;font-size:15px;max-width:460px">预约 <b>¥49.9</b> 成人试听课（含入学测评与科学定级），或加微信 <b>engo2026</b> 咨询。</p>
+      <a href="engo-pro.html#signup" class="btn" style="text-decoration:none;display:inline-block;margin:4px">预约试听课</a>
+      <a href="engo-pro.html" style="display:inline-block;margin:4px;color:#fff;border:1.5px solid rgba(255,255,255,.6);padding:14px 28px;border-radius:30px;font-weight:700;text-decoration:none">了解英歌派</a>
+    </div>
+    <div class="actions">
+      <button class="btn" onclick="window.print()">打印 / 保存结果</button>
+      <button class="btn ghost" onclick="location.reload()">重新测评</button>
+    </div>
+    <div class="foot">© 英歌宝成人英语 ENGO · 依据 CEFR 与剑桥 Interchange 分级体系</div>
+  </div>`;
+  window.scrollTo(0,0);
+}
+</script>
+</body>
+</html>
