@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>英歌宝成人英语 · 自适应水平测评</title>
+<title>英歌派成人英语 · 自适应水平测评</title>
 <style>
   :root{
     --navy:#0A2E4D; --deep:#0B3D5C; --teal:#1B7A8C; --ltteal:#4FB0AE;
@@ -140,11 +140,43 @@
 </head>
 <body>
 
+<!-- ===================== 班级口令门禁 ===================== -->
+<div id="gate" style="position:fixed;inset:0;z-index:9999;background:linear-gradient(155deg,#0B3D5C,#0A2E4D);display:flex;align-items:center;justify-content:center;padding:24px">
+  <div style="background:#fff;border-radius:18px;max-width:390px;width:100%;padding:34px 30px;text-align:center;box-shadow:0 20px 50px rgba(0,0,0,.3)">
+    <svg viewBox="0 0 24 24" width="42" height="42" fill="#F2884B" style="margin:0 auto 10px"><path d="M4 15h16l-2 4H6l-2-4zm8-13l6 11H6L12 2z"/></svg>
+    <h2 style="color:#0A2E4D;font-size:21px;margin-bottom:6px">英歌派成人英语 · 入学测评</h2>
+    <p style="color:#5A6B75;font-size:14px;line-height:1.6;margin-bottom:20px">本测评仅限到店试听的同学参加。<br>请输入老师提供的班级口令。</p>
+    <input id="gateInput" type="text" placeholder="请输入班级口令" autocomplete="off" autofocus
+      style="width:100%;font-size:16px;text-align:center;padding:13px 14px;border:1.5px solid #DCE6EC;border-radius:12px;outline:none;letter-spacing:2px"
+      onkeydown="if(event.key==='Enter')gateCheck()">
+    <div id="gateErr" style="color:#E4572E;font-size:13px;min-height:18px;margin:9px 0 4px"></div>
+    <button onclick="gateCheck()" style="width:100%;background:#F2884B;color:#fff;font-weight:700;font-size:16px;padding:13px;border:none;border-radius:30px;cursor:pointer">进入测评</button>
+    <div style="margin-top:16px;font-size:13px;color:#5A6B75;line-height:1.7">还没有口令？测评为试听课学员专用。<br><a href="engo-pro.html#signup" style="color:#1B7A8C;font-weight:700;text-decoration:none">预约试听课 →</a>　·　微信 <b>engo2026</b></div>
+  </div>
+</div>
+<script>
+  /* ★★★ 班级口令：想改口令，就改下面引号里的文字，保存后 push 生效（大小写不限）★★★ */
+  var ENGO_ACCESS_CODE = "ENGO2026";
+
+  (function(){ try{ if(sessionStorage.getItem('engo_gate_ok')==='1') document.getElementById('gate').style.display='none'; }catch(e){} })();
+  function gateCheck(){
+    var v=(document.getElementById('gateInput').value||'').trim();
+    if(v.toUpperCase()===ENGO_ACCESS_CODE.toUpperCase()){
+      try{ sessionStorage.setItem('engo_gate_ok','1'); }catch(e){}
+      document.getElementById('gate').style.display='none';
+    }else{
+      document.getElementById('gateErr').textContent='口令不正确，请向老师确认，或联系我们预约试听课。';
+      document.getElementById('gateInput').select();
+    }
+  }
+</script>
+<!-- =================== 班级口令门禁 结束 =================== -->
+
 <div class="topbar" id="topbar">
   <div class="wrap">
     <a class="brand" href="engo-pro.html" style="color:#fff;text-decoration:none" title="返回英歌派成人英语">
       <svg class="boat" viewBox="0 0 24 24" fill="#F2884B"><path d="M4 15h16l-2 4H6l-2-4zm8-13l6 11H6L12 2z"/></svg>
-      英歌宝成人英语 · 自适应测评
+      英歌派成人英语 · 自适应测评
     </a>
     <div class="timer" id="timer">20:00</div>
   </div>
@@ -173,7 +205,7 @@
     <div class="center"><button class="btn" id="startBtn">开始测评</button></div>
     <p class="center" style="margin-top:14px;font-size:12px;color:var(--muted)">选项顺序随机 · 难度自适应 · 定级保守（宁可偏低）· 口语由老师面谈确认</p>
   </div>
-  <div class="foot">© 英歌宝成人英语 ENGO · 剑桥 Interchange 分级体系</div>
+  <div class="foot">© 英歌派成人英语 ENGO · 剑桥 Interchange 分级体系</div>
 </main>
 
 <!-- ===== TEST ===== -->
@@ -706,7 +738,7 @@ function renderResults(r){
       <button class="btn" onclick="window.print()">打印 / 保存结果</button>
       <button class="btn ghost" onclick="location.reload()">重新测评</button>
     </div>
-    <div class="foot">© 英歌宝成人英语 ENGO · 依据 CEFR 与剑桥 Interchange 分级体系</div>
+    <div class="foot">© 英歌派成人英语 ENGO · 依据 CEFR 与剑桥 Interchange 分级体系</div>
   </div>`;
   window.scrollTo(0,0);
 }
