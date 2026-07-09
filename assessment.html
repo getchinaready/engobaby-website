@@ -41,6 +41,16 @@
   .field{display:flex;gap:10px;align-items:center;margin:0 0 16px;justify-content:center}
   .field input{border:1px solid var(--line);border-radius:10px;padding:11px 14px;font-size:15px;width:240px;font-family:inherit}
   .note{font-size:13px;color:var(--muted);background:#FFF6EE;border:1px solid #F6D9C2;border-radius:12px;padding:12px 14px;margin:16px 0}
+  .lchoice{margin:16px 0 4px}
+  .lchoice .lclab{font-size:14px;font-weight:700;color:var(--navy);margin-bottom:8px;display:flex;align-items:center;gap:6px}
+  .lcopts{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .lcopt{border:1.5px solid var(--line);border-radius:12px;padding:12px 14px;text-align:left;font-size:14px;background:#fff;color:var(--ink);line-height:1.4;transition:all .15s}
+  .lcopt b{display:block;font-size:15px;color:var(--navy);margin-bottom:2px}
+  .lcopt span{font-size:12px;color:var(--muted)}
+  .lcopt:hover{border-color:var(--teal)}
+  .lcopt.on{border-color:var(--teal);background:#EAF4F5}
+  .lcopt.on b{color:var(--teal)}
+  @media (max-width:600px){.lcopts{grid-template-columns:1fr}}
   .btn{background:var(--coral);color:#fff;font-weight:700;font-size:17px;padding:14px 34px;border-radius:30px;transition:transform .12s ease, box-shadow .2s;box-shadow:0 6px 16px rgba(242,136,75,.32)}
   .btn:hover{transform:translateY(-1px)}
   .btn:disabled{opacity:.45;cursor:not-allowed;transform:none}
@@ -193,7 +203,7 @@
   </div>
   <div class="card startcard">
     <div class="facts">
-      <div class="fact"><b>4</b><span>测评部分</span></div>
+      <div class="fact"><b id="factParts">4</b><span>测评部分</span></div>
       <div class="fact"><b>约20′</b><span>限时 20 分钟</span></div>
       <div class="fact"><b>自适应</b><span>难度自调</span></div>
       <div class="fact"><b>即时</b><span>自动定级</span></div>
@@ -201,7 +211,14 @@
     <div class="field">
       <input id="name" type="text" placeholder="你的名字（选填）" aria-label="姓名">
     </div>
-    <div class="note">🎧 <b>听力部分需要声音</b>：请在安静环境、开启扬声器或戴耳机作答，并使用 Chrome、Edge 或 Safari 浏览器。每段录音最多播放 2 次。</div>
+    <div class="lchoice" id="listenChoice">
+      <div class="lclab">🎧 是否参加听力测评？</div>
+      <div class="lcopts">
+        <button type="button" class="lcopt on" data-skip="0"><b>参加听力测评</b><span>含听力，共 4 个部分</span></button>
+        <button type="button" class="lcopt" data-skip="1"><b>不考听力</b><span>老师已单独测，共 3 个部分</span></button>
+      </div>
+    </div>
+    <div class="note" id="listenNote">🎧 <b>听力部分需要声音</b>：请在安静环境、开启扬声器或戴耳机作答，并使用 Chrome、Edge 或 Safari 浏览器。每段录音最多播放 2 次。</div>
     <div class="center"><button class="btn" id="startBtn">开始测评</button></div>
     <p class="center" style="margin-top:14px;font-size:12px;color:var(--muted)">选项顺序随机 · 难度自适应 · 定级保守（宁可偏低）· 口语由老师面谈确认</p>
   </div>
@@ -402,14 +419,24 @@ let vMcq=null;            // vocab MCQ engine (formats B/C/D)
 let gEngine=null,rEngine=null,lEngine=null;
 
 /* ---------------- START ---------------- */
+let skipListenChoice=false;   // 是否不考听力（老师已单独测）
+document.querySelectorAll(".lcopt").forEach(b=>b.addEventListener("click",()=>{
+  document.querySelectorAll(".lcopt").forEach(x=>x.classList.remove("on"));
+  b.classList.add("on");
+  skipListenChoice=b.dataset.skip==="1";
+  const fp=$("factParts"); if(fp)fp.textContent=skipListenChoice?"3":"4";
+  const ln=$("listenNote"); if(ln)ln.style.display=skipListenChoice?"none":"";
+}));
 $("startBtn").addEventListener("click",start);
 function start(){
   state.name=$("name").value.trim();
+  state.skipListen=skipListenChoice;
   vocabOrder=[]; ["a1","a2","b1","b2","pseudo"].forEach(b=>VSELF[b].forEach(w=>vocabOrder.push({w,b}))); shuffle(vocabOrder);
   vMcq=makeVocabMcqEngine();
   gEngine=makeItemEngine(GBANK,"grammar");
   rEngine=makeReadListEngine(RITEMS);
-  lEngine=makeReadListEngine(LITEMS);
+  SEC=state.skipListen?["词汇","语法","阅读"]:["词汇","语法","阅读","听力"];
+  lEngine=state.skipListen?null:makeReadListEngine(LITEMS);
   $("start").classList.add("hidden"); $("test").classList.remove("hidden"); $("navbar").classList.remove("hidden");
   section=0; renderSection();
   endTime=Date.now()+20*60*1000; tick(); timerId=setInterval(tick,1000);
@@ -522,14 +549,14 @@ function makeReadListEngine(items){
 /* =========================================================================
    RENDERING
    ========================================================================= */
-const SEC=["词汇","语法","阅读","听力"];
+let SEC=["词汇","语法","阅读","听力"];
 let pendingChoice=null;
 let vocabPhase=0;   // 0 = self-report chips, 1 = MCQ items
 
 function renderSection(){
   window.scrollTo(0,0);
   $("steps").innerHTML=SEC.map((_,i)=>`<span class="dot ${i<section?'done':''} ${i===section?'cur':''}"></span>`).join("");
-  $("progressbar").style.width=(section/4*100)+"%";
+  $("progressbar").style.width=(section/SEC.length*100)+"%";
   if(section===0){ vocabPhase===0 ? renderVocabSelf() : renderVocabMcq(); }
   else if(section===1) renderGrammar();
   else if(section===2) renderReading();
@@ -599,7 +626,7 @@ function renderGrammar(){
 /* ---- Reading: one mini-passage + one question ---- */
 function renderReading(){
   const item=rEngine.serve();
-  if(!item){ section=3; renderSection(); return; }
+  if(!item){ if(state.skipListen){ finishAll(); } else { section=3; renderSection(); } return; }
   $("test").innerHTML=`<div class="section">
     <div class="sec-head"><span class="num">第三部分 / READING</span><h2>阅读</h2></div>
     <p class="sec-sub">读这段短文并回答（每题一段，难度自适应）。</p>
@@ -672,22 +699,29 @@ function scoreVocabSelf(){
 
 function finishAll(){
   clearInterval(timerId); if(window.speechSynthesis)speechSynthesis.cancel();
+  const skip=state.skipListen;
   const VS=scoreVocabSelf();        // self-report -> est + level
   const VM=vMcq.level();            // vocab MCQ -> level
   // combined vocab level: average of the two, round down (conservative)
   const vLvl=Math.max(1,Math.floor((VS.lvl+VM.lvl)/2 + 0.34));
-  const G=gEngine.level(), R=rEngine.level(), L=lEngine.level();
+  const G=gEngine.level(), R=rEngine.level();
+  const L=skip?null:lEngine.level();
 
   // weights: grammar/reading/listening ×2, vocab ×1; round DOWN.
-  const weighted=(2*G.lvl+2*R.lvl+2*L.lvl+1*vLvl)/7;
+  // 不考听力时按 语法/阅读×2、词汇×1（总权重 5）重新计算。
+  const weighted=skip
+    ? (2*G.lvl+2*R.lvl+1*vLvl)/5
+    : (2*G.lvl+2*R.lvl+2*L.lvl+1*vLvl)/7;
   let rec=Math.floor(weighted+0.34); rec=Math.min(4,Math.max(1,rec));
-  const anchorFails=[G.anchorFail,R.anchorFail,L.anchorFail,VM.anchorFail].filter(Boolean).length;
+  const anchorArr=[G.anchorFail,R.anchorFail,VM.anchorFail];
+  if(!skip)anchorArr.push(L.anchorFail);
+  const anchorFails=anchorArr.filter(Boolean).length;
   const unreliable=VS.unreliable||anchorFails>=2;
   if(anchorFails>=2)rec=1; else if(anchorFails===1)rec=Math.max(1,rec-1);
 
-  const lvls=[vLvl,G.lvl,R.lvl,L.lvl];
+  const lvls=skip?[vLvl,G.lvl,R.lvl]:[vLvl,G.lvl,R.lvl,L.lvl];
   const spread=Math.max(...lvls)-Math.min(...lvls);
-  renderResults({VS,VM,vLvl,G,R,L,rec,spread,unreliable,anchorFails});
+  renderResults({VS,VM,vLvl,G,R,L,rec,spread,unreliable,anchorFails,skip});
 }
 
 function ladderRung(i,rec){const L=LEVELS[i];
@@ -703,8 +737,10 @@ function renderResults(r){
   if(r.unreliable)flag=`<div class="flag warn">⚠️ 本次结果可信度偏低（校准词误选过多，或最简单题目出错）。建议老师当面复测，本报告仅供初步参考。</div>`;
   else if(r.spread>=2)flag=`<div class="flag">📌 你各项能力差异较明显（常见于“读得懂但说不出”）。以上为参考级别，最终入班将结合老师口语面谈确定。</div>`;
 
-  const rows=[["词汇",r.vLvl],["语法",r.G.lvl],["阅读",r.R.lvl],["听力",r.L.lvl]]
-    .map(([lab,lv])=>`<div class="prow"><span class="plab">${lab}</span><div class="pbar">${segBar(lv)}</div><span class="pcefr">${LEVELS[lv].cefr}</span></div>`).join("");
+  const rowData=[["词汇",r.vLvl],["语法",r.G.lvl],["阅读",r.R.lvl]];
+  if(!r.skip)rowData.push(["听力",r.L.lvl]);
+  let rows=rowData.map(([lab,lv])=>`<div class="prow"><span class="plab">${lab}</span><div class="pbar">${segBar(lv)}</div><span class="pcefr">${LEVELS[lv].cefr}</span></div>`).join("");
+  if(r.skip)rows+=`<div class="prow"><span class="plab">听力</span><div class="pbar" style="background:transparent;align-items:center;padding-left:2px;font-size:13px;color:var(--muted)">由老师单独测评</div><span class="pcefr">—</span></div>`;
 
   $("results").classList.remove("hidden");
   $("results").innerHTML=`<div class="results">
@@ -724,9 +760,9 @@ function renderResults(r){
         <tr><td>词汇 · 词义/用法（自适应）</td><td>${bsum(vMcq.summary())}</td><td>${LEVELS[r.VM.lvl].key}</td></tr>
         <tr><td>语法（自适应）</td><td>${bsum(gEngine.summary())}</td><td>${LEVELS[r.G.lvl].key}</td></tr>
         <tr><td>阅读（自适应）</td><td>${bsum(rEngine.summary())}</td><td>${LEVELS[r.R.lvl].key}</td></tr>
-        <tr><td>听力（自适应）</td><td>${bsum(lEngine.summary())}</td><td>${LEVELS[r.L.lvl].key}</td></tr>
+        ${r.skip?`<tr><td>听力</td><td>本次未测（由老师单独测评）</td><td>—</td></tr>`:`<tr><td>听力（自适应）</td><td>${bsum(lEngine.summary())}</td><td>${LEVELS[r.L.lvl].key}</td></tr>`}
       </table>
-      <p style="font-size:13px;color:var(--muted);margin-top:10px">权重：语法/阅读/听力各×2、词汇×1，向下取整以避免高估。锚定题失败数：${r.anchorFails}。词汇综合级别取自评与词义题的均值（向下取整）。口语由教师面谈补充确认。</p>
+      <p style="font-size:13px;color:var(--muted);margin-top:10px">${r.skip?"权重：语法/阅读各×2、词汇×1（本次不含听力，由老师单独测评），向下取整以避免高估。":"权重：语法/阅读/听力各×2、词汇×1，向下取整以避免高估。"}锚定题失败数：${r.anchorFails}。词汇综合级别取自评与词义题的均值（向下取整）。口语由教师面谈补充确认。</p>
     </details>
     <div class="cta-book" style="margin-top:26px;background:linear-gradient(150deg,#0B3D5C,#0A2E4D);border-radius:16px;padding:28px 24px;text-align:center;color:#fff">
       <h3 style="font-size:20px;margin-bottom:8px">想让老师帮你精准定级、定制学习计划？</h3>
