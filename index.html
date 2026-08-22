@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>英歌宝 Engo Baby · 启蒙英语，快乐成长</title>
-<meta name="description" content="英歌宝 Engo Baby — 普宁 3-6 岁幼儿英语启蒙与全英文 STEAM 创新工坊。Play, Learn, Grow!">
+<title>英歌宝 Engo Baby · 启蒙英语，快乐成长｜2026 秋季学期招生中</title>
+<meta name="description" content="英歌宝 Engo Baby — 普宁 3-6 岁幼儿英语启蒙与全英文 STEAM 创新工坊。2026 秋季学期招生中，另开 2–3 岁儿歌绘本、少儿定制课、成人英语口语。">
 <meta property="og:type" content="website">
 <meta property="og:title" content="英歌宝 Engo Baby · 启蒙英语，快乐成长">
 <meta property="og:description" content="普宁 3–6 岁幼儿英语启蒙与全英文 STEAM 创新工坊 · Play, Learn, Grow!">
@@ -252,8 +252,10 @@
         <a href="#about"><span class="zh">关于我们</span><span class="en">About</span></a>
         <a href="#curriculum"><span class="zh">课程体系</span><span class="en">Curriculum</span></a>
         <a href="#faculty"><span class="zh">师资</span><span class="en">Teachers</span></a>
-        <a href="#program"><span class="zh">价格</span><span class="en">Pricing</span></a>
+        <a href="jiage.html"><span class="zh">课程与价格</span><span class="en">Pricing</span></a>
+        <!-- 暑期课程表入口已隐藏（暑期结束）；如需恢复取消下一行注释
         <a href="kebiao.html"><span class="zh">暑期课程表</span><span class="en">Schedule</span></a>
+        -->
         <a href="english-name.html"><span class="zh">取英文名</span><span class="en">English Name</span></a>
         <a href="kecheng-2-3.html"><span class="zh">课程说明</span><span class="en">Course Guide</span></a>
         <a href="engo-pro.html"><span class="zh">英歌派·成人</span><span class="en">Engo Pro</span></a>
@@ -282,13 +284,13 @@
         <span class="en block">Engo Baby — an all-English immersion home for ages 3–6 in Puning. We bring a world-class, natural language-acquisition approach back home, so children love English first, then understand it, then speak it naturally.</span>
       </p>
       <div class="hero-cta">
-        <a href="#signup" class="btn"><span class="zh">预约暑期试听课</span><span class="en">Book a Summer Trial</span></a>
-        <a href="#curriculum" class="btn ghost"><span class="zh">了解课程</span><span class="en">Explore Courses</span></a>
+        <a href="#signup" class="btn"><span class="zh">预约秋季试听课</span><span class="en">Book an Autumn Trial</span></a>
+        <a href="jiage.html" class="btn ghost"><span class="zh">查看课程与价格</span><span class="en">Courses &amp; Pricing</span></a>
       </div>
       <div class="hero-badges">
         <div><span><b>3–6</b><span class="zh">岁专属</span><span class="en">years</span></span></div>
-        <div><span><b>3–5</b><span class="zh">人小班</span><span class="en">per class</span></span></div>
-        <div><span><b>36</b><span class="zh">课时全英文</span><span class="en">all-English</span></span></div>
+        <div><span><b>3–4</b><span class="zh">人小班</span><span class="en">per class</span></span></div>
+        <div><span><b>16</b><span class="zh">周秋季学期</span><span class="en">week term</span></span></div>
       </div>
     </div>
     <div class="hero-art">
@@ -429,8 +431,11 @@
   </div>
 </section>
 
-<!-- SCHEDULE -->
-<section id="schedule" class="alt">
+<!-- ===== SCHEDULE（2026 暑期课程表）已隐藏 =====
+     暑期已结课（2026-08-17 起下线）。整段内容完整保留，
+     以后要恢复：删除下面 <section> 标签里的 hidden 属性即可。
+     同时需恢复：导航与页脚的「暑期课程表」链接（见上方注释）。 -->
+<section id="schedule" class="alt" hidden>
   <div class="wrap center">
     <span class="eyebrow"><span class="zh">2026 暑期</span><span class="en">Summer 2026</span></span>
     <h2 class="sec"><span class="zh">缤纷夏日 · 快乐学习</span><span class="en">A Colorful Summer of Learning</span></h2>
@@ -478,8 +483,83 @@
   </div>
 </section>
 
-<!-- PROGRAM & PRICING -->
+<!-- ===== 秋季课程与价格（2026 秋季学期） ===== -->
+<style>
+  .term-strip{background:#EAF3FC;border:1px solid #D8E8F8;border-radius:20px;padding:22px 26px;display:flex;gap:22px;align-items:flex-start;flex-wrap:wrap;margin-bottom:38px}
+  .term-strip .tb{flex:none;background:var(--blue);color:#fff;font-family:var(--fh);font-weight:800;font-size:1rem;padding:8px 18px;border-radius:12px}
+  .term-strip p{color:#4c5a66;font-size:.95rem;margin:0;flex:1;min-width:260px}
+  .term-strip b{color:var(--blue-d)}
+  .pgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
+  .pcard{background:#fff;border-radius:20px;box-shadow:var(--shadow);overflow:hidden;display:flex;flex-direction:column;transition:transform .2s,box-shadow .2s}
+  .pcard:hover{transform:translateY(-5px);box-shadow:0 16px 38px rgba(31,111,176,.16)}
+  .pcard .pbar{height:7px}
+  .pcard .pbody{padding:22px 20px 20px;display:flex;flex-direction:column;flex:1}
+  .pcard h3{font-size:1.12rem;font-weight:800;margin-bottom:6px;line-height:1.3}
+  .pcard .fit{font-size:.85rem;color:#7a8894;margin-bottom:12px;min-height:2.6em}
+  .pcard .pk{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px}
+  .pcard .pk span{font-size:.76rem;font-weight:700;background:var(--cream);color:#6b7a88;padding:4px 10px;border-radius:99px}
+  .pcard .pnum{font-family:var(--fh);font-weight:800;font-size:1.6rem;line-height:1.1;margin-top:auto}
+  .pcard .pnum small{font-size:.75rem;font-weight:600;color:#8a98a4}
+  .pcard .pask{font-size:.76rem;color:#9aa6b1;margin-top:6px}
+  .g1 .pbar{background:var(--green)} .g1 h3,.g1 .pnum{color:#6E9339}
+  .g2 .pbar{background:var(--blue)} .g2 h3,.g2 .pnum{color:var(--blue-d)}
+  .g3 .pbar{background:var(--yellow)} .g3 h3,.g3 .pnum{color:#C98A08}
+  .g4 .pbar{background:var(--red)} .g4 h3,.g4 .pnum{color:#DB4547}
+  @media(max-width:920px){.pgrid{grid-template-columns:1fr 1fr}}
+  @media(max-width:520px){.pgrid{grid-template-columns:1fr}.pcard .fit{min-height:0}}
+</style>
 <section id="program" class="alt">
+  <div class="wrap center">
+    <span class="eyebrow"><span class="zh">2026 秋季学期</span><span class="en">Autumn 2026</span></span>
+    <h2 class="sec"><span class="zh">四大课程产品 · 总有一款适合孩子</span><span class="en">Four programs, one that fits your child</span></h2>
+    <p class="sub"><span class="zh">英语启蒙 × STEAM 全球思维，兼开 2–3 岁儿歌绘本、少儿定制课、成人英语口语。</span><span class="en block">English × STEAM for ages 3–6, plus songs &amp; picture books (2–3), customized courses and adult spoken English.</span></p>
+  </div>
+  <div class="wrap" style="margin-top:34px">
+    <div class="term-strip">
+      <span class="tb"><span class="zh">秋季学期 · 共 16 周</span><span class="en">Autumn term · 16 weeks</span></span>
+      <p><span class="zh">学期 <b>9 月开学</b>，至次年 <b>1 月底结课</b>。9月7日–13日、中秋 + 国庆（含中间连休）放假，另预留 <b>3 周机动周</b>（天气、调课等），实际授课 <b>16 周</b>。</span><span class="en block">The term <b>starts in September</b> and ends in <b>late January</b>. Sep 7–13, Mid-Autumn and National Day are holidays, with <b>3 buffer weeks</b> reserved — <b>16 actual teaching weeks</b>.</span></p>
+    </div>
+    <div class="pgrid">
+      <div class="pcard g1"><div class="pbar"></div><div class="pbody">
+        <h3><span class="zh">幼儿英语启蒙班<br>（双科班）</span><span class="en">Kids English + STEAM</span></h3>
+        <p class="fit"><span class="zh">3–6 岁 · 3–4 人小班 · 全英授课</span><span class="en">Ages 3–6 · 3–4 per class · all-English</span></p>
+        <div class="pk"><span>32<span class="zh">课时</span><span class="en"> sess.</span></span><span>64<span class="zh">课时</span><span class="en"> sess.</span></span></div>
+        <div class="pnum">¥1XX<small>/<span class="zh">课时起</span><span class="en">session</span></small></div>
+        <p class="pask"><span class="zh">具体价格欢迎咨询工作室</span><span class="en">Ask us for exact pricing</span></p>
+      </div></div>
+      <div class="pcard g2"><div class="pbar"></div><div class="pbody">
+        <h3><span class="zh">定制课程班</span><span class="en">Customized Program</span></h3>
+        <p class="fit"><span class="zh">学龄前 / 小学 / 初中 · 1对1 ~ 1对4</span><span class="en">Pre-school to middle school · 1-on-1 to 1-on-4</span></p>
+        <div class="pk"><span>32<span class="zh">课时</span><span class="en"> sess.</span></span><span>64<span class="zh">课时</span><span class="en"> sess.</span></span></div>
+        <div class="pnum">¥1XX<small>–¥2XX/<span class="zh">课时</span><span class="en">session</span></small></div>
+        <p class="pask"><span class="zh">1 对多为每人价 · 欢迎咨询</span><span class="en">Group rates are per student</span></p>
+      </div></div>
+      <div class="pcard g3"><div class="pbar"></div><div class="pbody">
+        <h3><span class="zh">儿歌绘本班</span><span class="en">Songs &amp; Picture Books</span></h3>
+        <p class="fit"><span class="zh">2–3 岁低龄宝宝 · 3–4 人小班</span><span class="en">Ages 2–3 · 3–4 per class</span></p>
+        <div class="pk"><span>16<span class="zh">课时</span><span class="en"> sess.</span></span><span>32<span class="zh">课时</span><span class="en"> sess.</span></span></div>
+        <div class="pnum">¥1XX<small>/<span class="zh">课时起</span><span class="en">session</span></small></div>
+        <p class="pask"><span class="zh">具体价格欢迎咨询工作室</span><span class="en">Ask us for exact pricing</span></p>
+      </div></div>
+      <div class="pcard g4"><div class="pbar"></div><div class="pbody">
+        <h3><span class="zh">成人英语口语班</span><span class="en">Adult Spoken English</span></h3>
+        <p class="fit"><span class="zh">成人 · 小班开口 · 时段灵活</span><span class="en">Adults · small group · flexible hours</span></p>
+        <div class="pk"><span>16<span class="zh">课时</span><span class="en"> sess.</span></span><span>32<span class="zh">课时</span><span class="en"> sess.</span></span><span>64<span class="zh">课时</span><span class="en"> sess.</span></span></div>
+        <div class="pnum">¥1XX<small>/<span class="zh">课时起</span><span class="en">session</span></small></div>
+        <p class="pask"><span class="zh">凑够人数即开班 · 欢迎咨询</span><span class="en">Opens as soon as it fills</span></p>
+      </div></div>
+    </div>
+    <div style="text-align:center;margin-top:34px">
+      <a href="jiage.html" class="btn blue"><span class="zh">查看完整课程与价格 →</span><span class="en">View full courses &amp; pricing →</span></a>
+    </div>
+    <p class="slot-note"><span class="zh">* 页面价格仅显示量级，具体优惠价格与新老客户价，欢迎咨询工作室（微信 engo2026）。报读过暑期课程营的家庭续报秋季任意课程享老客户价。</span><span class="en">* Prices show the range only — contact the studio (WeChat engo2026) for exact and returning-family rates.</span></p>
+  </div>
+</section>
+
+<!-- ===== 暑期成长营价格区已隐藏 =====
+     暑期已结课（2026-08-17 起下线）。整段内容完整保留，
+     以后要恢复：删除下面 <section> 标签里的 hidden 属性，并把 id 改回 program。 -->
+<section id="program-summer" class="alt" hidden>
   <div class="wrap center">
     <span class="eyebrow"><span class="zh">暑期成长营</span><span class="en">Summer Camp</span></span>
     <h2 class="sec"><span class="zh">36 课时 · 英语启蒙 × STEAM 创新工坊</span><span class="en">36 Sessions · English × STEAM</span></h2>
@@ -539,12 +619,12 @@
 <section id="signup">
   <div class="wrap">
     <div class="signup">
-      <h2><span class="zh">预约一节暑期试听课</span><span class="en">Book a Summer Trial Class</span></h2>
-      <p><span class="zh">让孩子先来体验一节全英文互动课。名额有限，欢迎扫码或联系我们预约。</span><span class="en block">Let your child experience an all-English interactive class. Seats are limited — scan or contact us to reserve.</span></p>
+      <h2><span class="zh">预约一节秋季试听课</span><span class="en">Book an Autumn Trial Class</span></h2>
+      <p><span class="zh">秋季学期 9 月开学，现已开放报名。让孩子先来体验一节全英文互动课，名额有限，欢迎联系我们预约。</span><span class="en block">The autumn term starts in September and enrollment is open. Let your child try an all-English interactive class — seats are limited.</span></p>
       <a href="#" class="btn" id="signupBtn"><span class="zh">立即预约试听</span><span class="en">Reserve Now</span></a>
       <div class="contact-row">
         <div><b><span class="zh">微信咨询</span><span class="en">WeChat</span></b><span style="opacity:.9">engo2026</span></div>
-        <div><b><span class="zh">上课时段</span><span class="en">Time Slots</span></b><span style="opacity:.9"><span class="zh">上午 / 下午 / 晚间场</span><span class="en">Morning / Afternoon / Evening</span></span></div>
+        <div><b><span class="zh">小红书 / 视频号</span><span class="en">RedNote / Channels</span></b><span style="opacity:.9"><span class="zh">元语英语工作室</span><span class="en">Engo English Studio</span></span></div>
         <div><b><span class="zh">上课地点</span><span class="en">Location</span></b><span style="opacity:.9"><span class="zh">普宁市万泰新天地时代中心 D 栋</span><span class="en">Wantai New World, Times Center Bldg D, Puning</span></span></div>
       </div>
     </div>
@@ -572,7 +652,7 @@
         <h4><span class="zh">导航</span><span class="en">Navigate</span></h4>
         <a href="#about"><span class="zh">关于我们</span><span class="en">About</span></a>
         <a href="#curriculum"><span class="zh">课程体系</span><span class="en">Curriculum</span></a>
-        <a href="kebiao.html"><span class="zh">暑期课程表</span><span class="en">Schedule</span></a>
+        <a href="jiage.html"><span class="zh">课程与价格</span><span class="en">Courses &amp; Pricing</span></a>
         <a href="english-name.html"><span class="zh">取英文名</span><span class="en">English Name</span></a>
         <a href="kecheng-2-3.html"><span class="zh">课程说明</span><span class="en">Course Guide</span></a>
         <a href="engo-pro.html"><span class="zh">英歌派·成人</span><span class="en">Engo Pro</span></a>
@@ -605,7 +685,7 @@
   document.getElementById('signupBtn').addEventListener('click',function(e){
     e.preventDefault();
     alert(html.getAttribute('lang')==='zh'
-      ? '预约试听：请添加微信「engo2026」联系我们预约。\n上课地点：普宁市万泰新天地时代中心 D 栋。'
+      ? '预约秋季试听：请添加微信「engo2026」联系我们预约。\n也可关注小红书 / 微信视频号「元语英语工作室」。\n上课地点：普宁市万泰新天地时代中心 D 栋。'
       : 'Book a trial: add us on WeChat "engo2026".\nLocation: Times Center Bldg D, Wantai New World, Puning.');
   });
 </script>
