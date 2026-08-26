@@ -310,7 +310,7 @@
     <div class="signup">
       <h2><span class="zh">预约一节成人试听课</span><span class="en">Book an Adult Trial Class</span></h2>
       <p><span class="zh">含入学测评与科学定级。先体验，再决定。</span><span class="en block">Includes a placement assessment. Try first, then decide.</span></p>
-      <a href="#" class="btn" id="signupBtn"><span class="zh">立即预约试听</span><span class="en">Reserve Now</span></a>
+      <a href="booking-pro.html" class="btn" id="signupBtn"><span class="zh">立即预约试听</span><span class="en">Reserve Now</span></a>
       <div class="contact-row">
         <div><b><span class="zh">微信咨询</span><span class="en">WeChat</span></b>engo2026</div>
         <div><b><span class="zh">上课地点</span><span class="en">Location</span></b><span class="zh">普宁 · 万泰新天地时代中心 D 栋</span><span class="en">Times Center Bldg D, Puning</span></div>
@@ -326,12 +326,6 @@
   langBtn.addEventListener('click',function(){
     if(html.getAttribute('lang')==='zh'){html.setAttribute('lang','en');langBtn.textContent='中';}
     else{html.setAttribute('lang','zh');langBtn.textContent='EN';}
-  });
-  document.getElementById('signupBtn').addEventListener('click',function(e){
-    e.preventDefault();
-    alert(html.getAttribute('lang')==='zh'
-      ? '预约试听：请添加微信「engo2026」联系我们预约。\n上课地点：普宁市万泰新天地时代中心 D 栋。'
-      : 'Book a trial: add us on WeChat "engo2026".\nLocation: Times Center Bldg D, Puning.');
   });
 </script>
 </body>

@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>预约试听课 · 英歌派 Engo Pro 成人英语</title>
+<meta name="description" content="英歌派 Engo Pro 成人英语试听课在线预约 — 零基础到 B1，听说优先，4 人精品小班。">
+<meta property="og:type" content="website">
+<meta property="og:title" content="预约试听课 · 英歌派 Engo Pro">
+<meta property="og:description" content="填写一分钟，为自己预约一节成人英语试听课 + 免费入学测评定级。">
+<meta property="og:image" content="https://www.engobaby.com/og-pro.png">
+<meta property="og:url" content="https://www.engobaby.com/booking-pro">
+<link rel="icon" href="logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Poppins:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --red:#EF4A4A; --yellow:#F4A81B; --green:#7BA84A; --blue:#3090D8;
+    --blue-d:#1F6FB0; --ink:#2B3A4A; --cream:#F7F3EC; --sand:#C9B79C;
+    --sky:#EAF5FD; --white:#fff; --line:#E3EBF2;
+    --blue-deep:#16456F;
+    --shadow:0 12px 32px rgba(22,69,111,.12);
+    --fz:"Poppins","Noto Sans SC",system-ui,sans-serif;
+    --fh:"Baloo 2","Noto Sans SC",system-ui,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:var(--fz);color:var(--ink);background:var(--cream);line-height:1.7;-webkit-font-smoothing:antialiased;-webkit-text-size-adjust:100%}
+  h1,h2,h3{font-family:var(--fh);line-height:1.25;text-wrap:balance}
+  img{max-width:100%;display:block}
+  a{color:var(--blue-d)}
+
+  .page{max-width:600px;margin:0 auto;padding:0 0 60px}
+
+  /* Header */
+  .hd{background:linear-gradient(160deg,#1F6FB0 0%,#16456F 100%);color:#fff;padding:26px 22px 62px;position:relative;overflow:hidden}
+  .hd::after{content:"";position:absolute;left:-6%;right:-6%;bottom:-30px;height:60px;background:var(--cream);border-radius:50% 50% 0 0}
+  .hd .logo{height:38px;width:auto;margin-bottom:18px;filter:brightness(0) invert(1)}
+  .hd h1{font-size:clamp(1.5rem,6.2vw,1.95rem);margin-bottom:8px}
+  .hd p{font-size:.94rem;opacity:.94;max-width:26em}
+  .hd .boat{position:absolute;right:14px;bottom:16px;width:88px;opacity:.9}
+
+  /* Card */
+  .card{background:#fff;border-radius:20px;box-shadow:var(--shadow);padding:24px 20px;margin:-34px 16px 0;position:relative;z-index:2}
+
+  .sec{margin-bottom:30px}
+  .sec:last-of-type{margin-bottom:14px}
+  .sec-h{display:flex;align-items:center;gap:9px;margin-bottom:16px;padding-bottom:11px;border-bottom:2px solid var(--sky)}
+  .sec-h .n{flex:none;width:25px;height:25px;border-radius:50%;background:var(--blue-deep);color:#fff;font-family:var(--fh);font-weight:700;font-size:.85rem;display:flex;align-items:center;justify-content:center}
+  .sec-h h2{font-size:1.06rem}
+
+  .f{margin-bottom:19px}
+  .f:last-child{margin-bottom:0}
+  label.q{display:block;font-weight:600;font-size:.95rem;margin-bottom:9px;color:var(--ink)}
+  label.q .req{color:var(--red);margin-left:2px}
+  label.q .hint{display:block;font-weight:400;font-size:.8rem;color:#8A9BAA;margin-top:2px;line-height:1.5}
+
+  input[type=text],input[type=tel],select,textarea{
+    width:100%;font-family:var(--fz);font-size:16px;color:var(--ink);
+    border:1.5px solid var(--line);border-radius:12px;padding:12px 13px;background:#fff;
+    transition:border-color .15s,box-shadow .15s;-webkit-appearance:none;appearance:none}
+  select{background-image:url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath fill='%238A9BAA' d='M1 1l5 5 5-5'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center;padding-right:36px}
+  textarea{min-height:82px;resize:vertical;line-height:1.6}
+  input:focus,select:focus,textarea:focus{outline:none;border-color:var(--blue);box-shadow:0 0 0 3px rgba(48,144,216,.13)}
+  .row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+
+  /* Chip choices */
+  .chips{display:flex;flex-wrap:wrap;gap:8px}
+  .chip{position:relative}
+  .chip input{position:absolute;opacity:0;width:0;height:0}
+  .chip span{display:block;border:1.5px solid var(--line);border-radius:11px;padding:9px 15px;font-size:.9rem;cursor:pointer;transition:all .15s;background:#fff;user-select:none;-webkit-tap-highlight-color:transparent}
+  .chip input:checked+span{border-color:var(--blue);background:var(--sky);color:var(--blue-d);font-weight:600}
+  .chip input:focus-visible+span{box-shadow:0 0 0 3px rgba(48,144,216,.13)}
+  .chips.g2{display:grid;grid-template-columns:1fr 1fr}
+  .chips.g2 .chip span{text-align:center}
+
+  /* Date grid */
+  .dates{display:grid;grid-template-columns:repeat(auto-fill,minmax(96px,1fr));gap:8px}
+  .dates .chip span{text-align:center;padding:11px 6px;font-size:.86rem;line-height:1.35}
+  .dates .chip span b{display:block;font-family:var(--fh);font-size:1.02rem;font-weight:700}
+
+  .tip{background:var(--sky);border-radius:12px;padding:11px 14px;font-size:.85rem;color:var(--blue-d);line-height:1.6;margin-top:10px}
+
+  .hp{position:absolute;left:-9999px;opacity:0;height:0;width:0}
+
+  /* Submit */
+  .submit{width:100%;background:var(--yellow);color:#fff;font-family:var(--fh);font-weight:700;font-size:1.12rem;
+    padding:16px;border:none;border-radius:14px;cursor:pointer;box-shadow:0 8px 20px rgba(244,168,27,.32);
+    transition:transform .15s,opacity .15s;-webkit-tap-highlight-color:transparent}
+  .submit:active{transform:translateY(1px)}
+  .submit:disabled{opacity:.6;cursor:not-allowed;box-shadow:none}
+  .err{background:#FDECEC;color:#C0392B;border-radius:11px;padding:11px 14px;font-size:.88rem;margin-bottom:13px;display:none;line-height:1.6}
+  .err.on{display:block}
+  .privacy{font-size:.79rem;color:#8A9BAA;text-align:center;margin-top:14px;line-height:1.65}
+
+  /* Success */
+  .done{display:none;text-align:center;padding:14px 4px 6px}
+  .done.on{display:block}
+  .done .tick{width:70px;height:70px;border-radius:50%;background:var(--green);margin:0 auto 20px;display:flex;align-items:center;justify-content:center}
+  .done .tick svg{width:34px;height:34px;stroke:#fff;stroke-width:3.4;fill:none;stroke-linecap:round;stroke-linejoin:round}
+  .done h2{font-size:1.45rem;margin-bottom:10px}
+  .done p{font-size:.95rem;color:#5A6B7B;margin-bottom:22px}
+  .wxbox{background:var(--cream);border-radius:15px;padding:19px;margin-bottom:16px}
+  .wxbox .lb{font-size:.82rem;color:#8A9BAA;margin-bottom:5px}
+  .wxbox .wx{font-family:var(--fh);font-size:1.55rem;font-weight:700;color:var(--blue-d);letter-spacing:.02em}
+  .copybtn{margin-top:11px;background:var(--blue);color:#fff;border:none;border-radius:10px;padding:9px 22px;font-size:.9rem;font-family:var(--fz);font-weight:600;cursor:pointer}
+  .backlink{display:inline-block;margin-top:6px;font-size:.9rem;color:var(--blue-d);border-bottom:1px solid rgba(48,144,216,.35);padding-bottom:1px}
+
+  .foot{text-align:center;font-size:.8rem;color:#96A5B3;margin-top:24px;padding:0 22px;line-height:1.7}
+  .foot a{color:#96A5B3}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <header class="hd">
+    <img src="engo_pro_logo.png" alt="Engo Pro" class="logo" onerror="this.style.display='none'">
+    <h1>预约一节成人英语试听课</h1>
+    <p>零基础到 B1 · 4 人精品小班 · 听说优先，开口为先<br>填写约 1 分钟，含<b>免费入学测评</b>，老师会为您科学定级。</p>
+  </header>
+
+  <div class="card">
+
+    <form id="bookingForm" novalidate>
+      <input type="text" name="_hp" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true">
+
+      <!-- 1 -->
+      <div class="sec">
+        <div class="sec-h"><div class="n">1</div><h2>怎么称呼您</h2></div>
+
+        <div class="f">
+          <label class="q" for="studentName">您的姓名 / 称呼<span class="req">*</span>
+            <span class="hint">写姓氏 + 先生/女士也可以</span></label>
+          <input type="text" id="studentName" name="studentName" placeholder="例：陈小姐 / 张伟" required maxlength="20">
+        </div>
+
+        <div class="f">
+          <label class="q" for="phone">手机号<span class="req">*</span>
+            <span class="hint">老师会通过微信或电话与您确认试听时间</span></label>
+          <input type="tel" id="phone" name="phone" placeholder="11 位手机号" required inputmode="numeric" maxlength="11">
+        </div>
+
+        <div class="f">
+          <label class="q" for="wechat">微信号<span class="hint">选填。填了我们优先加微信，沟通更方便</span></label>
+          <input type="text" id="wechat" name="wechat" placeholder="微信号 / 手机号同微信" maxlength="40">
+        </div>
+
+        <div class="f">
+          <label class="q">您的年龄段<span class="req">*</span><span class="hint">用于分班，同龄段学员话题更聊得来</span></label>
+          <div class="chips">
+            <label class="chip"><input type="radio" name="ageGroup" value="18–25 岁" required><span>18–25</span></label>
+            <label class="chip"><input type="radio" name="ageGroup" value="26–35 岁"><span>26–35</span></label>
+            <label class="chip"><input type="radio" name="ageGroup" value="36–45 岁"><span>36–45</span></label>
+            <label class="chip"><input type="radio" name="ageGroup" value="46 岁以上"><span>46 以上</span></label>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2 -->
+      <div class="sec">
+        <div class="sec-h"><div class="n">2</div><h2>您目前的英语基础</h2></div>
+
+        <div class="f">
+          <label class="q">自我感觉大概在<span class="req">*</span>
+            <span class="hint">凭感觉选就好，真实水平以试听课的入学测评为准</span></label>
+          <div class="chips">
+            <label class="chip"><input type="radio" name="level" value="零基础 — 几乎全忘了" required><span>零基础，全忘了</span></label>
+            <label class="chip"><input type="radio" name="level" value="认识单词，但开不了口"><span>认识词，开不了口</span></label>
+            <label class="chip"><input type="radio" name="level" value="能说简单句，日常勉强应付"><span>能说简单句</span></label>
+            <label class="chip"><input type="radio" name="level" value="能日常交流，想更流利"><span>能交流，想更流利</span></label>
+          </div>
+        </div>
+
+        <div class="f">
+          <label class="q">学历阶段最后一次系统学英语是<span class="hint">选填，供老师参考</span></label>
+          <div class="chips">
+            <label class="chip"><input type="radio" name="lastStudy" value="初中"><span>初中</span></label>
+            <label class="chip"><input type="radio" name="lastStudy" value="高中"><span>高中</span></label>
+            <label class="chip"><input type="radio" name="lastStudy" value="大学（过四级）"><span>大学·过四级</span></label>
+            <label class="chip"><input type="radio" name="lastStudy" value="大学（过六级）"><span>大学·过六级</span></label>
+            <label class="chip"><input type="radio" name="lastStudy" value="毕业后自学过"><span>毕业后自学</span></label>
+          </div>
+        </div>
+
+        <div class="f">
+          <label class="q" for="expDetail">还想补充什么吗？
+            <span class="hint">选填。例：能看懂邮件但听不懂 / 单词量还行但发音没自信…</span></label>
+          <textarea id="expDetail" name="expDetail" placeholder="随便写几句就好～" maxlength="500"></textarea>
+        </div>
+      </div>
+
+      <!-- 3 -->
+      <div class="sec">
+        <div class="sec-h"><div class="n">3</div><h2>您想用英语做什么</h2></div>
+
+        <div class="f">
+          <label class="q">学习目标<span class="req">*</span><span class="hint">可多选，我们会按目标调整课堂话题</span></label>
+          <div class="chips">
+            <label class="chip"><input type="checkbox" name="goal" value="日常口语交流"><span>日常口语</span></label>
+            <label class="chip"><input type="checkbox" name="goal" value="出国旅行"><span>出国旅行</span></label>
+            <label class="chip"><input type="checkbox" name="goal" value="工作 / 商务沟通"><span>工作商务</span></label>
+            <label class="chip"><input type="checkbox" name="goal" value="外贸 / 跨境生意"><span>外贸跨境</span></label>
+            <label class="chip"><input type="checkbox" name="goal" value="陪孩子学，做榜样"><span>陪孩子学</span></label>
+            <label class="chip"><input type="checkbox" name="goal" value="考试（四六级/雅思等）"><span>考试备考</span></label>
+            <label class="chip"><input type="checkbox" name="goal" value="兴趣，弥补遗憾"><span>兴趣爱好</span></label>
+          </div>
+        </div>
+
+        <div class="f">
+          <label class="q" for="pain">目前最大的困扰是什么？
+            <span class="hint">选填，但很有用 — 老师会针对它设计试听课内容</span></label>
+          <input type="text" id="pain" name="pain" placeholder="例：一开口就紧张 / 听不懂老外语速 / 学了就忘…" maxlength="120">
+        </div>
+      </div>
+
+      <!-- 4 -->
+      <div class="sec">
+        <div class="sec-h"><div class="n">4</div><h2>期望的上课时间</h2></div>
+
+        <div class="f">
+          <label class="q">方便的日期<span class="req">*</span>
+            <span class="hint">可多选，选得越多越容易排到理想班型</span></label>
+          <div class="dates" id="dateGrid"></div>
+        </div>
+
+        <div class="f">
+          <label class="q">长期上课方便的时段<span class="req">*</span><span class="hint">可多选，用于安排后续正课班型</span></label>
+          <div class="chips">
+            <label class="chip"><input type="checkbox" name="slot" value="工作日上午"><span>工作日上午</span></label>
+            <label class="chip"><input type="checkbox" name="slot" value="工作日下午"><span>工作日下午</span></label>
+            <label class="chip"><input type="checkbox" name="slot" value="工作日晚间"><span>工作日晚间</span></label>
+            <label class="chip"><input type="checkbox" name="slot" value="周末白天"><span>周末白天</span></label>
+            <label class="chip"><input type="checkbox" name="slot" value="周末晚间"><span>周末晚间</span></label>
+          </div>
+        </div>
+
+        <div class="f">
+          <label class="q" for="note">还有什么想告诉我们的？<span class="hint">选填</span></label>
+          <textarea id="note" name="note" placeholder="例：朋友推荐来的 / 想先了解价格 / 希望和同事一起报…" maxlength="500"></textarea>
+        </div>
+
+        <div class="f">
+          <label class="q" for="source">您是从哪里知道英歌派的？</label>
+          <select id="source" name="source">
+            <option value="">请选择（选填）</option>
+            <option>朋友 / 老学员推荐</option>
+            <option>微信朋友圈</option>
+            <option>小红书</option>
+            <option>微信视频号</option>
+            <option>孩子在英歌宝上课</option>
+            <option>路过看到 / 门店海报</option>
+            <option>其他</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="err" id="errBox"></div>
+      <button type="submit" class="submit" id="submitBtn">提交预约</button>
+      <p class="privacy">我们只会用这些信息为您安排试听与定级，<br>不会用于任何其他用途，也不会提供给第三方。</p>
+    </form>
+
+    <!-- Success -->
+    <div class="done" id="doneBox">
+      <div class="tick"><svg viewBox="0 0 24 24"><polyline points="4,12.5 9.5,18 20,6.5"/></svg></div>
+      <h2>预约已收到！</h2>
+      <p>老师会在 <b>24 小时内</b>联系您确认具体时间。<br>为免错过，建议先加上我们的微信 👇</p>
+      <div class="wxbox">
+        <div class="lb">英歌派老师微信</div>
+        <div class="wx" id="wxid">engo2026</div>
+        <button class="copybtn" id="copyBtn" type="button">复制微信号</button>
+      </div>
+      <p style="font-size:.86rem;color:#8A9BAA;margin-bottom:14px">
+        上课地点：普宁市万泰新天地时代中心 D 栋<br>
+        小红书 / 视频号：元语英语工作室
+      </p>
+      <a href="engo-pro.html" class="backlink">← 回到英歌派介绍页</a>
+    </div>
+
+  </div>
+
+  <p class="foot">
+    英歌派 Engo Pro · 零基础到 B1，开口为先<br>
+    <a href="/">www.engobaby.com</a> · Play, Learn, Grow!
+  </p>
+</div>
+
+<script>
+(function(){
+  'use strict';
+
+  // ---- 试听日期：未来 14 天 ----
+  var WD = ['周日','周一','周二','周三','周四','周五','周六'];
+  var grid = document.getElementById('dateGrid');
+  var today = new Date();
+  for (var i = 1; i <= 14; i++) {
+    var d = new Date(today.getFullYear(), today.getMonth(), today.getDate() + i);
+    var label = (d.getMonth() + 1) + '月' + d.getDate() + '日';
+    var val = label + ' （' + WD[d.getDay()] + '）';
+    var lab = document.createElement('label');
+    lab.className = 'chip';
+    lab.innerHTML = '<input type="checkbox" name="prefDate" value="' + val + '">' +
+                    '<span><b>' + label + '</b>' + WD[d.getDay()] + '</span>';
+    grid.appendChild(lab);
+  }
+
+  // ---- 提交 ----
+  var form = document.getElementById('bookingForm');
+  var btn  = document.getElementById('submitBtn');
+  var err  = document.getElementById('errBox');
+  var done = document.getElementById('doneBox');
+
+  function fail(msg, el){
+    err.textContent = msg;
+    err.classList.add('on');
+    if (el) {
+      var t = el.closest ? (el.closest('.f') || el) : el;
+      t.scrollIntoView({behavior:'smooth', block:'center'});
+    } else {
+      err.scrollIntoView({behavior:'smooth', block:'center'});
+    }
+  }
+
+  form.addEventListener('submit', function(e){
+    e.preventDefault();
+    err.classList.remove('on');
+
+    var fd = new FormData(form);
+    var name = (fd.get('studentName')||'').trim();
+    if (!name) return fail('请填写您的姓名或称呼', document.getElementById('studentName'));
+
+    var phone = (fd.get('phone')||'').trim().replace(/\s|-/g,'');
+    if (!/^1[3-9]\d{9}$/.test(phone)) return fail('请填写正确的 11 位手机号', document.getElementById('phone'));
+
+    if (!fd.get('ageGroup')) return fail('请选择您的年龄段');
+    if (!fd.get('level')) return fail('请选择您目前的英语基础');
+    if (fd.getAll('goal').length === 0) return fail('请至少选择一个学习目标');
+    if (fd.getAll('prefDate').length === 0) return fail('请至少选择一个方便的试听日期', document.getElementById('dateGrid'));
+    if (fd.getAll('slot').length === 0) return fail('请至少选择一个方便的时段');
+
+    var payload = {
+      formType: 'pro',
+      studentName: name,
+      phone: phone,
+      wechat: (fd.get('wechat')||'').trim(),
+      ageGroup: fd.get('ageGroup'),
+      level: fd.get('level'),
+      lastStudy: fd.get('lastStudy') || '',
+      expDetail: (fd.get('expDetail')||'').trim(),
+      goal: fd.getAll('goal').join(' / '),
+      pain: (fd.get('pain')||'').trim(),
+      prefDate: fd.getAll('prefDate').join(' / '),
+      slot: fd.getAll('slot').join(' / '),
+      note: (fd.get('note')||'').trim(),
+      source: fd.get('source') || '',
+      _hp: fd.get('_hp') || ''
+    };
+
+    btn.disabled = true;
+    btn.textContent = '提交中…';
+
+    fetch('/api/submit', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify(payload)
+    })
+    .then(function(r){ return r.json().then(function(j){ return {ok: r.ok, body: j}; }); })
+    .then(function(res){
+      if (!res.ok || !res.body.ok) throw new Error(res.body && res.body.error || '提交失败');
+      form.style.display = 'none';
+      done.classList.add('on');
+      window.scrollTo({top: 0, behavior: 'smooth'});
+    })
+    .catch(function(){
+      btn.disabled = false;
+      btn.textContent = '重新提交';
+      fail('提交失败了，可能是网络不稳定。请再试一次；如果一直不行，请直接加微信 engo2026 报名，非常抱歉！');
+    });
+  });
+
+  // ---- 复制微信号 ----
+  document.getElementById('copyBtn').addEventListener('click', function(){
+    var t = document.getElementById('wxid').textContent.trim();
+    var self = this;
+    function ok(){ self.textContent = '已复制 ✓'; setTimeout(function(){ self.textContent = '复制微信号'; }, 2000); }
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(t).then(ok, legacy);
+    } else { legacy(); }
+    function legacy(){
+      var ta = document.createElement('textarea');
+      ta.value = t; ta.style.position='fixed'; ta.style.opacity='0';
+      document.body.appendChild(ta); ta.select();
+      try { document.execCommand('copy'); ok(); } catch(e) { self.textContent = '请长按上方微信号复制'; }
+      document.body.removeChild(ta);
+    }
+  });
+})();
+</script>
+</body>
+</html>

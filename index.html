@@ -621,7 +621,7 @@
     <div class="signup">
       <h2><span class="zh">预约一节秋季试听课</span><span class="en">Book an Autumn Trial Class</span></h2>
       <p><span class="zh">秋季学期 9 月开学，现已开放报名。让孩子先来体验一节全英文互动课，名额有限，欢迎联系我们预约。</span><span class="en block">The autumn term starts in September and enrollment is open. Let your child try an all-English interactive class — seats are limited.</span></p>
-      <a href="#" class="btn" id="signupBtn"><span class="zh">立即预约试听</span><span class="en">Reserve Now</span></a>
+      <a href="booking.html" class="btn" id="signupBtn"><span class="zh">立即预约试听</span><span class="en">Reserve Now</span></a>
       <div class="contact-row">
         <div><b><span class="zh">微信咨询</span><span class="en">WeChat</span></b><span style="opacity:.9">engo2026</span></div>
         <div><b><span class="zh">小红书 / 视频号</span><span class="en">RedNote / Channels</span></b><span style="opacity:.9"><span class="zh">元语英语工作室</span><span class="en">Engo English Studio</span></span></div>
@@ -681,13 +681,6 @@
   var navlinks=document.getElementById('navlinks');
   menuBtn.addEventListener('click',function(){navlinks.classList.toggle('open');});
   navlinks.querySelectorAll('a').forEach(function(a){a.addEventListener('click',function(){navlinks.classList.remove('open');});});
-  // Signup placeholder
-  document.getElementById('signupBtn').addEventListener('click',function(e){
-    e.preventDefault();
-    alert(html.getAttribute('lang')==='zh'
-      ? '预约秋季试听：请添加微信「engo2026」联系我们预约。\n也可关注小红书 / 微信视频号「元语英语工作室」。\n上课地点：普宁市万泰新天地时代中心 D 栋。'
-      : 'Book a trial: add us on WeChat "engo2026".\nLocation: Times Center Bldg D, Wantai New World, Puning.');
-  });
 </script>
 </body>
 </html>
