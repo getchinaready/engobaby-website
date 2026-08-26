@@ -60,6 +60,7 @@ const FIELDS = {
     ['goalOther',   '其他目标'],
     ['dayPref',     '方便的日子'],
     ['timePref',    '方便的时段'],
+    ['prefDate',    '期望试听日期'],
   ],
 };
 

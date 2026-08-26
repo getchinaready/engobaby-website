@@ -206,6 +206,16 @@
         </div>
       </div>
 
+      <div class="sec">
+        <div class="sec-h"><div class="n">5</div><h2>期望的试听日期</h2></div>
+
+        <div class="f">
+          <label class="q">您方便来试听/测评的日期<span class="req">*</span>
+            <span class="hint">可多选，选得越多越容易排到理想班型</span></label>
+          <div class="dates" id="dateGrid"></div>
+        </div>
+      </div>
+
       <div class="err" id="errBox"></div>
       <button type="submit" class="submit" id="submitBtn">提交档案</button>
       <p class="privacy">我们只会用这些信息为您安排测评与定级，<br>不会用于任何其他用途，也不会提供给第三方。</p>
@@ -238,6 +248,20 @@
 <script>
 (function(){
   'use strict';
+
+  // 试听日期：未来 7 天滚动
+  var WD = ['周日','周一','周二','周三','周四','周五','周六'];
+  var grid = document.getElementById('dateGrid');
+  var today = new Date();
+  for (var i = 1; i <= 7; i++) {
+    var d = new Date(today.getFullYear(), today.getMonth(), today.getDate() + i);
+    var label = (d.getMonth() + 1) + '月' + d.getDate() + '日';
+    var lab = document.createElement('label');
+    lab.className = 'chip';
+    lab.innerHTML = '<input type="checkbox" name="prefDate" value="' + label + '（' + WD[d.getDay()] + '）">' +
+                    '<span><b>' + label + '</b>' + WD[d.getDay()] + '</span>';
+    grid.appendChild(lab);
+  }
 
   // 「其他」目标联动
   var goalOtherWrap = document.getElementById('goalOtherWrap');
@@ -278,6 +302,8 @@
     if (goals.length === 0) return fail('请至少选择一个学习目标');
     if (!fd.get('dayPref')) return fail('请选择您更方便在什么时候上课');
     if (!fd.get('timePref')) return fail('请选择您更方便在什么时段上课');
+    var dates = fd.getAll('prefDate');
+    if (dates.length === 0) return fail('请至少选择一个方便的试听日期', document.getElementById('dateGrid'));
 
     var payload = {
       formType: 'pro',
@@ -289,6 +315,7 @@
       goalOther: (fd.get('goalOther')||'').trim(),
       dayPref: fd.get('dayPref'),
       timePref: fd.get('timePref'),
+      prefDate: dates.join(' / '),
       _hp: fd.get('_hp') || ''
     };
 
