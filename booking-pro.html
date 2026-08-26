@@ -3,11 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>预约试听课 · 英歌派 Engo Pro 成人英语</title>
-<meta name="description" content="英歌派 Engo Pro 成人英语试听课在线预约 — 零基础到 B1，听说优先，4 人精品小班。">
+<title>英歌派成人英语学生档案 · Engo Pro</title>
+<meta name="description" content="英歌派 Engo Pro 成人英语 — 填写学生档案，老师为您科学定级、安排试听。">
 <meta property="og:type" content="website">
-<meta property="og:title" content="预约试听课 · 英歌派 Engo Pro">
-<meta property="og:description" content="填写一分钟，为自己预约一节成人英语试听课 + 免费入学测评定级。">
+<meta property="og:title" content="英歌派成人英语学生档案">
+<meta property="og:description" content="零基础到 B1，听说优先 · 填写一分钟，老师为您科学定级">
 <meta property="og:image" content="https://www.engobaby.com/og-pro.png">
 <meta property="og:url" content="https://www.engobaby.com/booking-pro">
 <link rel="icon" href="logo.png">
@@ -37,7 +37,8 @@
   .hd::after{content:"";position:absolute;left:-6%;right:-6%;bottom:-30px;height:60px;background:var(--cream);border-radius:50% 50% 0 0}
   .hd .logo{height:38px;width:auto;margin-bottom:18px;filter:brightness(0) invert(1)}
   .hd h1{font-size:clamp(1.5rem,6.2vw,1.95rem);margin-bottom:8px}
-  .hd p{font-size:.94rem;opacity:.94;max-width:26em}
+  .hd p{font-size:.94rem;opacity:.94;max-width:26em;padding-right:92px}
+  @media(max-width:360px){.hd .boat{width:66px}.hd p{padding-right:70px}}
   .hd .boat{position:absolute;right:14px;bottom:16px;width:88px;opacity:.9}
 
   /* Card */
@@ -115,7 +116,7 @@
 
   <header class="hd">
     <img src="engo_pro_logo.png" alt="Engo Pro" class="logo" onerror="this.style.display='none'">
-    <h1>预约一节成人英语试听课</h1>
+    <h1>英歌派成人英语学生档案</h1>
     <p>零基础到 B1 · 4 人精品小班 · 听说优先，开口为先<br>填写约 1 分钟，含<b>免费入学测评</b>，老师会为您科学定级。</p>
   </header>
 
@@ -124,146 +125,96 @@
     <form id="bookingForm" novalidate>
       <input type="text" name="_hp" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true">
 
-      <!-- 1 -->
       <div class="sec">
         <div class="sec-h"><div class="n">1</div><h2>怎么称呼您</h2></div>
 
         <div class="f">
-          <label class="q" for="studentName">您的姓名 / 称呼<span class="req">*</span>
-            <span class="hint">写姓氏 + 先生/女士也可以</span></label>
-          <input type="text" id="studentName" name="studentName" placeholder="例：陈小姐 / 张伟" required maxlength="20">
+          <label class="q" for="studentName">如何称呼您？<span class="req">*</span>
+            <span class="hint">姓名／昵称／英文名都可</span></label>
+          <input type="text" id="studentName" name="studentName" placeholder="例：陈小姐 / Kevin / 阿伟" required maxlength="30">
         </div>
 
         <div class="f">
-          <label class="q" for="phone">手机号<span class="req">*</span>
-            <span class="hint">老师会通过微信或电话与您确认试听时间</span></label>
-          <input type="tel" id="phone" name="phone" placeholder="11 位手机号" required inputmode="numeric" maxlength="11">
+          <label class="q" for="wechat">您的微信号<span class="req">*</span>
+            <span class="hint">老师会加您微信，安排测评与试听</span></label>
+          <input type="text" id="wechat" name="wechat" placeholder="微信号（在微信「我」→ 头像下方可见）" required maxlength="40">
         </div>
 
         <div class="f">
-          <label class="q" for="wechat">微信号<span class="hint">选填。填了我们优先加微信，沟通更方便</span></label>
-          <input type="text" id="wechat" name="wechat" placeholder="微信号 / 手机号同微信" maxlength="40">
+          <label class="q" for="phone">手机号<span class="hint">选填。万一微信没加上，我们打电话联系您</span></label>
+          <input type="tel" id="phone" name="phone" placeholder="11 位手机号（选填）" inputmode="numeric" maxlength="11">
         </div>
+      </div>
+
+      <div class="sec">
+        <div class="sec-h"><div class="n">2</div><h2>您目前的英语水平</h2></div>
 
         <div class="f">
-          <label class="q">您的年龄段<span class="req">*</span><span class="hint">用于分班，同龄段学员话题更聊得来</span></label>
+          <label class="q">您目前的英语水平接近以下哪一种<span class="req">*</span>
+            <span class="hint">凭感觉选就好，真实水平以入学测评为准</span></label>
           <div class="chips">
-            <label class="chip"><input type="radio" name="ageGroup" value="18–25 岁" required><span>18–25</span></label>
-            <label class="chip"><input type="radio" name="ageGroup" value="26–35 岁"><span>26–35</span></label>
-            <label class="chip"><input type="radio" name="ageGroup" value="36–45 岁"><span>36–45</span></label>
-            <label class="chip"><input type="radio" name="ageGroup" value="46 岁以上"><span>46 以上</span></label>
+            <label class="chip"><input type="radio" name="level" value="完全零基础（几乎不会英语）" required><span>完全零基础（几乎不会英语）</span></label>
+            <label class="chip"><input type="radio" name="level" value="初级（认识一些单词，会简单自我介绍）"><span>初级（认识一些单词，会简单自我介绍）</span></label>
+            <label class="chip"><input type="radio" name="level" value="初中级（能进行简单日常交流）"><span>初中级（能进行简单日常交流）</span></label>
+            <label class="chip"><input type="radio" name="level" value="中级（能应付工作或旅行中的大部分英语场景）"><span>中级（能应付工作或旅行中的大部分英语场景）</span></label>
+            <label class="chip"><input type="radio" name="level" value="中高级（能较流畅交流，但希望提升表达准确性）"><span>中高级（能较流畅交流，但希望提升表达准确性）</span></label>
+            <label class="chip"><input type="radio" name="level" value="高级（能较自由交流，希望提升商务或专业英语）"><span>高级（能较自由交流，希望提升商务或专业英语）</span></label>
           </div>
         </div>
       </div>
 
-      <!-- 2 -->
       <div class="sec">
-        <div class="sec-h"><div class="n">2</div><h2>您目前的英语基础</h2></div>
+        <div class="sec-h"><div class="n">3</div><h2>您的学习目标</h2></div>
 
         <div class="f">
-          <label class="q">自我感觉大概在<span class="req">*</span>
-            <span class="hint">凭感觉选就好，真实水平以试听课的入学测评为准</span></label>
+          <label class="q">您学习英语的主要目标是什么<span class="req">*</span>
+            <span class="hint">可多选</span></label>
           <div class="chips">
-            <label class="chip"><input type="radio" name="level" value="零基础 — 几乎全忘了" required><span>零基础，全忘了</span></label>
-            <label class="chip"><input type="radio" name="level" value="认识单词，但开不了口"><span>认识词，开不了口</span></label>
-            <label class="chip"><input type="radio" name="level" value="能说简单句，日常勉强应付"><span>能说简单句</span></label>
-            <label class="chip"><input type="radio" name="level" value="能日常交流，想更流利"><span>能交流，想更流利</span></label>
+            <label class="chip"><input type="checkbox" name="goal" value="日常交流"><span>日常交流</span></label>
+            <label class="chip"><input type="checkbox" name="goal" value="出国旅游"><span>出国旅游</span></label>
+            <label class="chip"><input type="checkbox" name="goal" value="工作沟通"><span>工作沟通</span></label>
+            <label class="chip"><input type="checkbox" name="goal" value="商务英语"><span>商务英语</span></label>
+            <label class="chip"><input type="checkbox" name="goal" value="考试（雅思、托福等）"><span>考试（雅思、托福等）</span></label>
+            <label class="chip"><input type="checkbox" name="goal" value="提升口语自信"><span>提升口语自信</span></label>
+            <label class="chip"><input type="checkbox" name="goal" value="其他"><span>其他</span></label>
           </div>
-        </div>
-
-        <div class="f">
-          <label class="q">学历阶段最后一次系统学英语是<span class="hint">选填，供老师参考</span></label>
-          <div class="chips">
-            <label class="chip"><input type="radio" name="lastStudy" value="初中"><span>初中</span></label>
-            <label class="chip"><input type="radio" name="lastStudy" value="高中"><span>高中</span></label>
-            <label class="chip"><input type="radio" name="lastStudy" value="大学（过四级）"><span>大学·过四级</span></label>
-            <label class="chip"><input type="radio" name="lastStudy" value="大学（过六级）"><span>大学·过六级</span></label>
-            <label class="chip"><input type="radio" name="lastStudy" value="毕业后自学过"><span>毕业后自学</span></label>
+          <div class="f" id="goalOtherWrap" style="display:none;margin-top:13px;margin-bottom:0">
+            <input type="text" name="goalOther" placeholder="其他目标是…" maxlength="100">
           </div>
-        </div>
-
-        <div class="f">
-          <label class="q" for="expDetail">还想补充什么吗？
-            <span class="hint">选填。例：能看懂邮件但听不懂 / 单词量还行但发音没自信…</span></label>
-          <textarea id="expDetail" name="expDetail" placeholder="随便写几句就好～" maxlength="500"></textarea>
         </div>
       </div>
 
-      <!-- 3 -->
       <div class="sec">
-        <div class="sec-h"><div class="n">3</div><h2>您想用英语做什么</h2></div>
+        <div class="sec-h"><div class="n">4</div><h2>方便的上课时间</h2></div>
 
         <div class="f">
-          <label class="q">学习目标<span class="req">*</span><span class="hint">可多选，我们会按目标调整课堂话题</span></label>
+          <label class="q">您更方便在什么时候上课<span class="req">*</span></label>
           <div class="chips">
-            <label class="chip"><input type="checkbox" name="goal" value="日常口语交流"><span>日常口语</span></label>
-            <label class="chip"><input type="checkbox" name="goal" value="出国旅行"><span>出国旅行</span></label>
-            <label class="chip"><input type="checkbox" name="goal" value="工作 / 商务沟通"><span>工作商务</span></label>
-            <label class="chip"><input type="checkbox" name="goal" value="外贸 / 跨境生意"><span>外贸跨境</span></label>
-            <label class="chip"><input type="checkbox" name="goal" value="陪孩子学，做榜样"><span>陪孩子学</span></label>
-            <label class="chip"><input type="checkbox" name="goal" value="考试（四六级/雅思等）"><span>考试备考</span></label>
-            <label class="chip"><input type="checkbox" name="goal" value="兴趣，弥补遗憾"><span>兴趣爱好</span></label>
+            <label class="chip"><input type="radio" name="dayPref" value="周中" required><span>周中</span></label>
+            <label class="chip"><input type="radio" name="dayPref" value="周末"><span>周末</span></label>
+            <label class="chip"><input type="radio" name="dayPref" value="都可以"><span>都可以</span></label>
           </div>
         </div>
 
         <div class="f">
-          <label class="q" for="pain">目前最大的困扰是什么？
-            <span class="hint">选填，但很有用 — 老师会针对它设计试听课内容</span></label>
-          <input type="text" id="pain" name="pain" placeholder="例：一开口就紧张 / 听不懂老外语速 / 学了就忘…" maxlength="120">
-        </div>
-      </div>
-
-      <!-- 4 -->
-      <div class="sec">
-        <div class="sec-h"><div class="n">4</div><h2>期望的上课时间</h2></div>
-
-        <div class="f">
-          <label class="q">方便的日期<span class="req">*</span>
-            <span class="hint">可多选，选得越多越容易排到理想班型</span></label>
-          <div class="dates" id="dateGrid"></div>
-        </div>
-
-        <div class="f">
-          <label class="q">长期上课方便的时段<span class="req">*</span><span class="hint">可多选，用于安排后续正课班型</span></label>
+          <label class="q">您更方便在什么时段上课<span class="req">*</span></label>
           <div class="chips">
-            <label class="chip"><input type="checkbox" name="slot" value="工作日上午"><span>工作日上午</span></label>
-            <label class="chip"><input type="checkbox" name="slot" value="工作日下午"><span>工作日下午</span></label>
-            <label class="chip"><input type="checkbox" name="slot" value="工作日晚间"><span>工作日晚间</span></label>
-            <label class="chip"><input type="checkbox" name="slot" value="周末白天"><span>周末白天</span></label>
-            <label class="chip"><input type="checkbox" name="slot" value="周末晚间"><span>周末晚间</span></label>
+            <label class="chip"><input type="radio" name="timePref" value="白天" required><span>白天</span></label>
+            <label class="chip"><input type="radio" name="timePref" value="晚上"><span>晚上</span></label>
+            <label class="chip"><input type="radio" name="timePref" value="都可以"><span>都可以</span></label>
           </div>
-        </div>
-
-        <div class="f">
-          <label class="q" for="note">还有什么想告诉我们的？<span class="hint">选填</span></label>
-          <textarea id="note" name="note" placeholder="例：朋友推荐来的 / 想先了解价格 / 希望和同事一起报…" maxlength="500"></textarea>
-        </div>
-
-        <div class="f">
-          <label class="q" for="source">您是从哪里知道英歌派的？</label>
-          <select id="source" name="source">
-            <option value="">请选择（选填）</option>
-            <option>朋友 / 老学员推荐</option>
-            <option>微信朋友圈</option>
-            <option>小红书</option>
-            <option>微信视频号</option>
-            <option>孩子在英歌宝上课</option>
-            <option>路过看到 / 门店海报</option>
-            <option>其他</option>
-          </select>
         </div>
       </div>
 
       <div class="err" id="errBox"></div>
-      <button type="submit" class="submit" id="submitBtn">提交预约</button>
-      <p class="privacy">我们只会用这些信息为您安排试听与定级，<br>不会用于任何其他用途，也不会提供给第三方。</p>
+      <button type="submit" class="submit" id="submitBtn">提交档案</button>
+      <p class="privacy">我们只会用这些信息为您安排测评与定级，<br>不会用于任何其他用途，也不会提供给第三方。</p>
     </form>
 
-    <!-- Success -->
     <div class="done" id="doneBox">
       <div class="tick"><svg viewBox="0 0 24 24"><polyline points="4,12.5 9.5,18 20,6.5"/></svg></div>
-      <h2>预约已收到！</h2>
-      <p>老师会在 <b>24 小时内</b>联系您确认具体时间。<br>为免错过，建议先加上我们的微信 👇</p>
+      <h2>档案已收到！</h2>
+      <p>老师会在 <b>24 小时内</b>加您微信，安排入学测评与试听。<br>也可以先主动加上我们 👇</p>
       <div class="wxbox">
         <div class="lb">英歌派老师微信</div>
         <div class="wx" id="wxid">engo2026</div>
@@ -288,22 +239,14 @@
 (function(){
   'use strict';
 
-  // ---- 试听日期：未来 14 天 ----
-  var WD = ['周日','周一','周二','周三','周四','周五','周六'];
-  var grid = document.getElementById('dateGrid');
-  var today = new Date();
-  for (var i = 1; i <= 14; i++) {
-    var d = new Date(today.getFullYear(), today.getMonth(), today.getDate() + i);
-    var label = (d.getMonth() + 1) + '月' + d.getDate() + '日';
-    var val = label + ' （' + WD[d.getDay()] + '）';
-    var lab = document.createElement('label');
-    lab.className = 'chip';
-    lab.innerHTML = '<input type="checkbox" name="prefDate" value="' + val + '">' +
-                    '<span><b>' + label + '</b>' + WD[d.getDay()] + '</span>';
-    grid.appendChild(lab);
-  }
+  // 「其他」目标联动
+  var goalOtherWrap = document.getElementById('goalOtherWrap');
+  document.querySelectorAll('input[name=goal]').forEach(function(b){
+    b.addEventListener('change', function(){
+      if (this.value === '其他') goalOtherWrap.style.display = this.checked ? 'block' : 'none';
+    });
+  });
 
-  // ---- 提交 ----
   var form = document.getElementById('bookingForm');
   var btn  = document.getElementById('submitBtn');
   var err  = document.getElementById('errBox');
@@ -312,12 +255,8 @@
   function fail(msg, el){
     err.textContent = msg;
     err.classList.add('on');
-    if (el) {
-      var t = el.closest ? (el.closest('.f') || el) : el;
-      t.scrollIntoView({behavior:'smooth', block:'center'});
-    } else {
-      err.scrollIntoView({behavior:'smooth', block:'center'});
-    }
+    var t = el ? (el.closest ? (el.closest('.f') || el) : el) : err;
+    t.scrollIntoView({behavior:'smooth', block:'center'});
   }
 
   form.addEventListener('submit', function(e){
@@ -326,32 +265,30 @@
 
     var fd = new FormData(form);
     var name = (fd.get('studentName')||'').trim();
-    if (!name) return fail('请填写您的姓名或称呼', document.getElementById('studentName'));
+    if (!name) return fail('请填写如何称呼您', document.getElementById('studentName'));
+
+    var wechat = (fd.get('wechat')||'').trim();
+    if (!wechat) return fail('请填写您的微信号，老师需要加您安排测评', document.getElementById('wechat'));
 
     var phone = (fd.get('phone')||'').trim().replace(/\s|-/g,'');
-    if (!/^1[3-9]\d{9}$/.test(phone)) return fail('请填写正确的 11 位手机号', document.getElementById('phone'));
+    if (phone && !/^1[3-9]\d{9}$/.test(phone)) return fail('手机号格式不对，请填 11 位手机号，或留空', document.getElementById('phone'));
 
-    if (!fd.get('ageGroup')) return fail('请选择您的年龄段');
-    if (!fd.get('level')) return fail('请选择您目前的英语基础');
-    if (fd.getAll('goal').length === 0) return fail('请至少选择一个学习目标');
-    if (fd.getAll('prefDate').length === 0) return fail('请至少选择一个方便的试听日期', document.getElementById('dateGrid'));
-    if (fd.getAll('slot').length === 0) return fail('请至少选择一个方便的时段');
+    if (!fd.get('level')) return fail('请选择您目前的英语水平');
+    var goals = fd.getAll('goal');
+    if (goals.length === 0) return fail('请至少选择一个学习目标');
+    if (!fd.get('dayPref')) return fail('请选择您更方便在什么时候上课');
+    if (!fd.get('timePref')) return fail('请选择您更方便在什么时段上课');
 
     var payload = {
       formType: 'pro',
       studentName: name,
+      wechat: wechat,
       phone: phone,
-      wechat: (fd.get('wechat')||'').trim(),
-      ageGroup: fd.get('ageGroup'),
       level: fd.get('level'),
-      lastStudy: fd.get('lastStudy') || '',
-      expDetail: (fd.get('expDetail')||'').trim(),
-      goal: fd.getAll('goal').join(' / '),
-      pain: (fd.get('pain')||'').trim(),
-      prefDate: fd.getAll('prefDate').join(' / '),
-      slot: fd.getAll('slot').join(' / '),
-      note: (fd.get('note')||'').trim(),
-      source: fd.get('source') || '',
+      goal: goals.join(' / '),
+      goalOther: (fd.get('goalOther')||'').trim(),
+      dayPref: fd.get('dayPref'),
+      timePref: fd.get('timePref'),
       _hp: fd.get('_hp') || ''
     };
 
@@ -365,7 +302,7 @@
     })
     .then(function(r){ return r.json().then(function(j){ return {ok: r.ok, body: j}; }); })
     .then(function(res){
-      if (!res.ok || !res.body.ok) throw new Error(res.body && res.body.error || '提交失败');
+      if (!res.ok || !res.body.ok) throw new Error('fail');
       form.style.display = 'none';
       done.classList.add('on');
       window.scrollTo({top: 0, behavior: 'smooth'});
@@ -373,18 +310,14 @@
     .catch(function(){
       btn.disabled = false;
       btn.textContent = '重新提交';
-      fail('提交失败了，可能是网络不稳定。请再试一次；如果一直不行，请直接加微信 engo2026 报名，非常抱歉！');
+      fail('提交失败了，可能是网络不稳定。请再试一次；如果一直不行，请直接加微信 engo2026，非常抱歉！');
     });
   });
 
-  // ---- 复制微信号 ----
   document.getElementById('copyBtn').addEventListener('click', function(){
     var t = document.getElementById('wxid').textContent.trim();
     var self = this;
     function ok(){ self.textContent = '已复制 ✓'; setTimeout(function(){ self.textContent = '复制微信号'; }, 2000); }
-    if (navigator.clipboard && navigator.clipboard.writeText) {
-      navigator.clipboard.writeText(t).then(ok, legacy);
-    } else { legacy(); }
     function legacy(){
       var ta = document.createElement('textarea');
       ta.value = t; ta.style.position='fixed'; ta.style.opacity='0';
@@ -392,6 +325,8 @@
       try { document.execCommand('copy'); ok(); } catch(e) { self.textContent = '请长按上方微信号复制'; }
       document.body.removeChild(ta);
     }
+    if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(t).then(ok, legacy);
+    else legacy();
   });
 })();
 </script>

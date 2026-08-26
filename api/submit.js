@@ -34,41 +34,35 @@ import { put, get } from '@vercel/blob';
 // ---------- 表单字段定义（顺序即 CSV 列顺序） ----------
 const FIELDS = {
   baby: [
-    ['submittedAt', '提交时间'],
-    ['childName',   '宝贝小名'],
-    ['hasEnName',   '有无英文名'],
-    ['enName',      '英文名'],
-    ['gender',      '性别'],
-    ['birth',       '出生年月'],
-    ['relation',    '家长称呼'],
-    ['phone',       '手机号'],
-    ['wechat',      '微信号'],
-    ['experience',  '英语启蒙经历'],
-    ['expDetail',   '基础详情'],
-    ['character',   '性格特点'],
-    ['interest',    '兴趣爱好'],
-    ['prefDate',    '期望试听日期'],
-    ['slot',        '期望时段'],
-    ['source',      '来源渠道'],
-    ['note',        '备注'],
+    ['submittedAt',   '提交时间'],
+    ['childName',     '宝贝小名'],
+    ['hasEnName',     '有无英文名'],
+    ['enName',        '英文名'],
+    ['gender',        '性别'],
+    ['birth',         '出生年月'],
+    ['relation',      '家长称呼'],
+    ['relationOther', '其他称呼'],
+    ['wechat',        '微信号'],
+    ['phone',         '手机号'],
+    ['experience',    '英语启蒙经历'],
+    ['expDetail',     '英语接触详情'],
+    ['character',     '性格特点'],
+    ['interest',      '兴趣爱好'],
+    ['prefDate',      '期望试听日期'],
   ],
   pro: [
     ['submittedAt', '提交时间'],
-    ['studentName', '姓名'],
-    ['phone',       '手机号'],
+    ['studentName', '称呼'],
     ['wechat',      '微信号'],
-    ['ageGroup',    '年龄段'],
-    ['level',       '英语基础自评'],
-    ['lastStudy',   '最后系统学习阶段'],
-    ['expDetail',   '基础补充'],
+    ['phone',       '手机号'],
+    ['level',       '英语水平'],
     ['goal',        '学习目标'],
-    ['pain',        '主要困扰'],
-    ['prefDate',    '期望试听日期'],
-    ['slot',        '期望时段'],
-    ['source',      '来源渠道'],
-    ['note',        '备注'],
+    ['goalOther',   '其他目标'],
+    ['dayPref',     '方便的日子'],
+    ['timePref',    '方便的时段'],
   ],
 };
+
 
 const BRAND = {
   baby: { name: '英歌宝 Engo Baby', color: '#3090D8', file: 'bookings-baby.csv', who: '宝贝' },
@@ -111,9 +105,13 @@ export default async function handler(req, res) {
   // 最低限度校验（前端已校验过，这里防绕过）
   const nameKey = type === 'pro' ? 'studentName' : 'childName';
   const name = String(data[nameKey] || '').trim().slice(0, 40);
+  const wechat = String(data.wechat || '').trim().slice(0, 60);
   const phone = String(data.phone || '').trim().replace(/[\s-]/g, '');
-  if (!name || !/^1[3-9]\d{9}$/.test(phone)) {
-    return res.status(400).json({ ok: false, error: '姓名或手机号格式不正确' });
+  // 微信号必填（老师主要靠微信联系）；手机号选填，但填了就要格式正确
+  if (!name) return res.status(400).json({ ok: false, error: '请填写称呼' });
+  if (!wechat) return res.status(400).json({ ok: false, error: '请填写微信号' });
+  if (phone && !/^1[3-9]\d{9}$/.test(phone)) {
+    return res.status(400).json({ ok: false, error: '手机号格式不正确' });
   }
 
   const row = { submittedAt: nowCN() };
@@ -121,6 +119,7 @@ export default async function handler(req, res) {
     if (key === 'submittedAt') continue;
     row[key] = String(data[key] ?? '').trim().slice(0, 600);
   }
+  row.wechat = wechat;
   row.phone = phone;
 
   // ---- 1. 追加到云端 CSV ----
@@ -206,7 +205,7 @@ async function sendMail({ brand, spec, row, csvText, total, storeErr, raw }) {
   const to = (MAIL_TO || '').split(',').map((x) => x.trim()).filter(Boolean);
   if (!to.length) throw new Error('MAIL_TO 未配置');
 
-  const subject = `【${brand.name}】新预约：${row[spec[1][0]]}　${row.phone}`;
+  const subject = `【${brand.name}】新预约：${row[spec[1][0]]}　微信 ${row.wechat}`;
   const html = renderEmail({ brand, spec, row, total, storeErr, raw });
   const attachment = csvText
     ? { filename: brand.file, content: Buffer.from(csvText, 'utf-8') }
@@ -320,6 +319,7 @@ function renderEmail({ brand, spec, row, total, storeErr, raw }) {
       ${warn}
       <div style="font-size:15px;color:#2B3A4A;margin-bottom:18px;line-height:1.7">
         <b style="font-size:17px">${esc(row[spec[1][0]])}</b>
+        　·　微信 <b>${esc(row.wechat)}</b>
         ${row.phone ? `　·　<a href="tel:${esc(row.phone)}" style="color:${brand.color};text-decoration:none">${esc(row.phone)}</a>` : ''}
       </div>
 
