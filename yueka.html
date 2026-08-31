@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>月卡预约 · 英歌派 Engo Pro</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" href="logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Poppins:wght@500;600;700&family=Noto+Sans+SC:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --gold:#F4A81B; --gold-d:#D08E0C;
+    --navy:#16456F; --navy-l:#1F6FB0; --navy-d:#0E2E4D;
+    --ink:#2B3A4A; --mut:#8A9BAA; --line:#E3EBF2;
+    --bg:#F4F7FA; --card:#fff; --ok:#5C9E4A;
+    --fz:"Poppins","Noto Sans SC",system-ui,sans-serif;
+    --fh:"Baloo 2","Noto Sans SC",system-ui,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+  body{font-family:var(--fz);background:var(--bg);color:var(--ink);line-height:1.6;
+    -webkit-font-smoothing:antialiased;-webkit-text-size-adjust:100%}
+  h1,h2,h3{font-family:var(--fh);line-height:1.25}
+  .page{max-width:600px;margin:0 auto;padding-bottom:50px}
+
+  /* ---- 顶部 ---- */
+  .hd{background:linear-gradient(160deg,#1F6FB0,#16456F);color:#fff;padding:22px 20px 26px;
+    position:sticky;top:0;z-index:20;box-shadow:0 4px 18px rgba(22,69,111,.22)}
+  .hd .row{display:flex;align-items:center;justify-content:space-between;gap:12px}
+  .hd .t{font-size:1.22rem;font-weight:800;font-family:var(--fh)}
+  .hd .sub{font-size:.8rem;opacity:.82;margin-top:2px}
+  .who{background:rgba(255,255,255,.16);border:1.5px solid rgba(255,255,255,.32);color:#fff;
+    border-radius:999px;padding:7px 15px;font-size:.85rem;font-weight:700;font-family:var(--fz);
+    cursor:pointer;white-space:nowrap;max-width:44vw;overflow:hidden;text-overflow:ellipsis}
+  .mine{margin-top:16px;background:rgba(255,255,255,.13);border-radius:13px;padding:11px 14px;
+    font-size:.85rem;display:flex;align-items:center;gap:8px}
+  .mine b{color:var(--gold);font-size:1.05rem;font-family:var(--fh)}
+
+  /* ---- 说明条 ---- */
+  .note{margin:16px 16px 0;background:#EAF3FB;border-left:4px solid var(--navy-l);
+    border-radius:11px;padding:12px 14px;font-size:.81rem;color:#41637F;line-height:1.65}
+  .note b{color:var(--navy)}
+
+  /* ---- 日卡 ---- */
+  .wk{margin:22px 16px 10px;font-size:.78rem;font-weight:800;color:var(--mut);letter-spacing:.1em}
+  .day{background:var(--card);border-radius:17px;margin:0 16px 11px;overflow:hidden;
+    box-shadow:0 2px 10px rgba(22,69,111,.06);border:2px solid transparent;transition:border-color .15s}
+  .day.on{border-color:var(--gold)}
+  .day.br{background:#EEF1F4;box-shadow:none}
+  .dh{display:flex;gap:13px;padding:15px 16px;cursor:pointer;align-items:flex-start}
+  .day.br .dh,.day.shut .dh{cursor:default}
+  .dt{flex:none;width:52px;text-align:center}
+  .dt .n{font-family:var(--fh);font-size:1.62rem;font-weight:800;color:var(--navy);line-height:1}
+  .dt .w{font-size:.72rem;color:var(--mut);margin-top:2px}
+  .day.br .dt .n,.day.shut .dt .n{color:#A9B6C2}
+  .dc{flex:1;min-width:0}
+  .dc .en{font-size:.99rem;font-weight:700;color:var(--ink);line-height:1.32}
+  .dc .cn{font-size:.83rem;color:var(--mut);margin-top:1px}
+  .day.br .dc .en,.day.shut .dc .en{color:#9AA7B3;font-weight:600}
+  .meta{display:flex;flex-wrap:wrap;gap:6px;margin-top:9px;align-items:center}
+  .pill{font-size:.72rem;font-weight:700;padding:4px 10px;border-radius:999px;white-space:nowrap}
+  .pill.time{background:#EAF3FB;color:#41637F}
+  .pill.shut{background:#EEF1F4;color:#9AA7B3}
+  .pill.grace{background:#FDF3E0;color:#9A6B0C}
+  .pill.cnt{background:#EDF6EA;color:#4A7F3C}
+  .pill.me{background:var(--gold);color:#4A3B12}
+  .caret{flex:none;align-self:center;color:#C3CED8;font-size:1.1rem;transition:transform .2s}
+  .day.open .caret{transform:rotate(90deg)}
+
+  /* ---- 展开区 ---- */
+  .bd{display:none;border-top:1px solid var(--line);padding:16px}
+  .day.open .bd{display:block}
+  .lb{font-size:.78rem;font-weight:800;color:var(--mut);margin-bottom:9px;letter-spacing:.03em}
+  .opts{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:18px}
+  .opt{border:1.5px solid var(--line);background:#fff;border-radius:11px;padding:9px 14px;
+    font-size:.87rem;font-weight:600;color:var(--ink);cursor:pointer;font-family:var(--fz)}
+  .opt small{display:block;font-size:.72rem;color:var(--mut);font-weight:500;margin-top:1px}
+  .opt.sel{border-color:var(--navy-l);background:#EAF3FB;color:var(--navy);font-weight:800}
+  .opt.sel small{color:#5C87AB}
+  .go{width:100%;background:var(--gold);color:#fff;border:none;border-radius:13px;padding:14px;
+    font-size:1.02rem;font-weight:800;font-family:var(--fh);cursor:pointer;
+    box-shadow:0 6px 16px rgba(244,168,27,.3)}
+  .go:disabled{opacity:.45;box-shadow:none}
+  .go.cancel{background:#fff;color:#C0392B;border:1.5px solid #F2C4BE;box-shadow:none;margin-top:9px;
+    font-size:.9rem;padding:11px}
+
+  /* ---- 同场的人 ---- */
+  .ppl{margin-top:4px;padding-top:15px;border-top:1px dashed var(--line)}
+  .grp{margin-bottom:13px}
+  .grp:last-child{margin-bottom:0}
+  .gt{font-size:.79rem;font-weight:800;color:#41637F;margin-bottom:8px}
+  .gt span{color:var(--mut);font-weight:600}
+  .chips{display:flex;flex-wrap:wrap;gap:7px}
+  .p{display:flex;align-items:center;gap:7px;background:#F4F7FA;border-radius:999px;
+    padding:5px 12px 5px 5px;font-size:.83rem;font-weight:700}
+  .p.self{background:#FDF3E0;box-shadow:inset 0 0 0 1.5px var(--gold)}
+  .av{width:26px;height:26px;border-radius:50%;display:grid;place-items:center;
+    color:#fff;font-size:.78rem;font-weight:800;flex:none}
+  .p em{font-style:normal;font-size:.78rem;color:var(--mut);font-weight:600}
+  .empty{font-size:.82rem;color:var(--mut);padding:2px 0 4px}
+
+  /* ---- 顺延主题 ---- */
+  .pend{margin:26px 16px 0;background:#fff;border-radius:17px;padding:17px 18px;
+    box-shadow:0 2px 10px rgba(22,69,111,.06)}
+  .pend h3{font-size:.98rem;margin-bottom:4px}
+  .pend .s{font-size:.78rem;color:var(--mut);margin-bottom:12px}
+  .pend li{list-style:none;font-size:.86rem;padding:7px 0;border-top:1px solid var(--line);color:#5A6B7B}
+  .pend li b{color:var(--ink);font-weight:700}
+
+  .foot{text-align:center;font-size:.76rem;color:#9AA7B3;margin-top:28px;line-height:1.8;padding:0 20px}
+
+  /* ---- 遮罩 / 提示 ---- */
+  .veil{position:fixed;inset:0;background:rgba(14,46,77,.55);display:none;z-index:60;
+    align-items:center;justify-content:center;padding:24px}
+  .veil.on{display:flex}
+  .box{background:#fff;border-radius:20px;padding:26px 22px;width:100%;max-width:360px}
+  .box h3{font-size:1.16rem;margin-bottom:7px}
+  .box p{font-size:.86rem;color:var(--mut);margin-bottom:16px;line-height:1.6}
+  .box input{width:100%;font-size:16px;font-family:var(--fz);border:1.5px solid var(--line);
+    border-radius:12px;padding:13px;margin-bottom:14px}
+  .box input:focus{outline:none;border-color:var(--navy-l)}
+  .toast{position:fixed;left:50%;bottom:32px;transform:translateX(-50%) translateY(20px);
+    background:rgba(22,69,111,.96);color:#fff;padding:13px 24px;border-radius:999px;
+    font-size:.88rem;font-weight:700;z-index:90;opacity:0;transition:.25s;pointer-events:none;
+    max-width:88vw;text-align:center}
+  .toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
+  .load{text-align:center;padding:60px 20px;color:var(--mut);font-size:.9rem}
+</style>
+</head>
+<body>
+<div class="page" id="page">
+  <div class="load" id="load">正在载入课表…</div>
+</div>
+
+<div class="veil" id="veil">
+  <div class="box">
+    <h3 id="nameTitle">你是哪位？</h3>
+    <p id="nameHint">填一次就好，之后这台手机会记住你。<br>这个名字会显示给同一场的其他同学。</p>
+    <input type="text" id="nameInput" placeholder="你的名字 / 英文名 / 昵称" maxlength="24">
+    <button class="go" id="nameSave">确定</button>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+(function(){
+  'use strict';
+
+  var K = new URLSearchParams(location.search).get('k') || '';
+  var LS_NAME = 'engo_yueka_name';
+  var me = '';
+  try { me = localStorage.getItem(LS_NAME) || ''; } catch(e){}
+
+  var D = null;               // 服务端数据
+  var openDate = null;        // 当前展开的日期
+  var pick = {};              // { date: {slot, status} }
+
+  var page = document.getElementById('page');
+  var veil = document.getElementById('veil');
+  var toastEl = document.getElementById('toast');
+
+  var AV = ['#3090D8','#EF4A4A','#7BA84A','#F4A81B','#8A63C4','#2FA8A0','#E07A3F','#5C7CB8'];
+  function avColor(n){ var h=0; for(var i=0;i<n.length;i++) h=(h*31+n.charCodeAt(i))>>>0; return AV[h%AV.length]; }
+  function initial(n){ return (n||'?').trim().charAt(0).toUpperCase(); }
+  function esc(s){ return String(s==null?'':s).replace(/[&<>"]/g,function(c){
+    return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
+
+  var toastT;
+  function toast(msg){
+    toastEl.textContent = msg; toastEl.classList.add('on');
+    clearTimeout(toastT); toastT = setTimeout(function(){ toastEl.classList.remove('on'); }, 2600);
+  }
+
+  // ---------- 姓名 ----------
+  function askName(first){
+    document.getElementById('nameInput').value = me;
+    document.getElementById('nameTitle').textContent = first ? '你是哪位？' : '换个名字';
+    veil.classList.add('on');
+    setTimeout(function(){ document.getElementById('nameInput').focus(); }, 80);
+  }
+  document.getElementById('nameSave').addEventListener('click', function(){
+    var v = document.getElementById('nameInput').value.trim();
+    if (!v) { toast('请填一下名字'); return; }
+    me = v;
+    try { localStorage.setItem(LS_NAME, me); } catch(e){}
+    veil.classList.remove('on');
+    render();
+  });
+
+  // ---------- 载入 ----------
+  function load(){
+    fetch('/api/yueka?k=' + encodeURIComponent(K))
+      .then(function(r){ return r.json().then(function(j){ return {s:r.status, j:j}; }); })
+      .then(function(x){
+        if (x.s === 403) { page.innerHTML =
+          '<div class="load"><div style="font-size:2.6rem;margin-bottom:14px">🔒</div>' +
+          '<b style="color:#2B3A4A;font-size:1.05rem">这是月卡会员专属链接</b><br><br>' +
+          '请向老师索取带口令的预约链接。<br>微信 <b style="color:#16456F">engo2026</b></div>'; return; }
+        if (!x.j.ok) throw new Error(x.j.error || 'fail');
+        D = x.j;
+        if (!me) askName(true);
+        render();
+      })
+      .catch(function(){
+        page.innerHTML = '<div class="load">载入失败了，请下拉刷新重试。<br>如果一直不行，请联系老师（微信 engo2026）。</div>';
+      });
+  }
+
+  // ---------- 渲染 ----------
+  function myBookings(){
+    return D.bookings.filter(function(b){ return b.name === me; });
+  }
+
+  function render(){
+    if (!D) return;
+    var mine = myBookings();
+    var future = mine.filter(function(b){ return b.date >= D.today; });
+
+    var h = '';
+    h += '<div class="hd"><div class="row"><div>' +
+         '<div class="t">月卡预约 · ' + esc(D.label) + '</div>' +
+         '<div class="sub">每天一个主题 · 每节 60 分钟</div></div>' +
+         '<button class="who" id="whoBtn">' + (me ? esc(me) : '设置名字') + ' ✎</button></div>' +
+         '<div class="mine">📅 你本月已约 <b>' + mine.length + '</b> 场' +
+         (future.length ? '，接下来 <b>' + future.length + '</b> 场' : '') + '</div></div>';
+
+    h += '<div class="note">' + esc(D.note) +
+         '<br><b>预约规则：</b>9/1–9/6 首周不限，随时可约；<b>从 9/14 起需提前 ' + D.leadDays +
+         ' 天预约</b>（例：9/14 的课，9/11 当天仍可约，9/12 起关闭）。</div>';
+
+    var lastWeek = null;
+    D.days.forEach(function(d){
+      var wk = weekKey(d.date);
+      if (wk !== lastWeek) { h += '<div class="wk">' + wk + '</div>'; lastWeek = wk; }
+      h += dayCard(d);
+    });
+
+    if (D.pending && D.pending.length){
+      h += '<div class="pend"><h3>顺延补足 · 另外 5 个主题</h3>' +
+           '<div class="s">日期与时段将结合大家的时间统一安排，确定后会加进这里</div><ul>';
+      D.pending.forEach(function(p){
+        h += '<li><b>' + esc(p.en) + '</b> · ' + esc(p.cn) + '</li>';
+      });
+      h += '</ul></div>';
+    }
+
+    h += '<div class="foot">英歌派 Engo Pro · 成人英语主题月卡<br>' +
+         '有问题随时微信 engo2026<br>普宁市万泰新天地时代中心 D 栋</div>';
+
+    page.innerHTML = h;
+    document.getElementById('whoBtn').addEventListener('click', function(){ askName(false); });
+    bind();
+  }
+
+  function weekKey(dateStr){
+    var d = new Date(dateStr + 'T00:00:00');
+    var mon = new Date(d); mon.setDate(d.getDate() - ((d.getDay() + 6) % 7));
+    var sun = new Date(mon); sun.setDate(mon.getDate() + 6);
+    var f = function(x){ return (x.getMonth()+1) + '/' + x.getDate(); };
+    return f(mon) + ' – ' + f(sun);
+  }
+
+  function dayCard(d){
+    var WD = ['周日','周一','周二','周三','周四','周五','周六'];
+    var dt = new Date(d.date + 'T00:00:00');
+    var dayBookings = D.bookings.filter(function(b){ return b.date === d.date; });
+    var mineHere = dayBookings.filter(function(b){ return b.name === me; })[0];
+
+    var cls = 'day';
+    if (d.break) cls += ' br';
+    else if (!d.state.open) cls += ' shut';
+    if (mineHere) cls += ' on';
+    if (openDate === d.date) cls += ' open';
+
+    var h = '<div class="' + cls + '" data-date="' + d.date + '">';
+    h += '<div class="dh" data-toggle="' + d.date + '">';
+    h += '<div class="dt"><div class="n">' + dt.getDate() + '</div><div class="w">' + WD[dt.getDay()] + '</div></div>';
+    h += '<div class="dc"><div class="en">' + esc(d.en) + '</div>';
+    if (d.cn) h += '<div class="cn">' + esc(d.cn) + '</div>';
+
+    h += '<div class="meta">';
+    if (d.break) {
+      h += '<span class="pill shut">休课</span>';
+    } else if (!d.state.open) {
+      h += '<span class="pill shut">' + esc(d.state.text) + '</span>';
+    } else {
+      (d.slots || []).forEach(function(s){
+        h += '<span class="pill time">' + esc(D.slots[s].name) + ' ' + esc(D.slots[s].time) + '</span>';
+      });
+      if (d.state.reason === 'grace') h += '<span class="pill grace">首周不限</span>';
+    }
+    if (!d.break && dayBookings.length) h += '<span class="pill cnt">🙋 ' + dayBookings.length + ' 人已约</span>';
+    if (mineHere) h += '<span class="pill me">✓ 你约了 ' + esc(D.slots[mineHere.slot].name) + '</span>';
+    h += '</div></div>';
+
+    if (!d.break) h += '<div class="caret">›</div>';
+    h += '</div>';
+
+    // 展开区
+    if (!d.break) {
+      h += '<div class="bd">';
+      if (d.state.open) {
+        var sel = pick[d.date] || { slot: mineHere ? mineHere.slot : (d.slots[0] || ''), status: mineHere ? mineHere.status : '' };
+        h += '<div class="lb">选一个时段（两场内容完全一样）</div><div class="opts">';
+        d.slots.forEach(function(s){
+          h += '<button class="opt' + (sel.slot === s ? ' sel' : '') + '" data-slot="' + d.date + '|' + s + '">' +
+               esc(D.slots[s].name) + '<small>' + esc(D.slots[s].time) + '</small></button>';
+        });
+        h += '</div>';
+        h += '<div class="lb">今天想练什么？（老师会提前看到）</div><div class="opts">';
+        D.statuses.forEach(function(st){
+          h += '<button class="opt' + (sel.status === st.key ? ' sel' : '') + '" data-st="' + d.date + '|' + st.key + '">' +
+               st.emoji + ' ' + esc(st.label) + '</button>';
+        });
+        h += '</div>';
+        h += '<button class="go" data-book="' + d.date + '">' + (mineHere ? '更新我的预约' : '确认预约') + '</button>';
+        if (mineHere) h += '<button class="go cancel" data-cancel="' + d.date + '">取消这天的预约</button>';
+      } else {
+        h += '<div class="empty">' + esc(d.state.text) + '，看看谁已经约了 👇</div>';
+      }
+      h += peopleBlock(d, dayBookings);
+      h += '</div>';
+    }
+
+    h += '</div>';
+    return h;
+  }
+
+  function peopleBlock(d, dayBookings){
+    var h = '<div class="ppl">';
+    if (!dayBookings.length) {
+      h += '<div class="empty">还没有人约这一天 —— 你可以是第一个 🌱</div></div>';
+      return h;
+    }
+    (d.slots || []).forEach(function(s){
+      var list = dayBookings.filter(function(b){ return b.slot === s; });
+      h += '<div class="grp"><div class="gt">' + esc(D.slots[s].name) + ' ' +
+           '<span>' + esc(D.slots[s].time) + ' · ' + list.length + ' 人</span></div>';
+      if (!list.length) { h += '<div class="empty">暂时没有人</div></div>'; return; }
+      h += '<div class="chips">';
+      list.forEach(function(b){
+        var st = D.statuses.filter(function(x){ return x.key === b.status; })[0];
+        h += '<span class="p' + (b.name === me ? ' self' : '') + '">' +
+             '<span class="av" style="background:' + avColor(b.name) + '">' + esc(initial(b.name)) + '</span>' +
+             esc(b.name) + (st ? ' <em>' + st.emoji + ' ' + esc(st.label) + '</em>' : '') + '</span>';
+      });
+      h += '</div></div>';
+    });
+    return h + '</div>';
+  }
+
+  // ---------- 交互 ----------
+  function bind(){
+    page.querySelectorAll('[data-toggle]').forEach(function(el){
+      el.addEventListener('click', function(){
+        var dstr = el.getAttribute('data-toggle');
+        var d = D.days.filter(function(x){ return x.date === dstr; })[0];
+        if (d.break) return;
+        openDate = (openDate === dstr) ? null : dstr;
+        render();
+        if (openDate) {
+          var node = page.querySelector('[data-date="' + openDate + '"]');
+          if (node) node.scrollIntoView({behavior:'smooth', block:'center'});
+        }
+      });
+    });
+    page.querySelectorAll('[data-slot]').forEach(function(el){
+      el.addEventListener('click', function(){
+        var p = el.getAttribute('data-slot').split('|');
+        pick[p[0]] = pick[p[0]] || {}; pick[p[0]].slot = p[1];
+        if (!pick[p[0]].status) {
+          var mb = D.bookings.filter(function(b){ return b.date===p[0] && b.name===me; })[0];
+          pick[p[0]].status = mb ? mb.status : '';
+        }
+        render();
+      });
+    });
+    page.querySelectorAll('[data-st]').forEach(function(el){
+      el.addEventListener('click', function(){
+        var p = el.getAttribute('data-st').split('|');
+        pick[p[0]] = pick[p[0]] || {};
+        pick[p[0]].status = (pick[p[0]].status === p[1]) ? '' : p[1];
+        if (!pick[p[0]].slot) {
+          var d = D.days.filter(function(x){ return x.date===p[0]; })[0];
+          var mb = D.bookings.filter(function(b){ return b.date===p[0] && b.name===me; })[0];
+          pick[p[0]].slot = mb ? mb.slot : (d.slots[0] || '');
+        }
+        render();
+      });
+    });
+    page.querySelectorAll('[data-book]').forEach(function(el){
+      el.addEventListener('click', function(){ submit(el.getAttribute('data-book'), false, el); });
+    });
+    page.querySelectorAll('[data-cancel]').forEach(function(el){
+      el.addEventListener('click', function(){ submit(el.getAttribute('data-cancel'), true, el); });
+    });
+  }
+
+  function submit(date, cancel, btn){
+    if (!me) { askName(true); return; }
+    var mb = D.bookings.filter(function(b){ return b.date===date && b.name===me; })[0];
+    var sel = pick[date] || {};
+    var d = D.days.filter(function(x){ return x.date===date; })[0];
+    var slot = sel.slot || (mb && mb.slot) || (d.slots[0] || '');
+    var status = sel.status !== undefined ? sel.status : (mb ? mb.status : '');
+
+    var body = { k:K, name:me, date:date };
+    if (cancel) body.action = 'cancel';
+    else { body.slot = slot; body.status = status; }
+
+    btn.disabled = true;
+    var old = btn.textContent; btn.textContent = '处理中…';
+
+    fetch('/api/yueka', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(body) })
+      .then(function(r){ return r.json(); })
+      .then(function(j){
+        if (!j.ok) throw new Error(j.error || '失败');
+        toast(cancel ? '已取消' : '约好了，' + D.slots[slot].name + ' 见 👋');
+        delete pick[date];
+        if (cancel) openDate = null;
+        return refresh();
+      })
+      .catch(function(e){
+        btn.disabled = false; btn.textContent = old;
+        toast(e.message || '操作失败，请重试');
+      });
+  }
+
+  function refresh(){
+    return fetch('/api/yueka?k=' + encodeURIComponent(K))
+      .then(function(r){ return r.json(); })
+      .then(function(j){ if (j.ok) { D = j; render(); } });
+  }
+
+  load();
+})();
+</script>
+</body>
+</html>
