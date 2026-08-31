@@ -12,6 +12,7 @@
 <style>
   :root{
     --gold:#F4A81B; --gold-d:#C4820A; --gold-l:#FDF2DC;
+    --red:#EF5A5A; --grn:#7CB24E; --blu:#3E92DE;
     --navy:#16456F; --navy-l:#2E7CC0; --navy-d:#0E2E4D;
     --ink:#33302B; --mut:#9A8F82; --line:#EDE4D6;
     --cream:#FBF5EC; --card:#FFFDF9;
@@ -25,28 +26,44 @@
   .page{max-width:600px;margin:0 auto;padding-bottom:60px}
 
   /* ═══ 顶部 ═══ */
-  .hd{background:linear-gradient(150deg,#2E7CC0 0%,#16456F 58%,#0E2E4D 100%);
-    color:#fff;padding:20px 20px 44px;position:relative;overflow:hidden;
-    border-radius:0 0 30px 30px}
-  .hd::after{content:"";position:absolute;width:230px;height:230px;border-radius:50%;
-    background:rgba(244,168,27,.13);right:-80px;top:-70px}
-  .hd .row{display:flex;align-items:center;justify-content:space-between;gap:10px;position:relative;z-index:2}
-  .hd .t{font-size:1.3rem;font-weight:800;font-family:var(--fh);letter-spacing:.01em}
-  .hd .sub{font-size:.78rem;opacity:.8;margin-top:1px}
-  .who{background:rgba(255,255,255,.18);border:1.5px solid rgba(255,255,255,.34);color:#fff;
+  .hd{color:var(--ink);padding:22px 20px 46px;position:relative;overflow:hidden;
+    border-radius:0 0 30px 30px;
+    background:
+      radial-gradient(circle 5px at 11% 16%, rgba(239,90,90,.45) 97%, transparent 100%),
+      radial-gradient(circle 4px at 30% 7%,  rgba(124,178,78,.5) 97%, transparent 100%),
+      radial-gradient(circle 6px at 88% 12%, rgba(244,168,27,.5) 97%, transparent 100%),
+      radial-gradient(circle 4px at 68% 5%,  rgba(62,146,222,.45) 97%, transparent 100%),
+      radial-gradient(circle 3px at 50% 13%, rgba(239,90,90,.35) 97%, transparent 100%),
+      radial-gradient(circle 4px at 94% 40%, rgba(124,178,78,.4) 97%, transparent 100%),
+      radial-gradient(circle 3px at 5% 45%,  rgba(62,146,222,.4) 97%, transparent 100%),
+      linear-gradient(165deg,#FFF6E1 0%,#FDF1E8 46%,#E9F3FE 100%)}
+  .hd::before{content:"";position:absolute;width:210px;height:210px;border-radius:50%;
+    background:rgba(62,146,222,.10);right:-80px;top:-70px}
+  .hd::after{content:"";position:absolute;width:170px;height:170px;border-radius:50%;
+    background:rgba(244,168,27,.13);left:-70px;bottom:-60px}
+  .hd .row{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;position:relative;z-index:2}
+  .hlogo{height:26px;display:block;margin-bottom:9px}
+  .hd .t{font-size:1.35rem;font-weight:800;font-family:var(--fh);letter-spacing:.01em;color:var(--ink)}
+  .hd .t em{font-style:normal;color:var(--blu)}
+  .hd .sub{font-size:.78rem;color:#8C8174;margin-top:1px}
+  .who{background:#fff;border:2px solid #F0E4D0;color:var(--navy);
     border-radius:999px;padding:7px 14px;font-size:.83rem;font-weight:700;font-family:var(--fz);
-    cursor:pointer;white-space:nowrap;max-width:42vw;overflow:hidden;text-overflow:ellipsis;flex:none}
+    cursor:pointer;white-space:nowrap;max-width:42vw;overflow:hidden;text-overflow:ellipsis;flex:none;
+    box-shadow:0 2px 8px rgba(51,48,43,.07)}
 
   /* 我的本月 */
-  .hero{position:relative;z-index:2;margin-top:18px;background:rgba(255,255,255,.12);
-    border:1.5px solid rgba(255,255,255,.2);border-radius:18px;padding:15px 17px}
+  .hero{position:relative;z-index:2;margin-top:14px;background:#fff;
+    border:2px solid #F3E8D5;border-radius:18px;padding:15px 17px;
+    box-shadow:0 4px 14px rgba(51,48,43,.06)}
   .hero .big{display:flex;align-items:baseline;gap:9px;margin-bottom:11px}
-  .hero .big b{font-family:var(--fh);font-size:2.5rem;font-weight:800;color:var(--gold);line-height:1}
-  .hero .big span{font-size:.88rem;opacity:.92;font-weight:600}
-  .bar{height:9px;background:rgba(255,255,255,.18);border-radius:99px;overflow:hidden}
-  .bar i{display:block;height:100%;background:linear-gradient(90deg,#F4A81B,#FFD275);border-radius:99px;
+  .hero .big b{font-family:var(--fh);font-size:2.5rem;font-weight:800;line-height:1;
+    background:linear-gradient(100deg,var(--red),var(--gold) 40%,var(--grn) 75%,var(--blu));
+    -webkit-background-clip:text;background-clip:text;color:transparent}
+  .hero .big span{font-size:.88rem;color:#6E6357;font-weight:600}
+  .bar{height:9px;background:#F3EDE2;border-radius:99px;overflow:hidden}
+  .bar i{display:block;height:100%;background:linear-gradient(90deg,var(--red),var(--gold) 38%,var(--grn) 72%,var(--blu));border-radius:99px;
     transition:width .6s cubic-bezier(.2,.8,.2,1)}
-  .hero .cap{font-size:.73rem;opacity:.72;margin-top:7px}
+  .hero .cap{font-size:.73rem;color:#A99E90;margin-top:7px}
 
   /* ═══ 规则条 ═══ */
   .note{margin:14px 16px 0;position:relative;z-index:3;background:var(--card);
@@ -114,6 +131,8 @@
     border:2px solid var(--card)}
   .opt.st.sel{border-color:var(--gold);background:var(--gold-l);color:var(--gold-d)}
   .opt.st.sel::after{background:var(--gold)}
+  .opt.md.sel{border-color:var(--grn);background:#EFF7E6;color:#4A7F3C}
+  .opt.md.sel::after{background:var(--grn)}
   .tip{font-size:.74rem;color:#9A8F82;background:#F4EFE7;border-radius:9px;padding:8px 11px;
     margin:-9px 0 16px;line-height:1.55}
 
@@ -171,14 +190,16 @@
 
 
   .first{margin-top:-24px !important}
-  .quote{position:relative;z-index:2;margin-top:14px;font-family:var(--fh);
-    font-size:.95rem;font-weight:700;color:#FFD275;line-height:1.5;letter-spacing:.01em}
+  .quote{position:relative;z-index:2;margin-top:15px;font-family:var(--fh);
+    font-size:.97rem;font-weight:800;color:var(--navy);line-height:1.5;letter-spacing:.01em;
+    background:rgba(255,255,255,.72);border-radius:14px;padding:11px 14px;
+    border-left:5px solid var(--gold);box-shadow:0 2px 8px rgba(51,48,43,.05)}
   .quote span{display:block;font-family:var(--fz);font-size:.72rem;font-weight:600;
-    color:rgba(255,255,255,.65);margin-top:2px}
+    color:#A99E90;margin-top:2px}
 
   /* 代号 & 我的预约 */
-  .codebar{font-size:.72rem;opacity:.75;margin-top:8px}
-  .codebar b{color:var(--gold);font-family:var(--fh);letter-spacing:.03em}
+  .codebar{font-size:.72rem;color:#A99E90;margin-top:8px}
+  .codebar b{color:var(--gold-d);font-family:var(--fh);letter-spacing:.03em}
   .mybox{position:relative;z-index:3;margin:14px 16px 0;background:var(--card);border-radius:19px;padding:15px 17px;
     box-shadow:0 3px 14px rgba(51,48,43,.07)}
   .mybox h3{font-size:.95rem;color:var(--navy);margin-bottom:10px;display:flex;align-items:center;gap:7px}
@@ -253,6 +274,23 @@
 
   var D=null, openDate=null, pick={};
   var page=document.getElementById('page'), veil=document.getElementById('veil'), toastEl=document.getElementById('toast');
+
+  var QUOTES=[
+    ["You don't need perfect English — you just need to start.",'不用完美，先开口'],
+    ['Every word you speak is a step forward.','每开口一次，就前进一步'],
+    ['Small talk today, big talk tomorrow.','今天敢闲聊，明天敢演讲'],
+    ['Consistency beats intensity.','常来，比猛学更管用'],
+    ['One topic a day keeps the silence away.','每天一个主题，告别哑巴英语'],
+    ['Your accent is your story. Own it.','口音是你的故事，大方说'],
+    ['Show up. That is 80% of learning.','来了，就赢了八成'],
+    ['Mistakes mean you are trying.','说错了，说明你在认真练'],
+    ['Speak badly today, speak boldly tomorrow.','今天说得烂，明天说得敢'],
+    ['English is not a test. It is a door.','英语不是考试，是一扇门'],
+    ['The best time to speak up is now.','最好的开口时机，就是现在'],
+    ['Little by little, a little becomes a lot.','一点一点，就会很多'],
+    ['Done is better than perfect.','说出来，比说得完美更重要'],
+    ['Your future self will thank you for today.','未来的你，会感谢今天来的你']];
+  var QUOTE=QUOTES[Math.floor(Math.random()*QUOTES.length)];
 
   var ACC=['#2E7CC0','#E0703F','#5C9E4A','#C4820A','#7B5FC4','#2FA8A0','#D4506B'];
   var AV =['#3090D8','#EF4A4A','#7BA84A','#F4A81B','#8A63C4','#2FA8A0','#E07A3F','#5C7CB8'];
@@ -371,19 +409,12 @@
     var future=mine.filter(function(b){return b.date>=D.today;});
     var target=25, pct=Math.min(100,Math.round(mine.length/target*100));
 
-    var QUOTES=[
-      ['Every word you speak is a step forward.','每开口一次，就前进一步'],
-      ["You don't need perfect English — you just need to start.",'不用完美，先开口'],
-      ['Small talk today, big talk tomorrow.','今天敢闲聊，明天敢演讲'],
-      ['Consistency beats intensity.','常来，比猛学更管用'],
-      ['One topic a day keeps the silence away.','每天一个主题，告别哑巴英语'],
-      ['Your accent is your story. Own it.','口音是你的故事，大方说'],
-      ['Show up. That is 80% of learning.','来了，就赢了八成']];
-    var qt=QUOTES[new Date(D.today+'T00:00:00').getDate()%QUOTES.length];
+    var qt=QUOTE;
 
     var h='';
     h+='<div class="hd"><div class="row"><div>'+
-       '<div class="t">'+(myName?'Hello, '+esc(myName)+' 👋':'月卡预约')+'</div>'+
+       '<img class="hlogo" src="engo_pro_logo.png" alt="ENGO PRO">'+
+       '<div class="t">'+(myName?'Hello, <em>'+esc(myName)+'</em> 👋':'月卡预约')+'</div>'+
        '<div class="sub">'+(myName?'What do you want to practice this week?':esc(D.label)+' · 每节 60 分钟')+'</div></div>'+
        '<button class="who" id="whoBtn">'+(myName?esc(myName):'我是谁？')+' ✎</button></div>'+
        '<div class="quote">“'+esc(qt[0])+'”<span>'+esc(qt[1])+'</span></div>'+
@@ -404,7 +435,10 @@
         h+='<div class="myrow"><div class="md"><b>'+dt.getDate()+'</b><span>'+
            (dt.getMonth()+1)+'月·'+WD[dt.getDay()]+'</span></div>'+
            '<div class="mi"><b>'+esc(d.en||'')+'</b><span>'+esc(D.slots[b.slot].name)+' '+
-           esc(D.slots[b.slot].time)+'</span></div>'+
+           esc(D.slots[b.slot].time)+(function(){
+             var st=D.statuses.filter(function(y){return y.key===b.status;})[0];
+             var md=(D.moods||[]).filter(function(y){return y.key===b.mood;})[0];
+             var t=(st?' · '+st.emoji:'')+(md?' '+md.emoji:'');return t;})()+'</span></div>'+
            '<a class="cal" href="'+icsUrl(b.date,b.slot)+'">📅 加日历</a></div>';
       });
       if(future.length>1){
@@ -498,6 +532,7 @@
         var curSlot=sel.slot||(myBk[0]?myBk[0].slot:(d.slots[0]||''));
         var curBk=myBk.filter(function(b){return b.slot===curSlot;})[0];
         var curSt=sel.status!==undefined?sel.status:(curBk?curBk.status:'');
+        var curMd=sel.mood!==undefined?sel.mood:(curBk?curBk.mood:'');
 
         h+='<div class="lb">选时段 <span>· 一天想来两场也可以</span></div><div class="opts">';
         d.slots.forEach(function(x){
@@ -512,6 +547,12 @@
         D.statuses.forEach(function(st){
           h+='<button class="opt st'+(curSt===st.key?' sel':'')+'" data-st="'+d.date+'|'+st.key+'">'+
              st.emoji+' '+esc(st.label)+'</button>';
+        });
+        h+='</div>';
+        h+='<div class="lb">今天心情怎么样？ <span>· 选一个，让大家知道你来的状态</span></div><div class="opts">';
+        (D.moods||[]).forEach(function(md){
+          h+='<button class="opt md'+(curMd===md.key?' sel':'')+'" data-md="'+d.date+'|'+md.key+'">'+
+             md.emoji+' '+esc(md.label)+'</button>';
         });
         h+='</div>';
         h+='<button class="go" data-book="'+d.date+'">'+(curBk?'更新这一场':'约 '+D.slots[curSlot].name)+'</button>';
@@ -539,9 +580,11 @@
       h+='<div class="chips">';
       list.forEach(function(b){
         var st=D.statuses.filter(function(y){return y.key===b.status;})[0];
+        var md=(D.moods||[]).filter(function(y){return y.key===b.mood;})[0];
+        var tag=(md?md.emoji+' ':'')+(st?st.emoji+' '+esc(st.label):'');
         h+='<span class="p'+(b.mine?' self':'')+'">'+
            '<span class="av" style="background:'+avColor(b.name)+'">'+esc(initial(b.name))+'</span>'+
-           esc(b.name)+(st?' <em>'+st.emoji+' '+esc(st.label)+'</em>':'')+'</span>';
+           esc(b.name)+(tag?' <em>'+tag+'</em>':'')+'</span>';
       });
       h+='</div></div>';
     });
@@ -560,19 +603,29 @@
           if(n) n.scrollIntoView({behavior:'smooth',block:'center'});}
       });
     });
+    function pickSlot(date,cur){
+      var d=D.days.filter(function(x){return x.date===date;})[0];
+      return cur.slot||(D.bookings.filter(function(b){return b.date===date&&b.mine;})[0]||{}).slot||d.slots[0];
+    }
     page.querySelectorAll('[data-slot]').forEach(function(el){
       el.addEventListener('click',function(){
         var q=el.getAttribute('data-slot').split('|');
-        pick[q[0]]={slot:q[1]}; render();
+        var cur=pick[q[0]]||{};
+        pick[q[0]]={slot:q[1],status:cur.status,mood:cur.mood}; render();
       });
     });
     page.querySelectorAll('[data-st]').forEach(function(el){
       el.addEventListener('click',function(){
         var q=el.getAttribute('data-st').split('|');
         var cur=pick[q[0]]||{};
-        var d=D.days.filter(function(x){return x.date===q[0];})[0];
-        var slot=cur.slot||(D.bookings.filter(function(b){return b.date===q[0]&&b.mine;})[0]||{}).slot||d.slots[0];
-        pick[q[0]]={slot:slot,status:cur.status===q[1]?'':q[1]}; render();
+        pick[q[0]]={slot:pickSlot(q[0],cur),status:cur.status===q[1]?'':q[1],mood:cur.mood}; render();
+      });
+    });
+    page.querySelectorAll('[data-md]').forEach(function(el){
+      el.addEventListener('click',function(){
+        var q=el.getAttribute('data-md').split('|');
+        var cur=pick[q[0]]||{};
+        pick[q[0]]={slot:pickSlot(q[0],cur),status:cur.status,mood:cur.mood===q[1]?'':q[1]}; render();
       });
     });
     page.querySelectorAll('[data-book]').forEach(function(el){
@@ -591,9 +644,10 @@
     var slot=sel.slot||(myBk[0]?myBk[0].slot:(d.slots[0]||''));
     var cur=myBk.filter(function(b){return b.slot===slot;})[0];
     var status=sel.status!==undefined?sel.status:(cur?cur.status:'');
+    var mood=sel.mood!==undefined?sel.mood:(cur?cur.mood:'');
 
     var body={k:K,code:myCode,date:date,slot:slot};
-    if(cancel) body.action='cancel'; else {body.name=myName;body.status=status;}
+    if(cancel) body.action='cancel'; else {body.name=myName;body.status=status;body.mood=mood;}
 
     btn.disabled=true; var old=btn.textContent; btn.textContent='处理中…';
     fetch('/api/yueka',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)})

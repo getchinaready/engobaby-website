@@ -19,7 +19,7 @@
  */
 
 import { put, list } from '@vercel/blob';
-import { SLOTS, STATUSES, SCHEDULE, todayCN } from './_yueka-data.js';
+import { SLOTS, STATUSES, MOODS, SCHEDULE, todayCN } from './_yueka-data.js';
 import { listBookings } from './yueka.js';
 
 const MONTH = '2026-09';
@@ -94,12 +94,14 @@ async function sendDigest(job, dayBookings) {
     const rows = listB.length
       ? listB.map((b) => {
           const st = STATUSES.find((x) => x.key === b.status);
+          const md = MOODS.find((x) => x.key === b.mood);
           return `<tr>
             <td style="padding:8px 12px;border-bottom:1px solid #EDF1F5;font-size:14px;font-weight:700;color:#2B3A4A">${esc(b.name)}</td>
             <td style="padding:8px 12px;border-bottom:1px solid #EDF1F5;font-size:13px;color:#5A6B7B">${st ? st.emoji + ' ' + esc(st.label) : '—'}</td>
+            <td style="padding:8px 12px;border-bottom:1px solid #EDF1F5;font-size:13px;color:#5A6B7B">${md ? md.emoji + ' ' + esc(md.label) : '—'}</td>
             <td style="padding:8px 12px;border-bottom:1px solid #EDF1F5;font-size:12px;color:#96A5B3">${esc(b.code)}</td>
           </tr>`; }).join('')
-      : `<tr><td colspan="3" style="padding:10px 12px;font-size:13px;color:#96A5B3">暂时没有人预约</td></tr>`;
+      : `<tr><td colspan="4" style="padding:10px 12px;font-size:13px;color:#96A5B3">暂时没有人预约</td></tr>`;
     return `
       <div style="margin-bottom:16px">
         <div style="font-size:14px;font-weight:800;color:#16456F;margin-bottom:7px">
@@ -108,6 +110,7 @@ async function sendDigest(job, dayBookings) {
           <tr style="background:#F7F9FB">
             <th align="left" style="padding:7px 12px;font-size:12px;color:#7A8B9A">姓名</th>
             <th align="left" style="padding:7px 12px;font-size:12px;color:#7A8B9A">今天想练</th>
+            <th align="left" style="padding:7px 12px;font-size:12px;color:#7A8B9A">心情</th>
             <th align="left" style="padding:7px 12px;font-size:12px;color:#7A8B9A">代号</th>
           </tr>${rows}</table>
       </div>`;
@@ -130,7 +133,7 @@ async function sendDigest(job, dayBookings) {
       <p style="font-size:12px;color:#7A8B9A;line-height:1.7;margin:6px 0 0">${note}</p>
     </div>
     <div style="background:#F7F9FB;padding:12px 24px;font-size:12px;color:#96A5B3;text-align:center">
-      月卡预约系统自动发送 · www.engobaby.com/yueka</div>
+      英歌派 Engo Pro · 月卡预约系统自动发送 · www.engobaby.com/yueka</div>
   </div>
 </div>`;
 
@@ -138,7 +141,7 @@ async function sendDigest(job, dayBookings) {
     method: 'POST',
     headers: { Authorization: `Bearer ${RESEND_API_KEY}`, 'Content-Type': 'application/json' },
     body: JSON.stringify({
-      from: MAIL_FROM || 'onboarding@resend.dev',
+      from: `英歌派 Engo Pro <${(MAIL_FROM || '').match(/<([^>]+)>/)?.[1] || MAIL_FROM || 'onboarding@resend.dev'}>`,
       to: MAIL_TO.split(',').map((x) => x.trim()).filter(Boolean),
       subject: title, html,
     }),

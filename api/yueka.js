@@ -19,12 +19,12 @@
  *
  * 【存储】全部在 Vercel Blob（私有）：
  *   会员：yueka-members/<code>~<b64姓名>.json      —— 一次 list() 读全体
- *   预约：yueka/2026-09/<yyyymmdd>~<slot>~<code>~<b64姓名>~<b64状态>.json
+ *   预约：yueka/2026-09/<yyyymmdd>~<slot>~<code>~<b64姓名>~<b64状态>~<b64心情>.json
  *   信息编码在路径里：读整月一次 list()；不同人不同路径，无并发覆盖。
  */
 
 import { put, list, del } from '@vercel/blob';
-import { SLOTS, STATUSES, SCHEDULE, LEAD_DAYS, todayCN, bookingState } from './_yueka-data.js';
+import { SLOTS, STATUSES, MOODS, SCHEDULE, LEAD_DAYS, todayCN, bookingState } from './_yueka-data.js';
 
 const MONTH = '2026-09';
 const SEP = '~';
@@ -148,7 +148,7 @@ async function readAll(meNorm) {
 
   return { ok: true, month: MONTH, label: cfg.label, note: cfg.note,
     today: todayCN(), leadDays: LEAD_DAYS,
-    slots: SLOTS, statuses: STATUSES, pending: cfg.pending, days, bookings };
+    slots: SLOTS, statuses: STATUSES, moods: MOODS, pending: cfg.pending, days, bookings };
 }
 
 export async function listBookings() {
@@ -158,9 +158,9 @@ export async function listBookings() {
     const r = await list({ prefix: `yueka/${MONTH}/`, cursor, limit: 1000 });
     for (const b of r.blobs) {
       const file = b.pathname.split('/').pop().replace(/\.json$/, '');
-      const [d, slot, code, n, st] = file.split(SEP);
+      const [d, slot, code, n, st, md] = file.split(SEP);
       if (!d || !slot || !code) continue;
-      out.push({ date: expand(d), slot, code, name: b64d(n), status: b64d(st || ''),
+      out.push({ date: expand(d), slot, code, name: b64d(n), status: b64d(st || ''), mood: b64d(md || ''),
                  at: b.uploadedAt, _path: b.pathname });
     }
     cursor = r.cursor;
@@ -194,14 +194,15 @@ async function bookOrCancel(body, res) {
   if (!state.open) return res.status(400).json({ ok: false, error: state.text });
 
   const status = String(body.status || '').trim().slice(0, 16);
+  const mood = String(body.mood || '').trim().slice(0, 16);
 
   const old = await list({ prefix, limit: 100 });
   if (old.blobs.length) await del(old.blobs.map((b) => b.url));
 
-  await put(`${prefix}${b64e(name)}${SEP}${b64e(status)}.json`,
-    JSON.stringify({ code, name, date, slot, status, at: new Date().toISOString() }), {
+  await put(`${prefix}${b64e(name)}${SEP}${b64e(status)}${SEP}${b64e(mood)}.json`,
+    JSON.stringify({ code, name, date, slot, status, mood, at: new Date().toISOString() }), {
       access: 'private', contentType: 'application/json; charset=utf-8',
       addRandomSuffix: false, allowOverwrite: true, cacheControlMaxAge: 0,
     });
-  return res.status(200).json({ ok: true, booked: { date, slot, name, status } });
+  return res.status(200).json({ ok: true, booked: { date, slot, name, status, mood } });
 }

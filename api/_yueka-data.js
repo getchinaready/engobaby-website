@@ -19,6 +19,15 @@ export const STATUSES = [
   { key: 'chill',  label: '随便聊聊', emoji: '☕', hint: '轻松来一场' },
 ];
 
+/** 心情标签 —— 约课时可选，老师和同学都能看到（想改文案/emoji 只改这里） */
+export const MOODS = [
+  { key: 'great',    label: '状态超好', emoji: '🤩' },
+  { key: 'happy',    label: '心情不错', emoji: '😄' },
+  { key: 'chill',    label: '平平淡淡', emoji: '😌' },
+  { key: 'tired',    label: '有点累',   emoji: '😪' },
+  { key: 'stressed', label: '压力山大', emoji: '🫠' },
+];
+
 export const SCHEDULE = {
   '2026-09': {
     label: '2026 年 9 月',
