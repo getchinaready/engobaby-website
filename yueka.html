@@ -49,7 +49,7 @@
   .hero .cap{font-size:.73rem;opacity:.72;margin-top:7px}
 
   /* ═══ 规则条 ═══ */
-  .note{margin:-24px 16px 0;position:relative;z-index:3;background:var(--card);
+  .note{margin:14px 16px 0;position:relative;z-index:3;background:var(--card);
     border-radius:16px;padding:14px 16px;font-size:.8rem;color:#6E6357;line-height:1.72;
     box-shadow:0 6px 20px rgba(51,48,43,.09)}
   .note b{color:var(--navy)}
@@ -169,6 +169,49 @@
   .toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
   .load{text-align:center;padding:70px 24px;color:var(--mut);font-size:.9rem;line-height:1.8}
 
+
+  .first{margin-top:-24px !important}
+  .quote{position:relative;z-index:2;margin-top:14px;font-family:var(--fh);
+    font-size:.95rem;font-weight:700;color:#FFD275;line-height:1.5;letter-spacing:.01em}
+  .quote span{display:block;font-family:var(--fz);font-size:.72rem;font-weight:600;
+    color:rgba(255,255,255,.65);margin-top:2px}
+
+  /* 代号 & 我的预约 */
+  .codebar{font-size:.72rem;opacity:.75;margin-top:8px}
+  .codebar b{color:var(--gold);font-family:var(--fh);letter-spacing:.03em}
+  .mybox{position:relative;z-index:3;margin:14px 16px 0;background:var(--card);border-radius:19px;padding:15px 17px;
+    box-shadow:0 3px 14px rgba(51,48,43,.07)}
+  .mybox h3{font-size:.95rem;color:var(--navy);margin-bottom:10px;display:flex;align-items:center;gap:7px}
+  .myrow{display:flex;align-items:center;gap:11px;padding:9px 0;border-top:1px solid var(--line)}
+  .myrow .md{flex:none;width:44px;text-align:center;background:var(--gold-l);border-radius:11px;padding:5px 0}
+  .myrow .md b{display:block;font-family:var(--fh);font-size:1.15rem;color:var(--gold-d);line-height:1.1}
+  .myrow .md span{font-size:.62rem;color:#B7935A;font-weight:700}
+  .myrow .mi{flex:1;min-width:0}
+  .myrow .mi b{display:block;font-size:.85rem;font-weight:700;color:var(--ink);
+    white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .myrow .mi span{font-size:.73rem;color:var(--mut)}
+  .cal{flex:none;background:#EAF3FB;color:var(--navy);border:none;border-radius:10px;
+    padding:8px 12px;font-size:.76rem;font-weight:800;font-family:var(--fz);
+    text-decoration:none;white-space:nowrap}
+  .mytip{font-size:.7rem;color:#B0A597;margin-top:9px;line-height:1.55}
+  .callink{display:inline-block;margin-top:11px;background:#EAF3FB;color:var(--navy);
+    border-radius:10px;padding:8px 14px;font-size:.78rem;font-weight:800;text-decoration:none}
+
+  /* 弹窗里的代号卡 / 候选按钮 */
+  .codecard{background:linear-gradient(135deg,#16456F,#2E7CC0);border-radius:16px;
+    padding:18px;text-align:center;margin-bottom:14px}
+  .codecard .cl{font-size:.72rem;color:#9FC4E6;letter-spacing:.12em;margin-bottom:5px}
+  .codecard .cv{font-family:var(--fh);font-size:1.7rem;font-weight:800;color:var(--gold);letter-spacing:.02em}
+  .copybtn{margin-top:11px;background:rgba(255,255,255,.16);border:1.5px solid rgba(255,255,255,.35);
+    color:#fff;border-radius:999px;padding:7px 20px;font-size:.8rem;font-weight:700;cursor:pointer;font-family:var(--fz)}
+  .cand{width:100%;border:2px solid var(--line);background:var(--card);border-radius:13px;
+    padding:12px;font-size:.9rem;font-weight:700;color:var(--ink);cursor:pointer;
+    font-family:var(--fz);margin-bottom:9px;text-align:center}
+  .cand b{color:var(--navy)}
+  .cand.new{border-style:dashed;color:var(--gold-d)}
+  .boxmsg{font-size:.8rem;color:#B05B4C;text-align:center;margin:-8px 0 12px;display:none}
+  .boxmsg.on{display:block}
+
   /* 撒花 */
   .cf{position:fixed;pointer-events:none;z-index:80;width:9px;height:14px;border-radius:2px;top:-20px}
   @keyframes fall{to{transform:translateY(105vh) rotate(720deg);opacity:0}}
@@ -178,12 +221,23 @@
 <div class="page" id="page"><div class="load">正在载入课表…</div></div>
 
 <div class="veil" id="veil">
-  <div class="box">
+  <div class="box" id="boxEnter">
     <div class="ic">⛵️</div>
-    <h3 id="nameTitle">你是哪位？</h3>
-    <p id="nameHint">填一次就好，这台手机会记住你。<br>这个名字会显示给同场的其他同学。</p>
-    <input type="text" id="nameInput" placeholder="名字 / 英文名 / 昵称" maxlength="24">
-    <button class="go" id="nameSave">好了</button>
+    <h3 id="enterTitle">欢迎！你是哪位？</h3>
+    <p id="enterHint">第一次来：输入<b>英文名</b>，系统会发你一个专属代号。<br>已有代号：直接输入代号（如 engo-lily）。</p>
+    <div class="boxmsg" id="enterMsg"></div>
+    <input type="text" id="enterInput" placeholder="英文名 或 代号" maxlength="30" autocapitalize="off">
+    <button class="go" id="enterGo">进入</button>
+    <div id="candWrap" style="margin-top:14px"></div>
+  </div>
+  <div class="box" id="boxCode" style="display:none">
+    <div class="ic">🎉</div>
+    <h3>这是你的专属代号</h3>
+    <p>已经帮这台手机记住了。<b>换手机时输入这个代号</b>，就能回到你自己的预约。建议截图或存到微信收藏。</p>
+    <div class="codecard"><div class="cl">MY ENGO CODE</div>
+      <div class="cv" id="codeShow"></div>
+      <button class="copybtn" id="codeCopy">复制代号</button></div>
+    <button class="go" id="codeDone">开始预约 →</button>
   </div>
 </div>
 <div class="toast" id="toast"></div>
@@ -193,64 +247,104 @@
   'use strict';
 
   var K = new URLSearchParams(location.search).get('k') || '';
-  var LS_NAME='engo_yueka_name', LS_UID='engo_yueka_uid';
-  var me='', uid='';
-  try {
-    me = localStorage.getItem(LS_NAME) || '';
-    uid = localStorage.getItem(LS_UID) || '';
-    if (!uid) {
-      uid = 'u' + Date.now().toString(36) + Math.random().toString(36).slice(2,10);
-      localStorage.setItem(LS_UID, uid);
-    }
-  } catch(e) { uid = 'u' + Math.random().toString(36).slice(2,14); }
+  var LS_CODE='engo_yueka_code', LS_NAME='engo_yueka_name';
+  var myCode='', myName='';
+  try { myCode=localStorage.getItem(LS_CODE)||''; myName=localStorage.getItem(LS_NAME)||''; } catch(e){}
 
   var D=null, openDate=null, pick={};
   var page=document.getElementById('page'), veil=document.getElementById('veil'), toastEl=document.getElementById('toast');
 
-  // 每天一个主色，滚动起来不单调
   var ACC=['#2E7CC0','#E0703F','#5C9E4A','#C4820A','#7B5FC4','#2FA8A0','#D4506B'];
   var AV =['#3090D8','#EF4A4A','#7BA84A','#F4A81B','#8A63C4','#2FA8A0','#E07A3F','#5C7CB8'];
-  function hash(s){var h=0;for(var i=0;i<s.length;i++)h=(h*31+s.charCodeAt(i))>>>0;return h;}
+  function hash(x){var h=0;for(var i=0;i<x.length;i++)h=(h*31+x.charCodeAt(i))>>>0;return h;}
   function avColor(n){return AV[hash(n)%AV.length];}
   function initial(n){return (n||'?').trim().charAt(0).toUpperCase();}
-  function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){
+  function esc(x){return String(x==null?'':x).replace(/[&<>"]/g,function(c){
     return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
 
   var tT;
   function toast(m){toastEl.textContent=m;toastEl.classList.add('on');
-    clearTimeout(tT);tT=setTimeout(function(){toastEl.classList.remove('on');},2700);}
+    clearTimeout(tT);tT=setTimeout(function(){toastEl.classList.remove('on');},3000);}
 
   function confetti(){
     var C=['#F4A81B','#EF4A4A','#7BA84A','#3090D8','#FFD275'];
     for(var i=0;i<26;i++){(function(i){
       var el=document.createElement('div');el.className='cf';
-      el.style.left=(Math.random()*100)+'vw';
-      el.style.background=C[i%C.length];
+      el.style.left=(Math.random()*100)+'vw';el.style.background=C[i%C.length];
       el.style.animation='fall '+(1.5+Math.random()*1.1)+'s '+(Math.random()*.3)+'s ease-in forwards';
-      document.body.appendChild(el);
-      setTimeout(function(){el.remove();},3200);
+      document.body.appendChild(el);setTimeout(function(){el.remove();},3200);
     })(i);}
   }
-
-  // ---------- 姓名 ----------
-  function askName(first){
-    document.getElementById('nameInput').value=me;
-    document.getElementById('nameTitle').textContent=first?'你是哪位？':'换个名字';
-    veil.classList.add('on');
-    setTimeout(function(){document.getElementById('nameInput').focus();},80);
+  function copyText(t,btn,okLabel){
+    function done(){btn.textContent=okLabel;setTimeout(function(){btn.textContent='复制代号';},2000);}
+    function legacy(){var ta=document.createElement('textarea');ta.value=t;
+      ta.style.position='fixed';ta.style.opacity='0';document.body.appendChild(ta);ta.select();
+      try{document.execCommand('copy');done();}catch(e){}document.body.removeChild(ta);}
+    if(navigator.clipboard&&navigator.clipboard.writeText) navigator.clipboard.writeText(t).then(done,legacy);
+    else legacy();
   }
-  document.getElementById('nameSave').addEventListener('click',function(){
-    var v=document.getElementById('nameInput').value.trim();
-    if(!v){toast('填一下名字吧');return;}
-    me=v; try{localStorage.setItem(LS_NAME,me);}catch(e){}
-    veil.classList.remove('on'); render();
-  });
-  document.getElementById('nameInput').addEventListener('keydown',function(e){
-    if(e.key==='Enter') document.getElementById('nameSave').click();
-  });
+
+  // ---------- 登录 / 注册 ----------
+  var boxEnter=document.getElementById('boxEnter'), boxCode=document.getElementById('boxCode');
+  var enterMsg=document.getElementById('enterMsg'), candWrap=document.getElementById('candWrap');
+
+  function askEnter(switching){
+    boxEnter.style.display='block'; boxCode.style.display='none';
+    candWrap.innerHTML=''; enterMsg.classList.remove('on');
+    document.getElementById('enterTitle').textContent = switching ? '切换 / 找回账号' : '欢迎！你是哪位？';
+    document.getElementById('enterHint').innerHTML = switching
+      ? '当前：<b>'+esc(myName)+'</b>（'+esc(myCode)+'）。<br>输入别的代号可切换；输入新英文名会创建新代号。'
+      : '第一次来：输入<b>英文名</b>，系统会发你一个专属代号。<br>已有代号：直接输入代号（如 engo-lily）。';
+    document.getElementById('enterInput').value='';
+    veil.classList.add('on');
+    setTimeout(function(){document.getElementById('enterInput').focus();},80);
+  }
+  function showMsg(m){enterMsg.textContent=m;enterMsg.classList.add('on');}
+  function saveMe(code,name){
+    myCode=code; myName=name;
+    try{localStorage.setItem(LS_CODE,code);localStorage.setItem(LS_NAME,name);}catch(e){}
+  }
+  function doEnter(confirmNew){
+    var v=document.getElementById('enterInput').value.trim();
+    if(!v){showMsg('先输入名字或代号～');return;}
+    var btn=document.getElementById('enterGo');
+    btn.disabled=true;btn.textContent='稍等…';
+    fetch('/api/yueka',{method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({k:K,action:'enter',name:v,confirmNew:!!confirmNew})})
+      .then(function(r){return r.json();})
+      .then(function(j){
+        btn.disabled=false;btn.textContent='进入';
+        if(!j.ok){showMsg(j.message||j.error||'出错了，再试一次');return;}
+        if(j.mode==='login'){saveMe(j.code,j.name);veil.classList.remove('on');
+          toast('欢迎回来，'+j.name+' 👋');refresh();return;}
+        if(j.mode==='created'){saveMe(j.code,j.name);
+          boxEnter.style.display='none';boxCode.style.display='block';
+          document.getElementById('codeShow').textContent=j.code;confetti();return;}
+        if(j.mode==='conflict'){
+          candWrap.innerHTML='<div class="lb" style="text-align:center">已经有人用这个名字了 —— 是你本人吗？</div>'+
+            j.candidates.map(function(c){
+              return '<button class="cand" data-c="'+esc(c.code)+'" data-n="'+esc(c.name)+'">是我，我是 <b>'+
+                esc(c.name)+'</b>（'+esc(c.code)+'）</button>';}).join('')+
+            '<button class="cand new" id="candNew">我是新来的，给我新代号 <b>'+esc(j.suggest)+'</b></button>';
+          candWrap.querySelectorAll('[data-c]').forEach(function(el){
+            el.addEventListener('click',function(){
+              saveMe(el.getAttribute('data-c'),el.getAttribute('data-n'));
+              veil.classList.remove('on');toast('欢迎回来，'+el.getAttribute('data-n')+' 👋');refresh();});});
+          document.getElementById('candNew').addEventListener('click',function(){doEnter(true);});
+        }
+      })
+      .catch(function(){btn.disabled=false;btn.textContent='进入';showMsg('网络不太顺，再试一次');});
+  }
+  document.getElementById('enterGo').addEventListener('click',function(){doEnter(false);});
+  document.getElementById('enterInput').addEventListener('keydown',function(e){
+    if(e.key==='Enter') doEnter(false);});
+  document.getElementById('codeCopy').addEventListener('click',function(){
+    copyText(myCode,this,'已复制 ✓');});
+  document.getElementById('codeDone').addEventListener('click',function(){
+    veil.classList.remove('on');refresh();});
 
   // ---------- 载入 ----------
-  function api(){ return '/api/yueka?k='+encodeURIComponent(K)+'&u='+encodeURIComponent(uid); }
+  function api(){return '/api/yueka?k='+encodeURIComponent(K)+'&me='+encodeURIComponent(myCode);}
   function load(){
     fetch(api()).then(function(r){return r.json().then(function(j){return {s:r.status,j:j};});})
       .then(function(x){
@@ -258,52 +352,93 @@
           '<b style="color:#33302B;font-size:1.06rem">这是月卡会员专属链接</b><br><br>'+
           '请向老师索取带口令的预约链接<br>微信 <b style="color:#16456F">engo2026</b></div>';return;}
         if(!x.j.ok) throw new Error(x.j.error||'fail');
-        D=x.j; if(!me) askName(true); render();
+        D=x.j; if(!myCode) askEnter(false); render();
       })
       .catch(function(){page.innerHTML='<div class="load">载入失败了，下拉刷新重试。<br>一直不行请联系老师（微信 engo2026）。</div>';});
   }
+  function refresh(){
+    return fetch(api()).then(function(r){return r.json();})
+      .then(function(j){if(j.ok){D=j;render();}});
+  }
 
   // ---------- 渲染 ----------
+  function icsUrl(date,slot){
+    return '/api/yueka-ics?k='+encodeURIComponent(K)+'&date='+encodeURIComponent(date)+'&slot='+encodeURIComponent(slot);
+  }
   function render(){
     if(!D) return;
     var mine=D.bookings.filter(function(b){return b.mine;});
     var future=mine.filter(function(b){return b.date>=D.today;});
-    var target=25, pct=Math.min(100, Math.round(mine.length/target*100));
+    var target=25, pct=Math.min(100,Math.round(mine.length/target*100));
+
+    var QUOTES=[
+      ['Every word you speak is a step forward.','每开口一次，就前进一步'],
+      ["You don't need perfect English — you just need to start.",'不用完美，先开口'],
+      ['Small talk today, big talk tomorrow.','今天敢闲聊，明天敢演讲'],
+      ['Consistency beats intensity.','常来，比猛学更管用'],
+      ['One topic a day keeps the silence away.','每天一个主题，告别哑巴英语'],
+      ['Your accent is your story. Own it.','口音是你的故事，大方说'],
+      ['Show up. That is 80% of learning.','来了，就赢了八成']];
+    var qt=QUOTES[new Date(D.today+'T00:00:00').getDate()%QUOTES.length];
 
     var h='';
     h+='<div class="hd"><div class="row"><div>'+
-       '<div class="t">月卡预约</div><div class="sub">'+esc(D.label)+' · 每节 60 分钟</div></div>'+
-       '<button class="who" id="whoBtn">'+(me?esc(me):'设置名字')+' ✎</button></div>'+
+       '<div class="t">'+(myName?'Hello, '+esc(myName)+' 👋':'月卡预约')+'</div>'+
+       '<div class="sub">'+(myName?'What do you want to practice this week?':esc(D.label)+' · 每节 60 分钟')+'</div></div>'+
+       '<button class="who" id="whoBtn">'+(myName?esc(myName):'我是谁？')+' ✎</button></div>'+
+       '<div class="quote">“'+esc(qt[0])+'”<span>'+esc(qt[1])+'</span></div>'+
        '<div class="hero"><div class="big"><b>'+mine.length+'</b><span>场已约'+
        (future.length?'　·　接下来还有 '+future.length+' 场':'')+'</span></div>'+
        '<div class="bar"><i style="width:'+pct+'%"></i></div>'+
-       '<div class="cap">本月共 25 个主题学习日，来得越多越划算 🚀</div></div></div>';
+       '<div class="cap">本月 25 个主题日 · 每来一场，进度条就亮一格 ✨</div>'+
+       (myCode?'<div class="codebar">我的代号 <b>'+esc(myCode)+'</b> · 换手机时用它找回预约</div>':'')+
+       '</div></div>';
 
-    h+='<div class="note">'+esc(D.note)+'<br>'+
+    // 我的预约
+    if(future.length){
+      var WD=['周日','周一','周二','周三','周四','周五','周六'];
+      h+='<div class="mybox first"><h3>📌 我的预约</h3>';
+      future.forEach(function(b){
+        var d=D.days.filter(function(x){return x.date===b.date;})[0]||{};
+        var dt=new Date(b.date+'T00:00:00');
+        h+='<div class="myrow"><div class="md"><b>'+dt.getDate()+'</b><span>'+
+           (dt.getMonth()+1)+'月·'+WD[dt.getDay()]+'</span></div>'+
+           '<div class="mi"><b>'+esc(d.en||'')+'</b><span>'+esc(D.slots[b.slot].name)+' '+
+           esc(D.slots[b.slot].time)+'</span></div>'+
+           '<a class="cal" href="'+icsUrl(b.date,b.slot)+'">📅 加日历</a></div>';
+      });
+      if(future.length>1){
+        var ev=future.map(function(b){return b.date.replace(/-/g,'')+'-'+b.slot;}).join(',');
+        h+='<div style="text-align:center;margin-top:11px"><a class="callink" href="/api/yueka-ics?k='+
+           encodeURIComponent(K)+'&ev='+encodeURIComponent(ev)+
+           '">📅 一键把 '+future.length+' 场全部加进日历</a></div>';
+      }
+      h+='<div class="mytip">💡 加进手机日历后，每场开课前 1 小时自动提醒。'+
+         '微信里如果点了没反应，右上角 ··· 选「在浏览器中打开」再点。</div></div>';
+    }
+
+    h+='<div class="note'+(future.length?'':' first')+'">'+esc(D.note)+'<br>'+
        '<b>预约规则：</b>9/1–9/6 <span class="hl">首周不限</span>随时可约；'+
        '<b>9/14 起需提前 '+D.leadDays+' 天</b>（9/14 的课 9/11 仍可约，9/12 起关闭）。</div>';
 
     var last=null;
     D.days.forEach(function(d){
       var wk=weekKey(d.date);
-      if(wk.key!==last){
-        h+='<div class="wk"><b>'+wk.label+'</b><i></i><em>'+wk.tag+'</em></div>';
-        last=wk.key;
-      }
+      if(wk.key!==last){h+='<div class="wk"><b>'+wk.label+'</b><i></i><em>'+wk.tag+'</em></div>';last=wk.key;}
       h+=dayCard(d);
     });
 
     if(D.pending&&D.pending.length){
       h+='<div class="pend"><h3>顺延补足 · 另外 5 个主题</h3>'+
          '<div class="s">日期与时段会结合大家的时间统一安排，定了就加进来</div><ul>';
-      D.pending.forEach(function(p){h+='<li><b>'+esc(p.en)+'</b> · '+esc(p.cn)+'</li>';});
+      D.pending.forEach(function(x){h+='<li><b>'+esc(x.en)+'</b> · '+esc(x.cn)+'</li>';});
       h+='</ul></div>';
     }
     h+='<div class="foot">英歌派 Engo Pro · 成人英语主题月卡<br>'+
        '有问题随时微信 engo2026<br>普宁市万泰新天地时代中心 D 栋</div>';
 
     page.innerHTML=h;
-    document.getElementById('whoBtn').addEventListener('click',function(){askName(false);});
+    document.getElementById('whoBtn').addEventListener('click',function(){askEnter(!!myCode);});
     bind();
   }
 
@@ -312,11 +447,9 @@
     var mon=new Date(d); mon.setDate(d.getDate()-((d.getDay()+6)%7));
     var sun=new Date(mon); sun.setDate(mon.getDate()+6);
     var f=function(x){return (x.getMonth()+1)+'/'+x.getDate();};
-    var days=D.days.filter(function(x){
-      var t=new Date(x.date+'T00:00:00'); return t>=mon&&t<=sun;});
+    var days=D.days.filter(function(x){var t=new Date(x.date+'T00:00:00');return t>=mon&&t<=sun;});
     var open=days.filter(function(x){return !x.break;}).length;
-    return {key:f(mon), label:f(mon)+' – '+f(sun),
-            tag: open? open+' 个主题日' : '休课周'};
+    return {key:f(mon),label:f(mon)+' – '+f(sun),tag:open?open+' 个主题日':'休课周'};
   }
 
   function dayCard(d){
@@ -338,11 +471,11 @@
     if(d.cn) h+='<div class="cn">'+esc(d.cn)+'</div>';
 
     h+='<div class="meta">';
-    if(d.break){ h+='<span class="pill shut">☕ 休课</span>'; }
-    else if(!d.state.open){ h+='<span class="pill shut">'+esc(d.state.text)+'</span>'; }
+    if(d.break){h+='<span class="pill shut">☕ 休课</span>';}
+    else if(!d.state.open){h+='<span class="pill shut">'+esc(d.state.text)+'</span>';}
     else{
-      (d.slots||[]).forEach(function(s){
-        h+='<span class="pill time">'+esc(D.slots[s].name)+' '+esc(D.slots[s].time)+'</span>';});
+      (d.slots||[]).forEach(function(x){
+        h+='<span class="pill time">'+esc(D.slots[x].name)+' '+esc(D.slots[x].time)+'</span>';});
       if(d.state.reason==='grace') h+='<span class="pill grace">首周不限</span>';
     }
     if(!d.break&&bs.length){
@@ -367,10 +500,10 @@
         var curSt=sel.status!==undefined?sel.status:(curBk?curBk.status:'');
 
         h+='<div class="lb">选时段 <span>· 一天想来两场也可以</span></div><div class="opts">';
-        d.slots.forEach(function(s){
-          var booked=myBk.filter(function(b){return b.slot===s;}).length>0;
-          h+='<button class="opt'+(curSlot===s?' sel':'')+'" data-slot="'+d.date+'|'+s+'">'+
-             esc(D.slots[s].name)+(booked?' ✓':'')+'<small>'+esc(D.slots[s].time)+'</small></button>';
+        d.slots.forEach(function(x){
+          var booked=myBk.filter(function(b){return b.slot===x;}).length>0;
+          h+='<button class="opt'+(curSlot===x?' sel':'')+'" data-slot="'+d.date+'|'+x+'">'+
+             esc(D.slots[x].name)+(booked?' ✓':'')+'<small>'+esc(D.slots[x].time)+'</small></button>';
         });
         h+='</div>';
         if(d.slots.length>1) h+='<div class="tip">💡 同一天两场<b>内容完全一样</b>，来一场就够；想加练也可以两场都约。</div>';
@@ -382,7 +515,10 @@
         });
         h+='</div>';
         h+='<button class="go" data-book="'+d.date+'">'+(curBk?'更新这一场':'约 '+D.slots[curSlot].name)+'</button>';
-        if(curBk) h+='<button class="go cancel" data-cancel="'+d.date+'">取消我的 '+D.slots[curSlot].name+'</button>';
+        if(curBk){
+          h+='<button class="go cancel" data-cancel="'+d.date+'">取消我的 '+D.slots[curSlot].name+'</button>';
+          h+='<div style="text-align:center"><a class="callink" href="'+icsUrl(d.date,curSlot)+'">📅 把这场加进手机日历</a></div>';
+        }
       } else {
         h+='<div class="empty">'+esc(d.state.text)+'，看看谁已经约了 👇</div>';
       }
@@ -395,14 +531,14 @@
   function peopleBlock(d,bs){
     var h='<div class="ppl">';
     if(!bs.length) return h+'<div class="empty">还没有人约这一天 —— 你可以是第一个 🌱</div></div>';
-    (d.slots||[]).forEach(function(s){
-      var list=bs.filter(function(b){return b.slot===s;});
-      h+='<div class="grp"><div class="gt">'+esc(D.slots[s].name)+
-         ' <em>'+esc(D.slots[s].time)+' · '+list.length+' 人</em></div>';
+    (d.slots||[]).forEach(function(x){
+      var list=bs.filter(function(b){return b.slot===x;});
+      h+='<div class="grp"><div class="gt">'+esc(D.slots[x].name)+
+         ' <em>'+esc(D.slots[x].time)+' · '+list.length+' 人</em></div>';
       if(!list.length){h+='<div class="empty">暂时没有人</div></div>';return;}
       h+='<div class="chips">';
       list.forEach(function(b){
-        var st=D.statuses.filter(function(x){return x.key===b.status;})[0];
+        var st=D.statuses.filter(function(y){return y.key===b.status;})[0];
         h+='<span class="p'+(b.mine?' self':'')+'">'+
            '<span class="av" style="background:'+avColor(b.name)+'">'+esc(initial(b.name))+'</span>'+
            esc(b.name)+(st?' <em>'+st.emoji+' '+esc(st.label)+'</em>':'')+'</span>';
@@ -426,19 +562,17 @@
     });
     page.querySelectorAll('[data-slot]').forEach(function(el){
       el.addEventListener('click',function(){
-        var p=el.getAttribute('data-slot').split('|');
-        pick[p[0]]={slot:p[1]};   // 换时段时状态跟着那一场重新取
-        render();
+        var q=el.getAttribute('data-slot').split('|');
+        pick[q[0]]={slot:q[1]}; render();
       });
     });
     page.querySelectorAll('[data-st]').forEach(function(el){
       el.addEventListener('click',function(){
-        var p=el.getAttribute('data-st').split('|');
-        var cur=pick[p[0]]||{};
-        var d=D.days.filter(function(x){return x.date===p[0];})[0];
-        var slot=cur.slot||(D.bookings.filter(function(b){return b.date===p[0]&&b.mine;})[0]||{}).slot||d.slots[0];
-        pick[p[0]]={slot:slot, status: cur.status===p[1] ? '' : p[1]};
-        render();
+        var q=el.getAttribute('data-st').split('|');
+        var cur=pick[q[0]]||{};
+        var d=D.days.filter(function(x){return x.date===q[0];})[0];
+        var slot=cur.slot||(D.bookings.filter(function(b){return b.date===q[0]&&b.mine;})[0]||{}).slot||d.slots[0];
+        pick[q[0]]={slot:slot,status:cur.status===q[1]?'':q[1]}; render();
       });
     });
     page.querySelectorAll('[data-book]').forEach(function(el){
@@ -450,7 +584,7 @@
   }
 
   function go(date,cancel,btn){
-    if(!me){askName(true);return;}
+    if(!myCode){askEnter(false);return;}
     var d=D.days.filter(function(x){return x.date===date;})[0];
     var sel=pick[date]||{};
     var myBk=D.bookings.filter(function(b){return b.date===date&&b.mine;});
@@ -458,19 +592,18 @@
     var cur=myBk.filter(function(b){return b.slot===slot;})[0];
     var status=sel.status!==undefined?sel.status:(cur?cur.status:'');
 
-    var body={k:K,u:uid,date:date,slot:slot};
-    if(cancel) body.action='cancel'; else {body.name=me;body.status=status;}
+    var body={k:K,code:myCode,date:date,slot:slot};
+    if(cancel) body.action='cancel'; else {body.name=myName;body.status=status;}
 
     btn.disabled=true; var old=btn.textContent; btn.textContent='处理中…';
     fetch('/api/yueka',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)})
       .then(function(r){return r.json();})
       .then(function(j){
         if(!j.ok) throw new Error(j.error||'失败');
-        if(cancel){ toast('已取消 '+D.slots[slot].name); }
-        else { toast('约好啦，'+D.slots[slot].name+' 见 👋'); confetti(); }
+        if(cancel){toast('已取消 '+D.slots[slot].name);}
+        else{toast('约好啦，'+D.slots[slot].name+' 见 👋');confetti();}
         delete pick[date];
-        return fetch(api()).then(function(r){return r.json();})
-          .then(function(n){if(n.ok){D=n;render();}});
+        return refresh();
       })
       .catch(function(e){btn.disabled=false;btn.textContent=old;toast(e.message||'操作失败，请重试');});
   }
