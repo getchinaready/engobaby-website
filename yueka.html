@@ -43,13 +43,17 @@
     background:rgba(244,168,27,.13);left:-70px;bottom:-60px}
   .hd .row{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;position:relative;z-index:2}
   .hlogo{height:26px;display:block;margin-bottom:9px}
-  .hd .t{font-size:1.35rem;font-weight:800;font-family:var(--fh);letter-spacing:.01em;color:var(--ink)}
+  .hd .t{font-size:1.72rem;font-weight:800;font-family:var(--fh);letter-spacing:.01em;color:var(--ink);line-height:1.2}
   .hd .t em{font-style:normal;color:var(--blu)}
   .hd .sub{font-size:.78rem;color:#8C8174;margin-top:1px}
   .who{background:#fff;border:2px solid #F0E4D0;color:var(--navy);
-    border-radius:999px;padding:7px 14px;font-size:.83rem;font-weight:700;font-family:var(--fz);
-    cursor:pointer;white-space:nowrap;max-width:42vw;overflow:hidden;text-overflow:ellipsis;flex:none;
-    box-shadow:0 2px 8px rgba(51,48,43,.07)}
+    border-radius:999px;padding:8px 15px;font-size:.84rem;font-weight:800;font-family:var(--fz);
+    cursor:pointer;white-space:nowrap;flex:none;display:flex;align-items:center;gap:7px;
+    box-shadow:0 3px 10px rgba(51,48,43,.09)}
+  .who .mav{width:26px;height:26px;border-radius:50%;background:linear-gradient(135deg,var(--gold),var(--red));
+    color:#fff;display:grid;place-items:center;font-size:.8rem;font-weight:800;font-family:var(--fh);flex:none}
+  .who .bdg{background:var(--red);color:#fff;border-radius:999px;min-width:20px;height:20px;padding:0 5px;
+    display:grid;place-items:center;font-size:.68rem;font-weight:800;flex:none}
 
   /* 我的本月 */
   .hero{position:relative;z-index:2;margin-top:14px;background:#fff;
@@ -64,6 +68,26 @@
   .bar i{display:block;height:100%;background:linear-gradient(90deg,var(--red),var(--gold) 38%,var(--grn) 72%,var(--blu));border-radius:99px;
     transition:width .6s cubic-bezier(.2,.8,.2,1)}
   .hero .cap{font-size:.73rem;color:#A99E90;margin-top:7px}
+  .wkgrid{display:flex;gap:9px}
+  .wkcell{flex:1;background:#fff;border:2px solid #F3E8D5;border-radius:15px;text-align:center;
+    padding:10px 2px 8px;box-shadow:0 3px 10px rgba(51,48,43,.05)}
+  .wkcell b{display:block;font-family:var(--fh);font-size:1.55rem;font-weight:800;line-height:1.05;color:var(--wc,#3E92DE)}
+  .wkcell em{font-style:normal;display:block;font-size:.62rem;color:#B0A597;font-weight:700;margin-top:2px}
+  .wkcell i{font-style:normal;display:block;font-size:.6rem;color:#CFC5B7;font-weight:600}
+  .wkcell.z b{color:#DCD2C4}
+  .minehd{font-size:1.5rem;font-weight:800;font-family:var(--fh);color:var(--ink);line-height:1.2}
+  .backpill{background:#fff;border:2px solid #F0E4D0;color:var(--navy);border-radius:999px;
+    padding:8px 15px;font-size:.84rem;font-weight:800;font-family:var(--fz);cursor:pointer;flex:none;
+    box-shadow:0 3px 10px rgba(51,48,43,.09)}
+  .gohome{display:block;width:100%;background:linear-gradient(135deg,#F4A81B,#E09400);color:#fff;border:none;
+    border-radius:14px;padding:14px;font-size:1rem;font-weight:800;font-family:var(--fh);cursor:pointer;
+    box-shadow:0 7px 18px rgba(244,168,27,.32);text-align:center}
+  .wxtip{margin:14px 16px 0;background:#FFF9E8;border:2px dashed #F0DCA8;border-radius:16px;
+    padding:13px 15px;font-size:.76rem;color:#8A7434;line-height:1.75}
+  .wxtip b{color:#C4820A}
+  .switchline{text-align:center;margin-top:26px}
+  .switchline button{background:none;border:none;color:#B0A597;font-size:.76rem;font-weight:600;
+    text-decoration:underline;cursor:pointer;font-family:var(--fz)}
 
   /* ═══ 规则条 ═══ */
   .note{margin:14px 16px 0;position:relative;z-index:3;background:var(--card);
@@ -272,7 +296,8 @@
   var myCode='', myName='';
   try { myCode=localStorage.getItem(LS_CODE)||''; myName=localStorage.getItem(LS_NAME)||''; } catch(e){}
 
-  var D=null, openDate=null, pick={};
+  var D=null, openDate=null, pick={}, view='home';
+  var isWX=/MicroMessenger/i.test(navigator.userAgent||'');
   var page=document.getElementById('page'), veil=document.getElementById('veil'), toastEl=document.getElementById('toast');
 
   var QUOTES=[
@@ -312,6 +337,13 @@
       el.style.animation='fall '+(1.5+Math.random()*1.1)+'s '+(Math.random()*.3)+'s ease-in forwards';
       document.body.appendChild(el);setTimeout(function(){el.remove();},3200);
     })(i);}
+  }
+  function copyAny(t,done){
+    function legacy(){var ta=document.createElement('textarea');ta.value=t;
+      ta.style.position='fixed';ta.style.opacity='0';document.body.appendChild(ta);ta.select();
+      try{document.execCommand('copy');}catch(e){}document.body.removeChild(ta);done();}
+    if(navigator.clipboard&&navigator.clipboard.writeText) navigator.clipboard.writeText(t).then(done,legacy);
+    else legacy();
   }
   function copyText(t,btn,okLabel){
     function done(){btn.textContent=okLabel;setTimeout(function(){btn.textContent='复制代号';},2000);}
@@ -403,55 +435,59 @@
   function icsUrl(date,slot){
     return '/api/yueka-ics?k='+encodeURIComponent(K)+'&date='+encodeURIComponent(date)+'&slot='+encodeURIComponent(slot);
   }
+  function icsBtn(url,label,cls){
+    if(isWX) return '<button class="'+cls+'" data-copy="'+esc(url)+'">📋 复制日历链接</button>';
+    return '<a class="'+cls+'" href="'+url+'">'+label+'</a>';
+  }
+  function calTip(){
+    return isWX
+      ? '<div class="wxtip">📵 <b>微信里没法直接打开日历文件</b>，这样弄最顺：<br>'+
+        '① 点上面的「复制日历链接」　② 打开手机<b>备忘录</b>，粘贴　③ 在备忘录里点一下这个链接，选「添加到日历」。<br>'+
+        '加好后每场<b>开课前 1 小时</b>手机自动提醒 ⏰</div>'
+      : '<div class="wxtip">💡 点「加日历」保存后，每场<b>开课前 1 小时</b>手机自动提醒 ⏰</div>';
+  }
   function render(){
     if(!D) return;
+    if(view==='mine') renderMine(); else renderHome();
+  }
+
+  function mineBtnHtml(future){
+    return '<button class="who" id="mineBtn"><span class="mav">'+esc(initial(myName||'?'))+'</span>我的预约'+
+      (future.length?'<span class="bdg">'+future.length+'</span>':'')+'</button>';
+  }
+
+  function renderHome(){
     var mine=D.bookings.filter(function(b){return b.mine;});
     var future=mine.filter(function(b){return b.date>=D.today;});
-    var target=25, pct=Math.min(100,Math.round(mine.length/target*100));
-
     var qt=QUOTE;
+
+    // 每周约了几场
+    var weeks=[], seen={};
+    D.days.forEach(function(d){
+      var wk=weekKey(d.date);
+      if(!seen[wk.key]){seen[wk.key]={label:wk.label,count:0,open:false};weeks.push(seen[wk.key]);}
+      if(!d.break) seen[wk.key].open=true;
+    });
+    mine.forEach(function(b){var wk=weekKey(b.date);if(seen[wk.key])seen[wk.key].count++;});
+    weeks=weeks.filter(function(w){return w.open;});
+    var WC=['#EF5A5A','#F4A81B','#7CB24E','#3E92DE','#8A63C4'];
 
     var h='';
     h+='<div class="hd"><div class="row"><div>'+
        '<img class="hlogo" src="engo_pro_logo.png" alt="ENGO PRO">'+
-       '<div class="t">'+(myName?'Hello, <em>'+esc(myName)+'</em> 👋':'月卡预约')+'</div>'+
+       '<div class="t">'+(myName?'Hello,<br><em style="white-space:nowrap">'+esc(myName)+'</em>&nbsp;👋':'月卡预约')+'</div>'+
        '<div class="sub">'+(myName?'What do you want to practice this week?':esc(D.label)+' · 每节 60 分钟')+'</div></div>'+
-       '<button class="who" id="whoBtn">'+(myName?esc(myName):'我是谁？')+' ✎</button></div>'+
+       mineBtnHtml(future)+'</div>'+
        '<div class="quote">“'+esc(qt[0])+'”<span>'+esc(qt[1])+'</span></div>'+
-       '<div class="hero"><div class="big"><b>'+mine.length+'</b><span>场已约'+
-       (future.length?'　·　接下来还有 '+future.length+' 场':'')+'</span></div>'+
-       '<div class="bar"><i style="width:'+pct+'%"></i></div>'+
-       '<div class="cap">本月 25 个主题日 · 每来一场，进度条就亮一格 ✨</div>'+
-       (myCode?'<div class="codebar">我的代号 <b>'+esc(myCode)+'</b> · 换手机时用它找回预约</div>':'')+
+       '<div class="hero"><div class="cap" style="margin:0 0 8px;font-weight:700">每周约了几场</div>'+
+       '<div class="wkgrid">'+weeks.map(function(w,i){
+          return '<div class="wkcell'+(w.count?'':' z')+'" style="--wc:'+WC[i%WC.length]+'"><b>'+w.count+'</b>'+
+                 '<em>'+esc(w.label)+'</em><i>'+(w.count?'场':'还没约')+'</i></div>';
+       }).join('')+'</div>'+
+       (myCode?'<div class="codebar">我的代号 <b>'+esc(myCode)+'</b> · 右上角可以看「我的预约」</div>':'')+
        '</div></div>';
 
-    // 我的预约
-    if(future.length){
-      var WD=['周日','周一','周二','周三','周四','周五','周六'];
-      h+='<div class="mybox first"><h3>📌 我的预约</h3>';
-      future.forEach(function(b){
-        var d=D.days.filter(function(x){return x.date===b.date;})[0]||{};
-        var dt=new Date(b.date+'T00:00:00');
-        h+='<div class="myrow"><div class="md"><b>'+dt.getDate()+'</b><span>'+
-           (dt.getMonth()+1)+'月·'+WD[dt.getDay()]+'</span></div>'+
-           '<div class="mi"><b>'+esc(d.en||'')+'</b><span>'+esc(D.slots[b.slot].name)+' '+
-           esc(D.slots[b.slot].time)+(function(){
-             var st=D.statuses.filter(function(y){return y.key===b.status;})[0];
-             var md=(D.moods||[]).filter(function(y){return y.key===b.mood;})[0];
-             var t=(st?' · '+st.emoji:'')+(md?' '+md.emoji:'');return t;})()+'</span></div>'+
-           '<a class="cal" href="'+icsUrl(b.date,b.slot)+'">📅 加日历</a></div>';
-      });
-      if(future.length>1){
-        var ev=future.map(function(b){return b.date.replace(/-/g,'')+'-'+b.slot;}).join(',');
-        h+='<div style="text-align:center;margin-top:11px"><a class="callink" href="/api/yueka-ics?k='+
-           encodeURIComponent(K)+'&ev='+encodeURIComponent(ev)+
-           '">📅 一键把 '+future.length+' 场全部加进日历</a></div>';
-      }
-      h+='<div class="mytip">💡 加进手机日历后，每场开课前 1 小时自动提醒。'+
-         '微信里如果点了没反应，右上角 ··· 选「在浏览器中打开」再点。</div></div>';
-    }
-
-    h+='<div class="note'+(future.length?'':' first')+'">'+esc(D.note)+'<br>'+
+    h+='<div class="note first">'+esc(D.note)+'<br>'+
        '<b>预约规则：</b>9/1–9/6 <span class="hl">首周不限</span>随时可约；'+
        '<b>9/14 起需提前 '+D.leadDays+' 天</b>（9/14 的课 9/11 仍可约，9/12 起关闭）。</div>';
 
@@ -459,7 +495,7 @@
     D.days.forEach(function(d){
       var wk=weekKey(d.date);
       if(wk.key!==last){h+='<div class="wk"><b>'+wk.label+'</b><i></i><em>'+wk.tag+'</em></div>';last=wk.key;}
-      h+=dayCard(d);
+      h+=dayCard(d,false);
     });
 
     if(D.pending&&D.pending.length){
@@ -472,7 +508,54 @@
        '有问题随时微信 engo2026<br>普宁市万泰新天地时代中心 D 栋</div>';
 
     page.innerHTML=h;
-    document.getElementById('whoBtn').addEventListener('click',function(){askEnter(!!myCode);});
+    bind();
+  }
+
+  function renderMine(){
+    var mine=D.bookings.filter(function(b){return b.mine;});
+    var future=mine.filter(function(b){return b.date>=D.today;});
+    var done=mine.length-future.length;
+    var dates=[]; var seenD={};
+    future.forEach(function(b){if(!seenD[b.date]){seenD[b.date]=1;dates.push(b.date);}});
+    dates.sort();
+
+    var h='';
+    h+='<div class="hd"><div class="row"><div>'+
+       '<img class="hlogo" src="engo_pro_logo.png" alt="ENGO PRO">'+
+       '<div class="minehd">📌 我的预约</div>'+
+       '<div class="sub">'+(future.length
+          ?'接下来 '+future.length+' 场'+(done>0?' · 已上 '+done+' 场':'')+' —— See you there!'
+          :(done>0?'已上 '+done+' 场 · 接下来还没有约':'还没有约课'))+'</div></div>'+
+       '<button class="backpill" id="backBtn">← 去约课</button></div>'+
+       (myCode?'<div class="codebar">Hello, '+esc(myName)+' · 代号 <b>'+esc(myCode)+'</b>（换手机时用它找回）</div>':'')+
+       '</div>';
+
+    if(!future.length){
+      h+='<div class="mybox first" style="text-align:center;padding:34px 20px">'+
+         '<div style="font-size:2.6rem;margin-bottom:10px">🌱</div>'+
+         '<div style="font-weight:800;font-size:1rem;margin-bottom:6px">这个月还是一张白纸</div>'+
+         '<div style="font-size:.82rem;color:var(--mut);margin-bottom:18px">挑一天有意思的话题，开个头吧</div>'+
+         '<button class="gohome" id="goHome">去看看有什么主题 →</button></div>';
+    } else {
+      h+='<div class="mybox first" style="padding:10px 14px 12px">'+
+         '<div style="font-size:.78rem;color:var(--mut);padding:6px 3px 2px">👇 点每一天可以<b>改时段 / 改想练的 / 改心情</b>，也可以取消。</div></div>';
+      dates.forEach(function(ds){
+        var d=D.days.filter(function(x){return x.date===ds;})[0];
+        if(d) h+=dayCard(d,true);
+      });
+      if(future.length>1){
+        var ev=future.map(function(b){return b.date.replace(/-/g,'')+'-'+b.slot;}).join(',');
+        var allUrl='/api/yueka-ics?k='+encodeURIComponent(K)+'&ev='+encodeURIComponent(ev);
+        h+='<div style="text-align:center;margin-top:16px">'+
+           icsBtn(allUrl,'📅 一键把 '+future.length+' 场全部加进日历','callink')+'</div>';
+      }
+      h+=calTip();
+    }
+
+    h+='<div class="switchline"><button id="switchLink">不是 '+esc(myName||'我')+'？换个账号 / 找回代号</button></div>';
+    h+='<div class="foot">英歌派 Engo Pro · 成人英语主题月卡<br>有问题随时微信 engo2026</div>';
+
+    page.innerHTML=h;
     bind();
   }
 
@@ -486,7 +569,7 @@
     return {key:f(mon),label:f(mon)+' – '+f(sun),tag:open?open+' 个主题日':'休课周'};
   }
 
-  function dayCard(d){
+  function dayCard(d,forceOpen){
     var WD=['周日','周一','周二','周三','周四','周五','周六'];
     var dt=new Date(d.date+'T00:00:00');
     var bs=D.bookings.filter(function(b){return b.date===d.date;});
@@ -496,7 +579,7 @@
     var cls='day';
     if(d.break) cls+=' br'; else if(!d.state.open) cls+=' shut';
     if(myBk.length) cls+=' on';
-    if(openDate===d.date) cls+=' open';
+    if(forceOpen||openDate===d.date) cls+=' open';
 
     var h='<div class="'+cls+'" data-date="'+d.date+'" style="--ac:'+ac+'">';
     h+='<div class="dh" data-toggle="'+d.date+'">';
@@ -558,7 +641,7 @@
         h+='<button class="go" data-book="'+d.date+'">'+(curBk?'更新这一场':'约 '+D.slots[curSlot].name)+'</button>';
         if(curBk){
           h+='<button class="go cancel" data-cancel="'+d.date+'">取消我的 '+D.slots[curSlot].name+'</button>';
-          h+='<div style="text-align:center"><a class="callink" href="'+icsUrl(d.date,curSlot)+'">📅 把这场加进手机日历</a></div>';
+          h+='<div style="text-align:center">'+icsBtn(icsUrl(d.date,curSlot),'📅 把这场加进手机日历','callink')+'</div>';
         }
       } else {
         h+='<div class="empty">'+esc(d.state.text)+'，看看谁已经约了 👇</div>';
@@ -593,8 +676,30 @@
 
   // ---------- 交互 ----------
   function bind(){
+    var mb=document.getElementById('mineBtn');
+    if(mb) mb.addEventListener('click',function(){
+      if(!myCode){askEnter(false);return;}
+      view='mine'; render(); window.scrollTo(0,0);
+    });
+    var bb=document.getElementById('backBtn');
+    if(bb) bb.addEventListener('click',function(){view='home'; render(); window.scrollTo(0,0);});
+    var gh=document.getElementById('goHome');
+    if(gh) gh.addEventListener('click',function(){view='home'; render(); window.scrollTo(0,0);});
+    var sw=document.getElementById('switchLink');
+    if(sw) sw.addEventListener('click',function(){askEnter(!!myCode);});
+    page.querySelectorAll('[data-copy]').forEach(function(el){
+      el.addEventListener('click',function(){
+        var full=location.origin+el.getAttribute('data-copy');
+        copyAny(full,function(){
+          el.textContent='已复制 ✓ 去备忘录粘贴';
+          toast('链接已复制 📋 打开备忘录粘贴，再从备忘录点开它就能加日历');
+          setTimeout(function(){el.textContent='📋 复制日历链接';},3000);
+        });
+      });
+    });
     page.querySelectorAll('[data-toggle]').forEach(function(el){
       el.addEventListener('click',function(){
+        if(view==='mine') return;
         var ds=el.getAttribute('data-toggle');
         var d=D.days.filter(function(x){return x.date===ds;})[0];
         if(d.break) return;
