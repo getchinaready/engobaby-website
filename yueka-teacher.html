@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>教师端 · 月卡实时看板</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" href="logo.png">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Noto+Sans+SC:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  :root{--gold:#F4A81B;--gold-d:#C4820A;--red:#EF5A5A;--grn:#7CB24E;--blu:#3E92DE;
+    --navy:#16456F;--ink:#33302B;--mut:#9A8F82;--line:#EDE4D6;--cream:#FBF5EC;--card:#FFFDF9;
+    --fz:"Noto Sans SC",system-ui,sans-serif;--fh:"Baloo 2","Noto Sans SC",system-ui,sans-serif}
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+  body{font-family:var(--fz);background:var(--cream);color:var(--ink);line-height:1.6;-webkit-font-smoothing:antialiased}
+  .page{max-width:640px;margin:0 auto;padding:0 0 60px}
+  .hd{background:linear-gradient(165deg,#FFF6E1,#FDF1E8 46%,#E9F3FE);padding:20px 18px 18px;
+    border-radius:0 0 24px 24px;display:flex;align-items:center;justify-content:space-between;gap:10px}
+  .hd h1{font-family:var(--fh);font-size:1.25rem;color:var(--ink)}
+  .hd .sub{font-size:.74rem;color:#8C8174;margin-top:2px}
+  .rf{background:#fff;border:2px solid #F0E4D0;color:var(--navy);border-radius:999px;padding:8px 16px;
+    font-size:.82rem;font-weight:800;cursor:pointer;font-family:var(--fz);box-shadow:0 3px 10px rgba(51,48,43,.09);flex:none}
+  .stats{display:flex;gap:9px;margin:14px 14px 0}
+  .st{flex:1;background:var(--card);border:2px solid #F3E8D5;border-radius:15px;text-align:center;padding:11px 4px 9px}
+  .st b{display:block;font-family:var(--fh);font-size:1.55rem;line-height:1.05}
+  .st em{font-style:normal;display:block;font-size:.66rem;color:#B0A597;font-weight:700;margin-top:2px}
+  .s1 b{color:var(--red)}.s2 b{color:var(--gold-d)}.s3 b{color:var(--grn)}.s4 b{color:var(--blu)}
+  .sec{margin:22px 14px 8px;font-family:var(--fh);font-size:.92rem;color:var(--navy);font-weight:700}
+  .day{background:var(--card);border-radius:16px;margin:0 14px 10px;padding:13px 15px;
+    box-shadow:0 3px 12px rgba(51,48,43,.06);border-left:6px solid var(--blu)}
+  .day.today{border-left-color:var(--red);box-shadow:0 5px 18px rgba(239,90,90,.18)}
+  .day.tmr{border-left-color:var(--gold)}
+  .day.past{opacity:.62;border-left-color:#DDD3C6}
+  .day.zero{opacity:.75}
+  .dh{display:flex;align-items:baseline;gap:9px;flex-wrap:wrap}
+  .dh b{font-family:var(--fh);font-size:1.05rem}
+  .dh .tag{font-size:.68rem;font-weight:800;border-radius:7px;padding:2px 8px}
+  .tag.t1{background:#FDEBEA;color:#C0392B}.tag.t2{background:#FDF2DC;color:#B7791F}
+  .dh .en{font-size:.86rem;font-weight:700;color:var(--ink)}
+  .dh .cn{font-size:.74rem;color:var(--mut)}
+  .slot{margin-top:9px;padding-top:8px;border-top:1px dashed var(--line)}
+  .slot .sh{display:flex;align-items:center;gap:8px;font-size:.8rem;font-weight:800;color:var(--navy)}
+  .slot .sh em{font-style:normal;color:var(--mut);font-weight:600;font-size:.72rem}
+  .slot .sh .n{margin-left:auto;font-family:var(--fh);font-size:1.05rem;color:var(--gold-d)}
+  .slot .sh .n.z{color:#CFC5B7}
+  .ppl{display:flex;flex-wrap:wrap;gap:6px;margin-top:7px}
+  .p{display:inline-flex;align-items:center;gap:6px;background:#F6F1E8;border-radius:999px;
+    padding:4px 12px 4px 5px;font-size:.79rem;font-weight:700}
+  .p .av{width:22px;height:22px;border-radius:50%;display:grid;place-items:center;color:#fff;
+    font-size:.68rem;font-weight:800;font-family:var(--fh)}
+  .p em{font-style:normal;font-size:.72rem;color:var(--mut);font-weight:600}
+  .none{font-size:.76rem;color:#B7AC9E;margin-top:5px}
+  .load{text-align:center;padding:70px 24px;color:var(--mut)}
+  .upd{text-align:center;font-size:.7rem;color:#B0A597;margin:10px 0 0}
+  .foldbtn{display:block;margin:18px auto 8px;background:#F4EFE7;border:2px dashed #E2D7C7;
+    border-radius:999px;padding:8px 18px;font-size:.78rem;color:#A99E90;font-weight:700;cursor:pointer;font-family:var(--fz)}
+</style>
+</head>
+<body>
+<div class="page" id="page"><div class="load">正在载入…</div></div>
+<script>
+(function(){
+  'use strict';
+  var K=new URLSearchParams(location.search).get('k')||'';
+  var page=document.getElementById('page');
+  var D=null, showPast=false, timer=null, lastAt=null;
+  var AV=['#3090D8','#EF4A4A','#7BA84A','#F4A81B','#8A63C4','#2FA8A0','#E07A3F','#5C7CB8'];
+  function hash(x){var h=0;for(var i=0;i<x.length;i++)h=(h*31+x.charCodeAt(i))>>>0;return h;}
+  function av(n){return AV[hash(n)%AV.length];}
+  function esc(x){return String(x==null?'':x).replace(/[&<>"]/g,function(c){
+    return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
+  var WD=['周日','周一','周二','周三','周四','周五','周六'];
+  function wd(ds){return WD[new Date(ds+'T00:00:00').getDay()];}
+
+  function load(quiet){
+    return fetch('/api/yueka?k='+encodeURIComponent(K)+'&r='+Date.now())
+      .then(function(r){return r.json().then(function(j){return {s:r.status,j:j};});})
+      .then(function(x){
+        if(x.s===403){page.innerHTML='<div class="load">🔒 需要带口令的链接才能查看</div>';return;}
+        if(!x.j.ok) throw 0;
+        D=x.j; lastAt=new Date(); render();
+      })
+      .catch(function(){if(!quiet)page.innerHTML='<div class="load">载入失败，下拉刷新重试</div>';});
+  }
+
+  function render(){
+    var bs=D.bookings;
+    var names={}; bs.forEach(function(b){names[b.name.toLowerCase()]=1;});
+    var todayBs=bs.filter(function(b){return b.date===D.today;});
+    var plus1=new Date(Date.parse(D.today)+86400000).toISOString().slice(0,10);
+    var tmrBs=bs.filter(function(b){return b.date===plus1;});
+
+    var h='<div class="hd"><div><h1>📊 月卡实时看板</h1>'+
+      '<div class="sub">'+esc(D.label)+' · 教师端 · 每分钟自动刷新</div></div>'+
+      '<button class="rf" id="rf">↻ 刷新</button></div>';
+
+    h+='<div class="stats">'+
+      '<div class="st s1"><b>'+todayBs.length+'</b><em>今天</em></div>'+
+      '<div class="st s2"><b>'+tmrBs.length+'</b><em>明天</em></div>'+
+      '<div class="st s3"><b>'+bs.length+'</b><em>本月总预约</em></div>'+
+      '<div class="st s4"><b>'+Object.keys(names).length+'</b><em>约过课的人</em></div></div>';
+    h+='<div class="upd" id="upd"></div>';
+
+    var past=D.days.filter(function(d){return !d.break&&d.date<D.today;});
+    var now=D.days.filter(function(d){return !d.break&&d.date>=D.today;});
+
+    h+='<div class="sec">接下来的课</div>';
+    now.forEach(function(d){h+=dayRow(d,bs);});
+
+    if(past.length){
+      h+='<button class="foldbtn" id="fold">🏁 已结束的 '+past.length+' 天 '+(showPast?'▾ 收起':'▸ 点开回顾')+'</button>';
+      if(showPast) past.slice().reverse().forEach(function(d){h+=dayRow(d,bs);});
+    }
+    page.innerHTML=h;
+    var t=document.getElementById('upd');
+    if(t&&lastAt) t.textContent='更新于 '+lastAt.toTimeString().slice(0,8);
+    document.getElementById('rf').addEventListener('click',function(){this.textContent='…';load();});
+    var f=document.getElementById('fold');
+    if(f) f.addEventListener('click',function(){showPast=!showPast;render();});
+  }
+
+  function dayRow(d,bs){
+    var list=bs.filter(function(b){return b.date===d.date;});
+    var plus1=new Date(Date.parse(D.today)+86400000).toISOString().slice(0,10);
+    var cls='day'+(d.date===D.today?' today':(d.date===plus1?' tmr':''))+
+      (d.date<D.today?' past':'')+(list.length?'':' zero');
+    var h='<div class="'+cls+'"><div class="dh"><b>'+d.date.slice(5).replace('-','/')+'</b>'+
+      '<span class="cn">'+wd(d.date)+'</span>'+
+      (d.date===D.today?'<span class="tag t1">今天</span>':'')+
+      (d.date===plus1?'<span class="tag t2">明天</span>':'')+
+      '<span class="en">'+esc(d.en)+'</span><span class="cn">'+esc(d.cn||'')+'</span></div>';
+    (d.slots||[]).forEach(function(sk){
+      var sl=list.filter(function(b){return b.slot===sk;});
+      h+='<div class="slot"><div class="sh">'+esc(D.slots[sk].name)+
+         '<em>'+esc(D.slots[sk].time)+'</em><span class="n'+(sl.length?'':' z')+'">'+sl.length+' 人</span></div>';
+      if(sl.length){
+        h+='<div class="ppl">'+sl.map(function(b){
+          var st=D.statuses.filter(function(y){return y.key===b.status;})[0];
+          var md=(D.moods||[]).filter(function(y){return y.key===b.mood;})[0];
+          var tag=(md?md.emoji+' ':'')+(st?st.emoji+' '+esc(st.label):'');
+          return '<span class="p"><span class="av" style="background:'+av(b.name)+'">'+
+            esc((b.name||'?').charAt(0).toUpperCase())+'</span>'+esc(b.name)+
+            (tag?' <em>'+tag+'</em>':'')+'</span>';
+        }).join('')+'</div>';
+      } else h+='<div class="none">暂时没有人约</div>';
+      h+='</div>';
+    });
+    return h+'</div>';
+  }
+
+  load();
+  timer=setInterval(function(){load(true);},60000);
+  document.addEventListener('visibilitychange',function(){if(!document.hidden)load(true);});
+})();
+</script>
+</body>
+</html>
