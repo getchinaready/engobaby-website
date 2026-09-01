@@ -161,7 +161,7 @@ export async function listBookings() {
       const [d, slot, code, n, st, md] = file.split(SEP);
       if (!d || !slot || !code) continue;
       out.push({ date: expand(d), slot, code, name: b64d(n), status: b64d(st || ''), mood: b64d(md || ''),
-                 at: b.uploadedAt, _path: b.pathname });
+                 at: new Date(b.uploadedAt).toISOString(), _path: b.pathname });
     }
     cursor = r.cursor;
   } while (cursor);
