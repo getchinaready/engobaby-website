@@ -38,15 +38,27 @@ export default async function handler(req, res) {
     const today = todayCN();
     const plus = (n) => new Date(Date.parse(today) + n * 86400000).toISOString().slice(0, 10);
 
+    // 两班倒：早上 08:00 发「报名截止」，晚上 20:00 发「明日开课」。
+    // ?type=deadline / tomorrow / all 可手动指定；默认按北京时间自动判断（14 点前=早班）。
+    let want = q.type;
+    if (!want) {
+      const hourCN = (new Date().getUTCHours() + 8) % 24;
+      want = hourCN < 14 ? 'deadline' : 'tomorrow';
+    }
+
     const jobs = [];
     const deadlineDate = plus(2), tomorrowDate = plus(1);
 
-    const dDay = cfg.days.find((d) => d.date === deadlineDate && !d.break);
-    if (dDay && !(cfg.graceDates || []).includes(deadlineDate)) {
-      jobs.push({ type: 'deadline', day: dDay });
+    if (want === 'deadline' || want === 'all') {
+      const dDay = cfg.days.find((d) => d.date === deadlineDate && !d.break);
+      if (dDay && !(cfg.graceDates || []).includes(deadlineDate)) {
+        jobs.push({ type: 'deadline', day: dDay });
+      }
     }
-    const tDay = cfg.days.find((d) => d.date === tomorrowDate && !d.break);
-    if (tDay) jobs.push({ type: 'tomorrow', day: tDay });
+    if (want === 'tomorrow' || want === 'all') {
+      const tDay = cfg.days.find((d) => d.date === tomorrowDate && !d.break);
+      if (tDay) jobs.push({ type: 'tomorrow', day: tDay });
+    }
 
     if (!jobs.length) return res.status(200).json({ ok: true, sent: [], note: '今天没有需要发的摘要' });
 
@@ -118,7 +130,7 @@ async function sendDigest(job, dayBookings) {
 
   const note = isDeadline
     ? '这一天的报名已于今天 0 点截止，以上就是最终名单（老师手动补报除外）。'
-    : '明天就开课啦，记得按名单准备 Topic Card。首周不限预约的日子，明早开课前仍可能有人加入。';
+    : '明天就开课啦，记得按名单准备 Topic Card。不限预约的日子，开课前仍可能有人临时加入。';
 
   const html = `
 <div style="background:#F0F4F8;padding:24px 12px;font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif">
