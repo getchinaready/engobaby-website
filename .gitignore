@@ -7,3 +7,4 @@
 .vercel
 # deps
 node_modules/
+_to_delete/
