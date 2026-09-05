@@ -24,7 +24,7 @@ website/                 ← 本文件夹 = Git 仓库根 / 部署根
 
 ### 在"终端"里执行（逐行粘贴）
 ```bash
-cd "/Users/xinzheyu/Desktop/英歌宝创业/英歌宝 Master Folder/EngoBaby 网站项目/website"
+cd "/Users/xinzheyu/Desktop/英歌宝创业/英歌宝 Master Folder/网站/website"
 rm -rf .git assets          # 清掉残留的不完整 git，以及重复的 assets 文件夹
 git init -b main
 git add -A
