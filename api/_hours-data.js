@@ -11,8 +11,7 @@
 
 /**
  * 三位老师。key 只用小写字母（会进存储路径）；label 是界面显示名；email 用来发催填提醒。
- * ⚠️ email 是按现有三个教师邮箱推断的对应关系，Devin 请核对一遍再用：
- *    xmj17778194023@gmail.com → MJ / llw97@foxmail.com → Lili / yuxinzhe1019@163.com → Devin
+ * 邮箱对应关系已由 Devin 于 2026-09-17 确认无误。
  */
 export const TEACHERS = [
   { key: 'mj',    label: 'MJ',    color: '#EF5A5A', email: 'xmj17778194023@gmail.com' },
