@@ -119,6 +119,7 @@
 (function(){
   'use strict';
   var K=new URLSearchParams(location.search).get('k')||'';
+  var ADM=new URLSearchParams(location.search).get('admin')||'';
   var page=document.getElementById('page');
   var D=null, showPast=false, timer=null, lastAt=null;
   var view='board', H=null, me='', draft={}, busy=false;
@@ -230,7 +231,7 @@
 
   // ═══════════════════════ 课时记录 ═══════════════════════
   function loadHours(quiet){
-    return fetch('/api/hours?k='+encodeURIComponent(K)+'&r='+Date.now())
+    return fetch('/api/hours?k='+encodeURIComponent(K)+(ADM?'&admin='+encodeURIComponent(ADM):'')+'&r='+Date.now())
       .then(function(r){return r.json().then(function(j){return {s:r.status,j:j};});})
       .then(function(x){
         if(x.s===403){page.innerHTML='<div class="load">🔒 需要带口令的链接才能查看</div>';return;}
@@ -265,6 +266,11 @@
     h+='<div class="mebar" style="justify-content:center"><span style="color:#8C8174;font-size:.78rem">'+
        '全员累计 <b>'+num(H.grandTotal)+'</b> 小时</span></div>';
 
+    if(H.admin){
+      h+='<div class="tip" style="background:#FDEBEA;border-color:#F2C4BF;color:#9B2C1E">'+
+         '🔑 <b>管理员模式</b>：已锁定的周也能改，而且可以替任何人填。<br>'+
+         '别人拿到的是不带 admin 参数的普通链接。</div>';
+    }
     // 我是谁
     if(meT){
       h+='<div class="mebar">我是 <b style="color:'+meT.color+'">'+esc(meT.label)+'</b>'+
@@ -278,7 +284,8 @@
     }
 
     h+='<div class="tip">💡 填完点「保存」随时可改；点「<b>确认</b>」表示这一周定稿了。<br>'+
-       '每一周<b>结束之后还能再改 '+H.editDays+' 天</b>，再晚就自动锁定了。</div>';
+       '每一周<b>结束之后还能再改 '+H.editDays+' 天</b>，再晚就自动锁定了。<br>'+
+       '最小单位 <b>0.25 小时</b>：15 分钟 = 0.25，45 分钟 = <b>0.75</b>，90 分钟 = 1.5。</div>';
 
     // 周列表：当前周和已开始的周在前，未开始的折叠
     var started=H.weeks.filter(function(w){return w.started;});
@@ -314,8 +321,8 @@
     });
     page.querySelectorAll('[data-act]').forEach(function(el){
       el.addEventListener('click',function(){
-        var q=el.getAttribute('data-act').split('|');   // week | confirm?
-        submitHours(q[0], q[1]==='1', el);
+        var q=el.getAttribute('data-act').split('|');   // week | confirm? | teacher
+        submitHours(q[0], q[1]==='1', el, q[2]);
       });
     });
   }
@@ -327,6 +334,7 @@
     if(w.current) h+='<span class="flag warn">本周</span>';
     if(!w.started) h+='<span class="flag lock">未开始</span>';
     else if(w.locked) h+='<span class="flag lock">🔒 已锁定</span>';
+    else if(H.admin && w.daysLeft>90) h+='';
     else if(!w.current) h+='<span class="flag warn">还能改 '+w.daysLeft+' 天</span>';
     if(w.allConfirmed) h+='<span class="flag done">✓ 三人已确认</span>';
     h+='<span class="sum'+(w.total?'':' z')+'">'+num(w.total)+' h</span></div>';
@@ -336,14 +344,14 @@
       var mine = me===t.key;
       h+='<div class="row"><span class="nm"><span class="dot" style="background:'+t.color+'"></span>'+
          esc(t.label)+'</span>';
-      if(mine && w.started && !w.locked){
+      if((mine||H.admin) && (w.started||H.admin) && !w.locked){
         var key=w.week+'|'+t.key;
         var val = draft[key]!==undefined ? draft[key] : (c.hours===null?'':num(c.hours));
-        h+='<input type="number" step="0.5" min="0" max="200" inputmode="decimal" '+
+        h+='<input type="number" step="0.25" min="0" max="200" inputmode="decimal" '+
            'data-inp="'+key+'" value="'+esc(val)+'" placeholder="0"><span class="u">小时</span>'+
            '<span class="act">';
-        h+='<button class="bt save" data-act="'+w.week+'|0">保存</button>';
-        if(!c.confirmed) h+='<button class="bt ok" data-act="'+w.week+'|1">确认</button>';
+        h+='<button class="bt save" data-act="'+w.week+'|0|'+t.key+'">保存</button>';
+        if(!c.confirmed) h+='<button class="bt ok" data-act="'+w.week+'|1|'+t.key+'">确认</button>';
         else h+='<span class="flag done">✓ 已确认</span>';
         h+='</span>';
       } else {
@@ -360,25 +368,30 @@
     return h+'</div>';
   }
 
-  function submitHours(week, confirm, btn){
+  function submitHours(week, confirm, btn, who){
     if(busy) return;
-    var key=week+'|'+me;
+    var tk = who || me;
+    var key=week+'|'+tk;
     var raw = draft[key];
     if(raw===undefined){
       var w=H.weeks.filter(function(x){return x.week===week;})[0];
-      var c=w&&w.cells[me];
+      var c=w&&w.cells[tk];
       raw = (c&&c.hours!==null)?num(c.hours):'';
     }
     if(raw===''||raw===null){ alert('先填一个小时数再保存'); return; }
     var val=Number(raw);
     if(!isFinite(val)||val<0||val>200){ alert('请填 0–200 之间的小时数'); return; }
+    if(Math.abs(val*4-Math.round(val*4))>1e-9){
+      alert('课时请按 0.25 小时（15 分钟）为单位。\n\n15 分钟 = 0.25\n30 分钟 = 0.5\n45 分钟 = 0.75\n60 分钟 = 1');
+      return;
+    }
     var w0=H.weeks.filter(function(x){return x.week===week;})[0];
     if(confirm && !window.confirm('确认这一周是 '+num(val)+' 小时？\n\n确认之后还是可以改的，'+
        '这一周到 '+(w0?w0.lockDate.slice(5).replace('-','/'):'')+' 为止都能改。')) return;
 
     busy=true; var old=btn.textContent; btn.textContent='…'; btn.disabled=true;
     fetch('/api/hours',{method:'POST',headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({k:K,teacher:me,week:week,hours:val,confirm:confirm?1:0})})
+      body:JSON.stringify({k:K,teacher:tk,week:week,hours:val,confirm:confirm?1:0,admin:ADM||undefined})})
       .then(function(r){return r.json();})
       .then(function(j){
         busy=false;

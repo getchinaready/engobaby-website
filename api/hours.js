@@ -1,9 +1,10 @@
 /**
  * 课时记录 —— 接口
  * ---------------------------------------------------------------
- *   GET  /api/hours?k=CODE                    → 周列表 + 全部记录
+ *   GET  /api/hours?k=CODE[&admin=TOKEN]      → 周列表 + 全部记录（带 admin 则解锁全部）
  *   POST {k, teacher, week, hours}            → 保存（不确认）
- *   POST {k, teacher, week, hours, confirm:1} → 保存并确认（开始 7 天倒计时）
+ *   POST {k, teacher, week, hours, confirm:1} → 保存并确认（确认只是定稿标记）
+ *   以上 POST 带 {admin:'<HOURS_ADMIN>'} 可以改已锁定的周 —— 给 Devin 留的后门。
  *
  * 【锁定规则，服务端强制】
  *   每一周在「周日结束后再过 7 天」的那天 24:00 锁死，三个人同一个期限。
@@ -34,10 +35,12 @@ export default async function handler(req, res) {
   if ((isGet ? q?.k : body?.k) !== codeEnv) return res.status(403).json({ ok: false, error: 'bad-code' });
 
   try {
-    if (isGet) return res.status(200).json(await readAll());
+    const adminEnv = process.env.HOURS_ADMIN;
+    const isAdmin = !!adminEnv && (isGet ? q?.admin : body?.admin) === adminEnv;
+    if (isGet) return res.status(200).json(await readAll(isAdmin));
     if (req.method !== 'POST') { res.setHeader('Allow', 'GET, POST');
       return res.status(405).json({ ok: false, error: 'Method not allowed' }); }
-    return await save(body, res);
+    return await save(body, res, isAdmin);
   } catch (e) {
     console.error('[hours]', e);
     return res.status(500).json({ ok: false, error: e.message || String(e) });
@@ -68,12 +71,13 @@ async function readRecords() {
   return out;
 }
 
-async function readAll() {
+async function readAll(isAdmin) {
   const recs = await readRecords();
   const today = todayCN();
   const now = Date.now();
   const ws = weeks().map((w) => {
     const st = editState(w.end, now);          // 锁定只跟这一周的日期有关
+    if (isAdmin) st.locked = false;            // 后门：管理员看到的所有周都可改
     const cells = {};
     let total = 0;
     for (const t of TEACHERS) {
@@ -100,12 +104,12 @@ async function readAll() {
     grand += sum;
   }
 
-  return { ok: true, today, teachers: TEACHERS, editDays: EDIT_DAYS,
-           termStart: TERM_START, termEnd: TERM_END,
+  return { ok: true, today, teachers: TEACHERS.map(({ email, ...t }) => t), editDays: EDIT_DAYS,
+           termStart: TERM_START, termEnd: TERM_END, admin: !!isAdmin,
            weeks: ws, totals, grandTotal: Math.round(grand * 100) / 100 };
 }
 
-async function save(body, res) {
+async function save(body, res, isAdmin) {
   const teacher = String(body.teacher || '').trim().toLowerCase();
   if (!TEACHERS.some((t) => t.key === teacher))
     return res.status(400).json({ ok: false, error: '请先在右上角选择你是谁' });
@@ -116,16 +120,20 @@ async function save(body, res) {
   if (!w) return res.status(400).json({ ok: false, error: '这一周不在本学期范围内' });
 
   const today = todayCN();
-  if (!weekStarted(week, today))
+  if (!isAdmin && !weekStarted(week, today))
     return res.status(400).json({ ok: false, error: '这一周还没开始，等开课了再填' });
 
   const hours = Number(body.hours);
   if (!Number.isFinite(hours) || hours < 0 || hours > 200)
     return res.status(400).json({ ok: false, error: '课时请填 0–200 之间的小时数' });
+  // 最小单位 0.25 小时（15 分钟）：45 分钟的课 = 0.75
+  if (Math.abs(hours * 4 - Math.round(hours * 4)) > 1e-9)
+    return res.status(400).json({ ok: false,
+      error: '课时请按 0.25 小时（15 分钟）为单位，比如 0.75 = 45 分钟、1.5 = 90 分钟' });
 
-  // 过了这一周的可改期限 → 拒绝
+  // 过了这一周的可改期限 → 拒绝（管理员后门除外）
   const st = editState(w.end, Date.now());
-  if (st.locked)
+  if (st.locked && !isAdmin)
     return res.status(403).json({ ok: false,
       error: `这一周可以修改到 ${w.end.slice(5).replace('-', '/')} 之后的 ${EDIT_DAYS} 天为止，现在已经锁定了。` });
 
@@ -141,13 +149,13 @@ async function save(body, res) {
 
   if (old.blobs.length) await del(old.blobs.map((b) => b.url));
 
-  const clean = Math.round(hours * 100) / 100;
+  const clean = Math.round(hours * 4) / 4;   // 落到 0.25 的格子上
   await put(`${prefix}${clean}${SEP}${confirmedAt}.json`,
     JSON.stringify({ teacher, week, hours: clean, confirmedAt, at: new Date().toISOString() }), {
       access: 'private', contentType: 'application/json; charset=utf-8',
       addRandomSuffix: false, allowOverwrite: true, cacheControlMaxAge: 0,
     });
 
-  return res.status(200).json({ ok: true,
+  return res.status(200).json({ ok: true, admin: !!isAdmin,
     saved: { week, teacher, hours: clean, confirmed: !!confirmedAt, ...editState(w.end, Date.now()) } });
 }

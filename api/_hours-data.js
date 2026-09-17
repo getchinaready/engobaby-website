@@ -9,12 +9,19 @@
  *   · 改锁定宽限期    → EDIT_DAYS
  */
 
-/** 三位老师。key 只用小写字母，存进路径里；label 是界面上显示的名字。 */
+/**
+ * 三位老师。key 只用小写字母（会进存储路径）；label 是界面显示名；email 用来发催填提醒。
+ * ⚠️ email 是按现有三个教师邮箱推断的对应关系，Devin 请核对一遍再用：
+ *    xmj17778194023@gmail.com → MJ / llw97@foxmail.com → Lili / yuxinzhe1019@163.com → Devin
+ */
 export const TEACHERS = [
-  { key: 'mj',    label: 'MJ',    color: '#EF5A5A' },
-  { key: 'lili',  label: 'Lili',  color: '#7CB24E' },
-  { key: 'devin', label: 'Devin', color: '#3E92DE' },
+  { key: 'mj',    label: 'MJ',    color: '#EF5A5A', email: 'xmj17778194023@gmail.com' },
+  { key: 'lili',  label: 'Lili',  color: '#7CB24E', email: 'llw97@foxmail.com' },
+  { key: 'devin', label: 'Devin', color: '#3E92DE', email: 'yuxinzhe1019@163.com' },
 ];
+
+/** 催填提醒：这一周结束后的第几天发（第 7 天是最后一天，不再打扰） */
+export const REMIND_DAYS = [1, 6];
 
 /** 学期范围：从 9/14 那一周（周一）开始，到 1/31 那一周结束，共 20 周 */
 export const TERM_START = '2026-09-14';   // 必须是周一
