@@ -20,7 +20,7 @@ export const TEACHERS = [
 export const TERM_START = '2026-09-14';   // 必须是周一
 export const TERM_END   = '2027-01-31';
 
-/** 确认之后还能改几天；超过就锁死 */
+/** 一周结束之后，还能再改几天；超过就锁死 */
 export const EDIT_DAYS = 7;
 
 const DAY = 86400000;
@@ -52,17 +52,25 @@ export function weeks() {
 }
 
 /**
- * 一条记录现在能不能改。
- *   · 还没确认           → 随时能改
- *   · 确认后 EDIT_DAYS 天内 → 还能改（改动不会重置倒计时）
- *   · 超过                → 锁死
+ * 这一周什么时候锁。
+ * 截止 = 周日结束后再过 EDIT_DAYS 天，到那天的北京时间 24:00。
+ * 例：9/14–9/20 这一周，改到 9/27 当天为止，9/28 零点锁死。
+ * 跟谁什么时候点的「确认」无关 —— 三个人是同一个期限。
  */
-export function editState(confirmedAt, nowMs) {
+export function lockAt(weekEnd) {
+  return parse(weekEnd) + (EDIT_DAYS + 1) * DAY - 8 * 3600000;
+}
+
+/** 这一周现在能不能改 */
+export function editState(weekEnd, nowMs) {
   const now = nowMs || Date.now();
-  if (!confirmedAt) return { locked: false, confirmed: false, daysLeft: null };
-  const deadline = confirmedAt + EDIT_DAYS * DAY;
+  const deadline = lockAt(weekEnd);
   const left = Math.ceil((deadline - now) / DAY);
-  return { locked: now > deadline, confirmed: true, daysLeft: left > 0 ? left : 0 };
+  return {
+    locked: now > deadline,
+    daysLeft: left > 0 ? left : 0,
+    lockDate: fmt(deadline + 8 * 3600000 - DAY),   // 最后一个可改的日子
+  };
 }
 
 /** 这一周是否已经开始（没开始的周不给填） */

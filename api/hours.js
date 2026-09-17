@@ -6,7 +6,8 @@
  *   POST {k, teacher, week, hours, confirm:1} → 保存并确认（开始 7 天倒计时）
  *
  * 【锁定规则，服务端强制】
- *   没确认 → 随时能改；确认后 7 天内 → 还能改，且不重置倒计时；超过 → 拒绝写入。
+ *   每一周在「周日结束后再过 7 天」的那天 24:00 锁死，三个人同一个期限。
+ *   例：9/14–9/20 这一周，改到 9/27 当天为止。「确认」只是定稿标记，不影响期限。
  *
  * 【存储】Vercel Blob（私有），信息全部编码在路径里，一次 list() 读完整个学期：
  *   hours/<yyyymmdd>~<teacher>~<hours>~<confirmedMs>.json
@@ -72,16 +73,14 @@ async function readAll() {
   const today = todayCN();
   const now = Date.now();
   const ws = weeks().map((w) => {
+    const st = editState(w.end, now);          // 锁定只跟这一周的日期有关
     const cells = {};
     let total = 0;
     for (const t of TEACHERS) {
       const r = recs[`${w.week}|${t.key}`];
-      const st = editState(r?.confirmedAt || 0, now);
       cells[t.key] = {
         hours: r ? r.hours : null,
-        confirmed: st.confirmed,
-        locked: st.locked,
-        daysLeft: st.daysLeft,
+        confirmed: !!(r && r.confirmedAt),
         confirmedAt: r?.confirmedAt || 0,
       };
       if (r) total += r.hours;
@@ -89,6 +88,7 @@ async function readAll() {
     const allConfirmed = TEACHERS.every((t) => cells[t.key].confirmed);
     return { ...w, cells, total: Math.round(total * 100) / 100,
              started: weekStarted(w.week, today), allConfirmed,
+             locked: st.locked, daysLeft: st.daysLeft, lockDate: st.lockDate,
              current: w.week <= today && today <= w.end };
   });
 
@@ -123,19 +123,20 @@ async function save(body, res) {
   if (!Number.isFinite(hours) || hours < 0 || hours > 200)
     return res.status(400).json({ ok: false, error: '课时请填 0–200 之间的小时数' });
 
-  // 先看旧记录：确认过且超期 → 拒绝
+  // 过了这一周的可改期限 → 拒绝
+  const st = editState(w.end, Date.now());
+  if (st.locked)
+    return res.status(403).json({ ok: false,
+      error: `这一周可以修改到 ${w.end.slice(5).replace('-', '/')} 之后的 ${EDIT_DAYS} 天为止，现在已经锁定了。` });
+
   const prefix = `${PREFIX}${compact(week)}${SEP}${teacher}${SEP}`;
   const old = await list({ prefix, limit: 100 });
   let confirmedAt = 0;
   if (old.blobs.length) {
     const file = old.blobs[0].pathname.slice(PREFIX.length).replace(/\.json$/, '');
     confirmedAt = Number(file.split(SEP)[3]) || 0;
-    const st = editState(confirmedAt, Date.now());
-    if (st.locked)
-      return res.status(403).json({ ok: false, error: `这一周已确认超过 ${EDIT_DAYS} 天，已锁定。需要改动请联系 Devin。` });
   }
-
-  // 确认时间只认第一次，改动不重置倒计时
+  // 确认只是定稿标记，第一次点了就记下来
   if (body.confirm && !confirmedAt) confirmedAt = Date.now();
 
   if (old.blobs.length) await del(old.blobs.map((b) => b.url));
@@ -147,6 +148,6 @@ async function save(body, res) {
       addRandomSuffix: false, allowOverwrite: true, cacheControlMaxAge: 0,
     });
 
-  const st = editState(confirmedAt, Date.now());
-  return res.status(200).json({ ok: true, saved: { week, teacher, hours: clean, ...st } });
+  return res.status(200).json({ ok: true,
+    saved: { week, teacher, hours: clean, confirmed: !!confirmedAt, ...editState(w.end, Date.now()) } });
 }

@@ -76,6 +76,7 @@
   .wk.cur{border-left-color:var(--red);box-shadow:0 5px 18px rgba(239,90,90,.16)}
   .wk.done{border-left-color:var(--grn)}
   .wk.soon{opacity:.55}
+  .wk.lk{opacity:.72}
   .wkh{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap;margin-bottom:9px}
   .wkh b{font-family:var(--fh);font-size:1rem}
   .wkh .sum{margin-left:auto;font-family:var(--fh);font-size:1.05rem;color:var(--gold-d)}
@@ -276,8 +277,8 @@
          }).join('')+'</div></div>';
     }
 
-    h+='<div class="tip">💡 填完点「保存」随时可改；点「<b>确认</b>」表示这一周定稿了 —— '+
-       '确认后 <b>'+H.editDays+' 天内</b>仍可修改，超过就锁定，需要改动找 Devin。</div>';
+    h+='<div class="tip">💡 填完点「保存」随时可改；点「<b>确认</b>」表示这一周定稿了。<br>'+
+       '每一周<b>结束之后还能再改 '+H.editDays+' 天</b>，再晚就自动锁定了。</div>';
 
     // 周列表：当前周和已开始的周在前，未开始的折叠
     var started=H.weeks.filter(function(w){return w.started;});
@@ -320,11 +321,14 @@
   }
 
   function weekRow(w){
-    var cls='wk'+(w.current?' cur':'')+(w.allConfirmed?' done':'')+(w.started?'':' soon');
+    var cls='wk'+(w.current?' cur':'')+(w.allConfirmed?' done':'')+(w.started?'':' soon')+
+            (w.locked?' lk':'');
     var h='<div class="'+cls+'"><div class="wkh"><b>'+esc(w.label)+'</b>';
     if(w.current) h+='<span class="flag warn">本周</span>';
-    if(w.allConfirmed) h+='<span class="flag done">✓ 三人已确认</span>';
     if(!w.started) h+='<span class="flag lock">未开始</span>';
+    else if(w.locked) h+='<span class="flag lock">🔒 已锁定</span>';
+    else if(!w.current) h+='<span class="flag warn">还能改 '+w.daysLeft+' 天</span>';
+    if(w.allConfirmed) h+='<span class="flag done">✓ 三人已确认</span>';
     h+='<span class="sum'+(w.total?'':' z')+'">'+num(w.total)+' h</span></div>';
 
     H.teachers.forEach(function(t){
@@ -332,7 +336,7 @@
       var mine = me===t.key;
       h+='<div class="row"><span class="nm"><span class="dot" style="background:'+t.color+'"></span>'+
          esc(t.label)+'</span>';
-      if(mine && w.started && !c.locked){
+      if(mine && w.started && !w.locked){
         var key=w.week+'|'+t.key;
         var val = draft[key]!==undefined ? draft[key] : (c.hours===null?'':num(c.hours));
         h+='<input type="number" step="0.5" min="0" max="200" inputmode="decimal" '+
@@ -340,14 +344,14 @@
            '<span class="act">';
         h+='<button class="bt save" data-act="'+w.week+'|0">保存</button>';
         if(!c.confirmed) h+='<button class="bt ok" data-act="'+w.week+'|1">确认</button>';
-        else h+='<span class="flag warn">✓ 还能改 '+c.daysLeft+' 天</span>';
+        else h+='<span class="flag done">✓ 已确认</span>';
         h+='</span>';
       } else {
         h+='<span class="val'+(c.hours===null?' z':'')+'">'+(c.hours===null?'—':num(c.hours))+'</span>'+
            '<span class="u">小时</span><span class="act">';
-        if(c.locked) h+='<span class="flag lock">🔒 已锁定</span>';
-        else if(c.confirmed) h+='<span class="flag done">✓ 已确认</span>';
+        if(c.confirmed) h+='<span class="flag done">✓ 已确认</span>';
         else if(!w.started) h+='';
+        else if(w.locked) h+='<span class="flag lock">未填</span>';
         else h+='<span class="flag lock">待填</span>';
         h+='</span>';
       }
@@ -368,7 +372,9 @@
     if(raw===''||raw===null){ alert('先填一个小时数再保存'); return; }
     var val=Number(raw);
     if(!isFinite(val)||val<0||val>200){ alert('请填 0–200 之间的小时数'); return; }
-    if(confirm && !window.confirm('确认这一周是 '+num(val)+' 小时？\n\n确认后 '+H.editDays+' 天内还能修改，超过就锁定了。')) return;
+    var w0=H.weeks.filter(function(x){return x.week===week;})[0];
+    if(confirm && !window.confirm('确认这一周是 '+num(val)+' 小时？\n\n确认之后还是可以改的，'+
+       '这一周到 '+(w0?w0.lockDate.slice(5).replace('-','/'):'')+' 为止都能改。')) return;
 
     busy=true; var old=btn.textContent; btn.textContent='…'; btn.disabled=true;
     fetch('/api/hours',{method:'POST',headers:{'Content-Type':'application/json'},
