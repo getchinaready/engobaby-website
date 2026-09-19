@@ -511,7 +511,7 @@
     });
 
     if(D.pending&&D.pending.length){
-      h+='<div class="pend"><h3>顺延补足 · 另外 5 个主题</h3>'+
+      h+='<div class="pend"><h3>顺延补足 · 另外 '+D.pending.length+' 个主题</h3>'+
          '<div class="s">日期与时段会结合大家的时间统一安排，定了就加进来</div><ul>';
       D.pending.forEach(function(x){h+='<li><b>'+esc(x.en)+'</b> · '+esc(x.cn)+'</li>';});
       h+='</ul></div>';

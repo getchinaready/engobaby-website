@@ -69,10 +69,11 @@ export const SCHEDULE = {
 
       { date:'2026-09-28', slots:['am','eve'],  en:'How Was Your Holiday?',         cn:'把假期故事讲得更好' },
       { date:'2026-09-29', slots:['pm','eve'],  en:'Your Perfect 7-Day Trip',       cn:'设计你的完美七天旅行' },
-      { date:'2026-09-30', slots:['am','pm'],   en:'What Are You Looking Forward To?', cn:'接下来你最期待什么？' },
+      // 2026-09-30 的课已取消，主题移到下面 pending 里等重排
     ],
     // 顺延补足的主题（日期待定，暂不进预约系统）
     pending: [
+      { en:'What Are You Looking Forward To?',     cn:'接下来你最期待什么？' },
       { en:'What Kind of Person Are You, Really?', cn:'你到底是什么性格？' },
       { en:'Money Habits',                         cn:'你是存钱派还是花钱派？' },
       { en:'The Art of Saying No',                 cn:'如何体面地拒绝' },
