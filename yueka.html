@@ -131,6 +131,7 @@
   .pill.time{background:#F1F5F9;color:#5C6B7A}
   .pill.shut{background:#EDE7DE;color:#A99E90}
   .pill.grace{background:#E9F5E4;color:#4A7F3C}
+  .pill.card9{background:#FBF4EA;color:#A9855F;border:1px solid #EBDAC4}
   .pill.me{background:var(--gold);color:#4A3B12;box-shadow:0 2px 6px rgba(244,168,27,.35)}
   .heat{display:inline-flex;align-items:center;gap:3px;font-size:.71rem;font-weight:700;
     background:#FDF0E8;color:#C25A28;padding:4px 10px;border-radius:8px}
@@ -493,8 +494,8 @@
        '</div></div>';
 
     h+='<div class="note first">'+esc(D.note)+'<br>'+
-       '<b>预约规则：</b>9/1–9/6 <span class="hl">首周不限</span>随时可约；'+
-       '<b>9/14 起需提前 '+D.leadDays+' 天</b>（9/14 的课 9/11 仍可约，9/12 起关闭）。</div>';
+       '<b>预约规则：</b>10/7–10/12 <span class="hl">恢复首周不限</span>随时可约；'+
+       '<b>10/13 起需提前 '+D.leadDays+' 天</b>（10/16 的课 10/13 仍可约，10/14 起关闭）。</div>';
 
     var pastDays=D.days.filter(function(d){return d.date<D.today&&!d.break;});
     var nowDays=D.days.filter(function(d){return d.date>=D.today;});
@@ -621,6 +622,7 @@
         h+='<span class="pill time">'+esc(D.slots[x].name)+' '+esc(D.slots[x].time)+'</span>';});
       if(d.state.reason==='grace') h+='<span class="pill grace">首周不限</span>';
     }
+    if(d.tag) h+='<span class="pill card9">'+esc(d.tag)+'</span>';
     if(!d.break&&bs.length){
       h+='<span class="heat">'+(bs.length>=3?'🔥':'🙋')+' '+bs.length+' 人'+
          '<span class="stack">'+bs.slice(0,4).map(function(b){

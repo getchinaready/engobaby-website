@@ -19,14 +19,14 @@
  *
  * 【存储】全部在 Vercel Blob（私有）：
  *   会员：yueka-members/<code>~<b64姓名>.json      —— 一次 list() 读全体
- *   预约：yueka/2026-09/<yyyymmdd>~<slot>~<code>~<b64姓名>~<b64状态>~<b64心情>.json
+ *   预约：yueka/2026-10/<yyyymmdd>~<slot>~<code>~<b64姓名>~<b64状态>~<b64心情>.json
  *   信息编码在路径里：读整月一次 list()；不同人不同路径，无并发覆盖。
  */
 
 import { put, list, del } from '@vercel/blob';
 import { SLOTS, STATUSES, MOODS, SCHEDULE, LEAD_DAYS, todayCN, bookingState } from './_yueka-data.js';
 
-const MONTH = '2026-09';
+const MONTH = '2026-10';
 const SEP = '~';
 
 const b64e = (s) => Buffer.from(String(s), 'utf-8').toString('base64url');

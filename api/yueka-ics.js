@@ -1,6 +1,6 @@
 /**
  * 月卡预约 —— 生成 ICS 日历文件（支持一次导出多场）
- *   单场：GET /api/yueka-ics?k=口令&date=2026-09-14&slot=eve
+ *   单场：GET /api/yueka-ics?k=口令&date=2026-10-15&slot=eve
  *   多场：GET /api/yueka-ics?k=口令&ev=20260914-eve,20260915-pm,20260921-am
  * 返回 text/calendar；每个事件带开课前 1 小时提醒。
  * 时间用 UTC 表示（北京时间 −8h），避免 VTIMEZONE 兼容性问题。
@@ -8,7 +8,7 @@
 
 import { SLOTS, SCHEDULE } from './_yueka-data.js';
 
-const MONTH = '2026-09';
+const MONTH = '2026-10';
 const TIMES = {
   am:  { h1: 10, m1: 30, h2: 11, m2: 30 },
   pm:  { h1: 15, m1: 0,  h2: 16, m2: 0  },

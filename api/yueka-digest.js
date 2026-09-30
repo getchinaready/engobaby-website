@@ -22,7 +22,7 @@ import { put, list } from '@vercel/blob';
 import { SLOTS, STATUSES, MOODS, SCHEDULE, todayCN } from './_yueka-data.js';
 import { listBookings } from './yueka.js';
 
-const MONTH = '2026-09';
+const MONTH = '2026-10';
 
 export default async function handler(req, res) {
   const q = req.query || Object.fromEntries(new URL(req.url, 'http://x').searchParams);
