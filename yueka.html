@@ -494,8 +494,8 @@
        '</div></div>';
 
     h+='<div class="note first">'+esc(D.note)+'<br>'+
-       '<b>预约规则：</b>10/7–10/12 <span class="hl">恢复首周不限</span>随时可约；'+
-       '<b>10/13 起需提前 '+D.leadDays+' 天</b>（10/16 的课 10/13 仍可约，10/14 起关闭）。</div>';
+       '<b>预约规则：</b>所有课程统一需<span class="hl">提前 '+D.leadDays+' 天</span>预约 —— '+
+       '开课日往前数第 '+D.leadDays+' 天<b>当天仍可约</b>，再往后就关闭了。</div>';
 
     var pastDays=D.days.filter(function(d){return d.date<D.today&&!d.break;});
     var nowDays=D.days.filter(function(d){return d.date>=D.today;});
