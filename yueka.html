@@ -493,9 +493,17 @@
        (myCode?'<div class="codebar">我的代号 <b>'+esc(myCode)+'</b> · 右上角可以看「我的预约」</div>':'')+
        '</div></div>';
 
+    var graceDays=D.days.filter(function(d){return d.state&&d.state.reason==='grace';});
+    function md(s){var a=s.split('-');return (+a[1])+'/'+(+a[2]);}
     h+='<div class="note first">'+esc(D.note)+'<br>'+
        '<b>预约规则：</b>所有课程统一需<span class="hl">提前 '+D.leadDays+' 天</span>预约 —— '+
-       '开课日往前数第 '+D.leadDays+' 天<b>当天仍可约</b>，再往后就关闭了。</div>';
+       '开课日往前数第 '+D.leadDays+' 天<b>当天仍可约</b>，再往后就关闭了。'+
+       (graceDays.length
+         ? '<br><b>本周特例：</b>'+md(graceDays[0].date)+
+           (graceDays.length>1?'–'+md(graceDays[graceDays.length-1].date):'')+
+           ' <span class="hl">不限提前天数</span>，随时可约（之后恢复正常）。'
+         : '')+
+       '</div>';
 
     var pastDays=D.days.filter(function(d){return d.date<D.today&&!d.break;});
     var nowDays=D.days.filter(function(d){return d.date>=D.today;});
@@ -620,7 +628,7 @@
     else{
       (d.slots||[]).forEach(function(x){
         h+='<span class="pill time">'+esc(D.slots[x].name)+' '+esc(D.slots[x].time)+'</span>';});
-      if(d.state.reason==='grace') h+='<span class="pill grace">首周不限</span>';
+      if(d.state.reason==='grace') h+='<span class="pill grace">随时可约</span>';
     }
     if(d.tag) h+='<span class="pill card9">'+esc(d.tag)+'</span>';
     if(!d.break&&bs.length){

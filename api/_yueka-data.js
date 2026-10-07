@@ -33,8 +33,9 @@ export const SCHEDULE = {
   '2026-10': {
     label: '2026 年 10 月',
     note: '10/1–10/6 国庆休课，10/7 晚恢复上课。全月 25 个开课日：10/7–10/12 计入 9 月月卡（补足 9 月顺延的课次），10/13 起计入 10 月新月卡。同一天两个时段内容完全相同，任选一场参加。',
-    // 【2026-10 起的口径】不再设首周豁免，全月统一「提前 3 天」。新月份照抄这一行即可。
-    graceDates: [],
+    // 默认口径：不设豁免，全月统一「提前 3 天」，新月份照抄 graceDates: [] 即可。
+    // 2026-10-07 临时开口子：本周（10/7–10/11）不限提前天数，10/12 起恢复正常。用完清空。
+    graceDates: ['2026-10-07','2026-10-08','2026-10-09','2026-10-10','2026-10-11'],
     days: [
       { date:'2026-10-01', break:true, en:'National Day Holiday', cn:'国庆休课' },
       { date:'2026-10-02', break:true, en:'National Day Holiday', cn:'国庆休课' },
@@ -148,7 +149,7 @@ export function bookingState(dateStr, month) {
 
   const cfg = SCHEDULE[month];
   if (cfg && cfg.graceDates && cfg.graceDates.includes(dateStr)) {
-    return { open: true, reason: 'grace', text: '首周不限，随时可约' };
+    return { open: true, reason: 'grace', text: '不限提前天数，随时可约' };
   }
 
   const diff = Math.round((Date.parse(dateStr) - Date.parse(today)) / 86400000);
