@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>教师课时记录 · 英歌宝工作台</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" href="/logo.png">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Noto+Sans+SC:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  :root{--gold:#F4A81B;--gold-d:#C4820A;--red:#EF5A5A;--grn:#7CB24E;--blu:#3E92DE;
+    --navy:#16456F;--ink:#33302B;--mut:#9A8F82;--line:#EDE4D6;--cream:#FBF5EC;--card:#FFFDF9;
+    --fz:"Noto Sans SC",system-ui,sans-serif;--fh:"Baloo 2","Noto Sans SC",system-ui,sans-serif}
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+  body{font-family:var(--fz);background:var(--cream);color:var(--ink);line-height:1.6;-webkit-font-smoothing:antialiased}
+  .page{max-width:640px;margin:0 auto;padding:0 0 60px}
+  .hd{background:linear-gradient(165deg,#FFF6E1,#FDF1E8 46%,#E9F3FE);padding:20px 18px 18px;
+    border-radius:0 0 24px 24px;display:flex;align-items:center;justify-content:space-between;gap:10px}
+  .hd h1{font-family:var(--fh);font-size:1.25rem;color:var(--ink)}
+  .hd .sub{font-size:.74rem;color:#8C8174;margin-top:2px}
+  .rf{background:#fff;border:2px solid #F0E4D0;color:var(--navy);border-radius:999px;padding:8px 16px;
+    font-size:.82rem;font-weight:800;cursor:pointer;font-family:var(--fz);box-shadow:0 3px 10px rgba(51,48,43,.09);flex:none}
+  .staff-nav{max-width:640px;margin:auto;padding:12px 18px;display:flex;gap:18px;align-items:center}
+  .staff-nav a,.mebar a{font:inherit;font-weight:700;color:var(--navy);text-underline-offset:3px}
+  .mebar{display:flex;align-items:center;gap:9px;margin:14px 14px 0;padding:10px 13px;
+    border:1px solid var(--line);border-radius:12px;background:var(--card);font-size:.9rem}
+  .mebar a{margin-left:auto}
+  .foldbtn{display:block;width:calc(100% - 28px);margin:14px auto;padding:10px;border:1px solid var(--line);
+    border-radius:12px;background:var(--card);color:var(--navy);font-family:var(--fz);cursor:pointer}
+  .load{text-align:center;padding:60px 20px;color:var(--navy)}
+  .wk{background:var(--card);border-radius:16px;margin:0 14px 10px;padding:12px 14px;
+    box-shadow:0 3px 12px rgba(51,48,43,.06);border-left:6px solid #DDD3C6}
+  .wk.cur{border-left-color:var(--red);box-shadow:0 5px 18px rgba(239,90,90,.16)}
+  .wk.done{border-left-color:var(--grn)}
+  .wk.soon{opacity:.55}
+  .wk.lk{opacity:.72}
+  .wkh{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap;margin-bottom:9px}
+  .wkh b{font-family:var(--fh);font-size:1rem}
+  .wkh .sum{margin-left:auto;font-family:var(--fh);font-size:1.05rem;color:var(--gold-d)}
+  .wkh .sum.z{color:#CFC5B7}
+  .row{display:flex;align-items:center;gap:8px;padding:7px 0;border-top:1px dashed var(--line);flex-wrap:wrap}
+  .row .nm{flex:none;width:54px;font-size:.82rem;font-weight:800;display:flex;align-items:center;gap:6px}
+  .row .dot{width:9px;height:9px;border-radius:50%;flex:none}
+  .row input{width:70px;font-size:16px;font-family:var(--fz);font-weight:700;text-align:center;
+    border:2px solid var(--line);border-radius:10px;padding:7px 4px;background:#fff;color:var(--ink)}
+  .row input:focus{outline:none;border-color:var(--gold)}
+  .row input:disabled{background:#F6F1E8;color:#B0A597;border-style:dashed}
+  .row .u{font-size:.74rem;color:var(--mut);flex:none}
+  .row .act{margin-left:auto;display:flex;align-items:center;gap:7px;flex-wrap:wrap;justify-content:flex-end}
+  .row .val{font-family:var(--fh);font-size:1.05rem;color:var(--ink)}
+  .row .val.z{color:#CFC5B7}
+  .bt{border:none;border-radius:9px;padding:7px 13px;font-size:.75rem;font-weight:800;
+    cursor:pointer;font-family:var(--fz);white-space:nowrap}
+  .bt.save{background:linear-gradient(135deg,#F4A81B,#E09400);color:#fff;box-shadow:0 3px 9px rgba(244,168,27,.3)}
+  .bt.ok{background:var(--grn);color:#fff}
+  .bt:disabled{opacity:.45;box-shadow:none;cursor:default}
+  .flag{font-size:.7rem;font-weight:800;border-radius:7px;padding:3px 8px;white-space:nowrap}
+  .flag.lock{background:#EDE7DE;color:#A99E90}
+  .flag.warn{background:#FDF2DC;color:#B7791F}
+  .flag.done{background:#E9F5E4;color:#4A7F3C}
+  .mrk{margin:24px 14px 8px;font-family:var(--fh);font-size:.8rem;color:#B0A597;font-weight:700}
+  .tip{margin:14px 14px 0;background:#FFF9E8;border:2px dashed #F0DCA8;border-radius:14px;
+    padding:12px 14px;font-size:.76rem;color:#8A7434;line-height:1.75}
+  .tip b{color:#C4820A}
+  .share{display:flex;gap:9px;margin:14px 14px 0}
+  .share .sc{flex:1;background:var(--card);border:2px solid #F3E8D5;border-radius:15px;
+    text-align:center;padding:12px 4px 10px}
+  .share .sc b{display:block;font-family:var(--fh);font-size:1.5rem;line-height:1.05}
+  .share .sc em{font-style:normal;display:block;font-size:.68rem;color:#8C8174;font-weight:700;margin-top:3px}
+  .share .sc i{font-style:normal;display:block;font-size:.66rem;color:#B0A597;margin-top:1px}
+</style>
+</head>
+<body>
+<nav class="staff-nav" aria-label="工作台"><a href="/staff">团队工作台</a><a href="/steam">STEAM 课程记录</a></nav>
+<div class="page" id="page"><div class="load">正在载入…</div></div>
+<script>
+(function(){
+  'use strict';
+  var query=new URLSearchParams(location.search);
+  var manage=query.get('manage')==='1';
+  var page=document.getElementById('page');
+  var H=null, me='', draft={}, busy=false, showPast=false;
+  function esc(x){return String(x==null?'':x).replace(/[&<>"]/g,function(c){
+    return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
+  function loadHours(quiet){
+    return fetch('/api/hours'+(manage?'?manage=1':''),{cache:'no-store'})
+      .then(function(r){return r.json().then(function(j){return {s:r.status,j:j};});})
+      .then(function(x){
+        if(x.s===401){location.replace('/staff?next=hours');return;}
+        if(!x.j.ok) throw new Error(x.j.error);
+        H=x.j; me=H.viewer; renderHours();
+      })
+      .catch(function(){if(!quiet)page.innerHTML='<div class="load">载入失败，下拉刷新重试</div>';});
+  }
+
+  function tOf(key){ return (H.teachers||[]).filter(function(t){return t.key===key;})[0]||{label:key,color:'#999'}; }
+  function num(v){ return (Math.round(v*100)/100).toString(); }
+
+  function renderHours(){
+    if(!H) return;
+    var meT = me ? tOf(me) : null;
+
+    var h='<div class="hd"><div><h1>⏱ 课时记录</h1>'+
+      '<div class="sub">'+H.termStart.replace(/-/g,'/')+' – '+H.termEnd.replace(/-/g,'/')+
+      ' · '+H.weeks.length+' 周 · 单位小时</div></div>'+
+      '<button class="rf" id="rf">↻ 刷新</button></div>';
+
+    // 累计
+    h+='<div class="share">';
+    H.teachers.forEach(function(t){
+      var v=H.totals[t.key]||0;
+      var pct=H.grandTotal>0?Math.round(v/H.grandTotal*1000)/10:0;
+      h+='<div class="sc"><b style="color:'+t.color+'">'+num(v)+'</b>'+
+         '<em>'+esc(t.label)+'</em><i>'+(H.grandTotal>0?pct+'%':'—')+'</i></div>';
+    });
+    h+='</div>';
+    h+='<div class="mebar" style="justify-content:center"><span style="color:#8C8174;font-size:.78rem">'+
+       '全员累计 <b>'+num(H.grandTotal)+'</b> 小时</span></div>';
+
+    if(meT){
+      h+='<div class="mebar">已登录 <b style="color:'+meT.color+'">'+esc(meT.label)+'</b>';
+      if(me==='devin') h+='<a href="'+(H.admin?'/hours':'/hours?manage=1')+'">'+
+        (H.admin?'退出管理员模式':'管理员模式')+'</a>';
+      h+='</div>';
+    }
+    if(H.admin){
+      h+='<div class="tip" style="background:#FDEBEA;border-color:#F2C4BF;color:#9B2C1E">'+
+         '<b>管理员模式</b>可以替其他老师登记，也可以修改已锁定周的记录。</div>';
+    }
+
+    h+='<div class="tip">💡 填完点「保存」随时可改；点「<b>确认</b>」表示这一周定稿了。<br>'+
+       '每一周<b>结束之后还能再改 '+H.editDays+' 天</b>，再晚就自动锁定了。<br>'+
+       '最小单位 <b>0.25 小时</b>：15 分钟 = 0.25，45 分钟 = <b>0.75</b>，90 分钟 = 1.5。</div>';
+
+    // 周列表：当前周和已开始的周在前，未开始的折叠
+    var started=H.weeks.filter(function(w){return w.started;});
+    var soon=H.weeks.filter(function(w){return !w.started;});
+    var lastMonth=null;
+    started.slice().reverse().forEach(function(w){
+      if(w.month!==lastMonth){h+='<div class="mrk">'+w.month.replace('-','年')+'月</div>';lastMonth=w.month;}
+      h+=weekRow(w);
+    });
+    if(soon.length){
+      h+='<button class="foldbtn" id="foldSoon">📅 还没开始的 '+soon.length+' 周 '+
+         (showPast?'▾ 收起':'▸ 展开')+'</button>';
+      if(showPast) soon.forEach(function(w){h+=weekRow(w);});
+    }
+
+    page.innerHTML=h;
+    document.getElementById('rf').addEventListener('click',function(){this.textContent='…';loadHours();});
+    var f=document.getElementById('foldSoon');
+    if(f) f.addEventListener('click',function(){showPast=!showPast;renderHours();});
+    page.querySelectorAll('[data-inp]').forEach(function(el){
+      el.addEventListener('input',function(){ draft[el.getAttribute('data-inp')]=el.value; });
+    });
+    page.querySelectorAll('[data-act]').forEach(function(el){
+      el.addEventListener('click',function(){
+        var q=el.getAttribute('data-act').split('|');   // week | confirm? | teacher
+        submitHours(q[0], q[1]==='1', el, q[2]);
+      });
+    });
+  }
+
+  function weekRow(w){
+    var cls='wk'+(w.current?' cur':'')+(w.allConfirmed?' done':'')+(w.started?'':' soon')+
+            (w.locked?' lk':'');
+    var h='<div class="'+cls+'"><div class="wkh"><b>'+esc(w.label)+'</b>';
+    if(w.current) h+='<span class="flag warn">本周</span>';
+    if(!w.started) h+='<span class="flag lock">未开始</span>';
+    else if(w.locked) h+='<span class="flag lock">🔒 已锁定</span>';
+    else if(H.admin && w.daysLeft>90) h+='';
+    else if(!w.current) h+='<span class="flag warn">还能改 '+w.daysLeft+' 天</span>';
+    if(w.allConfirmed) h+='<span class="flag done">✓ 三人已确认</span>';
+    h+='<span class="sum'+(w.total?'':' z')+'">'+num(w.total)+' h</span></div>';
+
+    H.teachers.forEach(function(t){
+      var c=w.cells[t.key];
+      var mine = me===t.key;
+      h+='<div class="row"><span class="nm"><span class="dot" style="background:'+t.color+'"></span>'+
+         esc(t.label)+'</span>';
+      if((mine||H.admin) && (w.started||H.admin) && !w.locked){
+        var key=w.week+'|'+t.key;
+        var val = draft[key]!==undefined ? draft[key] : (c.hours===null?'':num(c.hours));
+        h+='<input type="number" step="0.25" min="0" max="200" inputmode="decimal" '+
+           'data-inp="'+key+'" value="'+esc(val)+'" placeholder="0"><span class="u">小时</span>'+
+           '<span class="act">';
+        h+='<button class="bt save" data-act="'+w.week+'|0|'+t.key+'">保存</button>';
+        if(!c.confirmed) h+='<button class="bt ok" data-act="'+w.week+'|1|'+t.key+'">确认</button>';
+        else h+='<span class="flag done">✓ 已确认</span>';
+        h+='</span>';
+      } else {
+        h+='<span class="val'+(c.hours===null?' z':'')+'">'+(c.hours===null?'—':num(c.hours))+'</span>'+
+           '<span class="u">小时</span><span class="act">';
+        if(c.confirmed) h+='<span class="flag done">✓ 已确认</span>';
+        else if(!w.started) h+='';
+        else if(w.locked) h+='<span class="flag lock">未填</span>';
+        else h+='<span class="flag lock">待填</span>';
+        h+='</span>';
+      }
+      h+='</div>';
+    });
+    return h+'</div>';
+  }
+
+  function submitHours(week, confirm, btn, who){
+    if(busy) return;
+    var tk = who || me;
+    var key=week+'|'+tk;
+    var raw = draft[key];
+    if(raw===undefined){
+      var w=H.weeks.filter(function(x){return x.week===week;})[0];
+      var c=w&&w.cells[tk];
+      raw = (c&&c.hours!==null)?num(c.hours):'';
+    }
+    if(raw===''||raw===null){ alert('先填一个小时数再保存'); return; }
+    var val=Number(raw);
+    if(!isFinite(val)||val<0||val>200){ alert('请填 0–200 之间的小时数'); return; }
+    if(Math.abs(val*4-Math.round(val*4))>1e-9){
+      alert('课时请按 0.25 小时（15 分钟）为单位。\n\n15 分钟 = 0.25\n30 分钟 = 0.5\n45 分钟 = 0.75\n60 分钟 = 1');
+      return;
+    }
+    var w0=H.weeks.filter(function(x){return x.week===week;})[0];
+    if(confirm && !window.confirm('确认这一周是 '+num(val)+' 小时？'+
+       (H.admin?'':'\n\n这一周到 '+(w0?w0.lockDate.slice(5).replace('-','/'):'')+' 为止都能改。'))) return;
+
+    busy=true; var old=btn.textContent; btn.textContent='…'; btn.disabled=true;
+    fetch('/api/hours',{method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({teacher:tk,week:week,hours:val,confirm:confirm,manage:manage})})
+      .then(function(r){
+        if(r.status===401){location.replace('/staff?next=hours');}
+        return r.json();
+      })
+      .then(function(j){
+        busy=false;
+        if(!j.ok){ btn.textContent=old; btn.disabled=false; alert(j.error||'保存失败'); return; }
+        delete draft[key];
+        return loadHours(true);
+      })
+      .catch(function(){busy=false;btn.textContent=old;btn.disabled=false;alert('网络不太顺，再试一次');});
+  }
+
+  loadHours();
+  document.addEventListener('visibilitychange',function(){if(!document.hidden&&!busy)loadHours(true);});
+})();
+</script>
+</body>
+</html>

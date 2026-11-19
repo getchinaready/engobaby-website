@@ -25,6 +25,7 @@ import { listBookings } from './yueka.js';
 const MONTH = '2026-10';
 
 export default async function handler(req, res) {
+  if (process.env.ENGO_YUEKA_OPEN !== '1') return res.status(204).end();
   const q = req.query || Object.fromEntries(new URL(req.url, 'http://x').searchParams);
   const okCron = process.env.CRON_SECRET &&
     req.headers?.authorization === `Bearer ${process.env.CRON_SECRET}`;

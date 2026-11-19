@@ -1,15 +1,18 @@
 {
   "cleanUrls": true,
   "trailingSlash": false,
+  "functions": {
+    "api/staff.js": { "includeFiles": "api/_staff-pages/**" }
+  },
+  "rewrites": [
+    { "source": "/staff", "destination": "/api/staff?view=home" },
+    { "source": "/yueka", "destination": "/api/staff?view=booking" },
+    { "source": "/yueka-teacher", "destination": "/api/staff?view=legacy-hours" },
+    { "source": "/steam", "destination": "/api/staff?view=steam" },
+    { "source": "/hours", "destination": "/api/staff?view=hours" },
+    { "source": "/api/steam/:action", "destination": "/api/steam?action=:action" }
+  ],
   "crons": [
-    {
-      "path": "/api/yueka-digest",
-      "schedule": "0 0 * * *"
-    },
-    {
-      "path": "/api/yueka-digest",
-      "schedule": "0 12 * * *"
-    },
     {
       "path": "/api/hours-remind",
       "schedule": "0 2 * * *"

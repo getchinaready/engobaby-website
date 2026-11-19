@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>英歌宝工作台</title>
+  <link rel="icon" href="/logo.png">
+  <style>
+    :root {
+      font-family: system-ui, "PingFang SC", "Microsoft YaHei", sans-serif;
+      color: #202721;
+      background: #f6f7f3;
+      color-scheme: light;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; }
+    [hidden] { display: none !important; }
+    .shell { width: min(820px, calc(100% - 40px)); margin: 0 auto; }
+    header { border-bottom: 1px solid #dde2d8; background: #fff; }
+    .bar { display: flex; min-height: 68px; align-items: center; justify-content: space-between; gap: 20px; }
+    .brand { display: flex; align-items: center; gap: 13px; font-weight: 720; }
+    .brand img { width: 100px; height: auto; }
+    main { padding-block: clamp(36px, 8vw, 88px); }
+    h1 { font-size: clamp(30px, 6vw, 49px); line-height: 1.17; margin: 0 0 14px; }
+    p { margin: 0; line-height: 1.65; color: #515c52; }
+    #login { max-width: 460px; }
+    form { margin-top: 24px; display: grid; gap: 16px; padding: clamp(18px, 4vw, 28px); }
+    form, .tool { border: 1px solid #dbe1d7; border-radius: 18px; background: #fff; }
+    label { display: grid; gap: 7px; min-width: 0; font-weight: 620; }
+    input, button { font: inherit; border-radius: 10px; min-height: 44px; }
+    input { width: 100%; border: 1px solid #aeb8ac; padding: 0 12px; }
+    button { border: 0; padding: 10px 15px; font-weight: 680; cursor: pointer; }
+    button:disabled { opacity: .6; cursor: default; }
+    .primary { color: #fff; background: #245438; }
+    .secondary { color: #245438; background: #e9f1e8; }
+    .actions { display: flex; flex-wrap: wrap; gap: 10px; }
+    .actions button { flex: 1; }
+    .tools { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; margin-top: 30px; }
+    .tool { color: inherit; text-decoration: none; padding: 24px; box-shadow: 0 3px 15px #22332209; }
+    .tool:hover { border-color: #527e5a; }
+    .tool h2 { margin: 0 0 9px; font-size: 21px; }
+    .tool.steam { border-top: 4px solid #388658; }
+    .tool.hours { border-top: 4px solid #426d9e; }
+    :focus-visible { outline: 3px solid #2f7953; outline-offset: 3px; }
+    #status { font-size: .92rem; }
+    #status:empty { display: none; }
+    #status.error { color: #a13939; }
+    @media (max-width: 540px) { .tools { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="shell bar">
+      <div class="brand"><img src="/logo_cn.png" alt="英歌宝"><span>团队工作台</span></div>
+      <button type="button" id="logout" class="secondary" hidden>退出登录</button>
+    </div>
+  </header>
+  <main class="shell">
+    <p id="loading" role="status">正在载入工作台…</p>
+    <section id="login" hidden>
+      <h1>登录工作台</h1>
+      <p>使用登记的教师邮箱收取登录验证码。</p>
+      <form id="sign-in">
+        <label>教师邮箱<input type="email" id="email" autocomplete="email" maxlength="254" required></label>
+        <label>验证码<input type="text" id="code" autocomplete="one-time-code" autocapitalize="characters" spellcheck="false" maxlength="40"></label>
+        <div class="actions">
+          <button type="button" id="send" class="secondary">发送验证码</button>
+          <button type="submit" class="primary">登录</button>
+        </div>
+        <p id="status" role="status"></p>
+      </form>
+    </section>
+    <section id="workspace" hidden>
+      <h1 id="greeting"></h1>
+      <div class="tools">
+        <a class="tool steam" href="/steam">
+          <h2>STEAM 课程记录</h2>
+          <p>查课程主题，选入备课，记录各班已上的课和实际使用的词句。</p>
+        </a>
+        <a class="tool hours" href="/hours">
+          <h2>教师课时记录</h2>
+          <p>登记每周课时，查看三位老师的累计小时数。</p>
+        </a>
+      </div>
+    </section>
+  </main>
+  <script>
+    const el = id => document.getElementById(id);
+    const form = el('sign-in');
+    const email = el('email');
+    const code = el('code');
+    const query = new URLSearchParams(location.search);
+    const next = query.get('next');
+    if (query.has('k') || query.has('admin')) {
+      history.replaceState(null, '', ['steam', 'hours'].includes(next) ? '/staff?next=' + next : '/staff');
+    }
+
+    function show(name) {
+      el('loading').hidden = true;
+      el('login').hidden = Boolean(name);
+      el('workspace').hidden = !name;
+      el('logout').hidden = !name;
+      if (name) el('greeting').textContent = name + '，你好';
+    }
+
+    function status(message, error = false) {
+      el('status').textContent = message;
+      el('status').className = error ? 'error' : '';
+    }
+
+    async function post(action) {
+      const response = await fetch('/api/staff', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action, email: email.value, code: action === 'login' ? code.value : undefined }),
+      });
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.error || '暂时无法登录，请重试。');
+      return data;
+    }
+
+    el('send').addEventListener('click', async event => {
+      if (!email.reportValidity()) return;
+      event.target.disabled = true;
+      status('正在发送验证码…');
+      try {
+        await post('send');
+        status('验证码已请求。请查收登记邮箱，在 10 分钟内输入验证码。');
+        code.focus();
+      } catch (error) {
+        status(error.message, true);
+      } finally {
+        event.target.disabled = false;
+      }
+    });
+
+    form.addEventListener('submit', async event => {
+      event.preventDefault();
+      if (!code.value.trim()) {
+        status('请填写邮件中的验证码。', true);
+        code.focus();
+        return;
+      }
+      const submit = form.querySelector('button[type="submit"]');
+      submit.disabled = true;
+      status('正在登录…');
+      try {
+        const { name } = await post('login');
+        form.reset();
+        status('');
+        if (next === 'steam' || next === 'hours') location.replace('/' + next);
+        else show(name);
+      } catch (error) {
+        status(error.message, true);
+      } finally {
+        submit.disabled = false;
+      }
+    });
+
+    el('logout').addEventListener('click', async event => {
+      event.target.disabled = true;
+      try {
+        await post('logout');
+        location.replace('/staff');
+      } catch {
+        event.target.textContent = '退出失败，请重试';
+        event.target.disabled = false;
+      }
+    });
+
+    fetch('/api/staff', { cache: 'no-store' })
+      .then(response => response.json())
+      .then(({ name }) => show(name))
+      .catch(() => {
+        show(null);
+        status('登录状态暂时无法读取，请重试。', true);
+      });
+  </script>
+</body>
+</html>

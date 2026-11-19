@@ -38,6 +38,10 @@ const expand  = (d) => `${d.slice(0,4)}-${d.slice(4,6)}-${d.slice(6,8)}`;
 const norm = (s) => String(s || '').toLowerCase().replace(/[^a-z0-9]/g, '');
 
 export default async function handler(req, res) {
+  if (process.env.ENGO_YUEKA_OPEN !== '1') {
+    res.setHeader('Cache-Control', 'no-store');
+    return res.status(503).json({ ok: false, error: '成人英语月卡订课暂未开放。' });
+  }
   const codeEnv = process.env.YUEKA_CODE;
   if (!codeEnv) return res.status(500).json({ ok: false, error: '服务端未配置 YUEKA_CODE' });
 

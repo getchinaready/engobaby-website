@@ -7,7 +7,7 @@
  * 例：9/14–9/20 这一周 → 9/21 发第一次，9/26 发第二次，9/27 截止，9/28 零点锁。
  *
  * 触发：Vercel Cron（每天 10:00 北京时间）。
- * 手动：/api/hours-remind?k=YUEKA_CODE           看今天会发给谁（不真发）用 &dry=1
+ * 带 Cron 鉴权时可用 ?dry=1 查看今天的提醒对象。
  */
 
 import { put, list } from '@vercel/blob';
@@ -19,11 +19,11 @@ const compact = (d) => d.replace(/-/g, '');
 
 export default async function handler(req, res) {
   const q = req.query || Object.fromEntries(new URL(req.url, 'http://x').searchParams);
-  const okCron = process.env.CRON_SECRET &&
-    req.headers?.authorization === `Bearer ${process.env.CRON_SECRET}`;
-  const okKey = process.env.YUEKA_CODE && q.k === process.env.YUEKA_CODE;
-  const okOpen = !process.env.CRON_SECRET && !q.k;
-  if (!okCron && !okKey && !okOpen) return res.status(403).json({ ok: false });
+  res.setHeader('Cache-Control', 'no-store');
+  if (req.method !== 'GET' || !process.env.CRON_SECRET ||
+      req.headers?.authorization !== `Bearer ${process.env.CRON_SECRET}`) {
+    return res.status(403).json({ ok: false });
+  }
 
   try {
     const today = todayCN();
@@ -79,7 +79,7 @@ const esc = (v) => String(v ?? '').replace(/[&<>"]/g,
   (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 
 async function sendRemind(teacher, job) {
-  const { RESEND_API_KEY, MAIL_FROM, YUEKA_CODE, SITE_URL } = process.env;
+  const { RESEND_API_KEY, MAIL_FROM, SITE_URL } = process.env;
   if (!RESEND_API_KEY) throw new Error('RESEND_API_KEY 未配置');
   if (!teacher.email) throw new Error(`${teacher.label} 没有配置邮箱`);
 
@@ -87,7 +87,7 @@ async function sendRemind(teacher, job) {
   const lastDay = new Date(lockAt(w.end) + 8 * 3600000 - DAY).toISOString().slice(0, 10);
   const daysLeft = EDIT_DAYS - job.nth + 1;
   const base = SITE_URL || 'https://www.engobaby.com';
-  const link = `${base}/yueka-teacher${YUEKA_CODE ? '?k=' + YUEKA_CODE : ''}`;
+  const link = `${base.replace(/\/$/, '')}/hours`;
   const urgent = job.nth >= 6;
 
   const title = urgent

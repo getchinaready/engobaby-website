@@ -16,6 +16,10 @@ const TIMES = {
 };
 
 export default function handler(req, res) {
+  if (process.env.ENGO_YUEKA_OPEN !== '1') {
+    res.setHeader('Cache-Control', 'no-store');
+    return res.status(503).send('成人英语月卡订课暂未开放。');
+  }
   const q = req.query || Object.fromEntries(new URL(req.url, 'http://x').searchParams);
   if (q.k !== process.env.YUEKA_CODE) return res.status(403).send('forbidden');
 
