@@ -1,5 +1,5 @@
 import { randomUUID } from 'node:crypto';
-import { BlobPreconditionFailedError, get, put } from '@vercel/blob';
+import { BlobPreconditionFailedError, get, head, put } from '@vercel/blob';
 import { getStaff, internalHeaders, sameOriginJson } from './_staff-auth.js';
 
 const path = process.env.VERCEL_ENV === 'preview' ? 'steam/v1/preview.json' : 'steam/v1/board.json';
@@ -107,15 +107,19 @@ function isSnapshot(board) {
 
 async function update(res, apply) {
   for (let attempt = 0; attempt < 4; attempt++) {
-    const state = await get(path, readOptions);
+    const state = await get(path, { ...readOptions, headers: { 'Accept-Encoding': 'identity' } });
     if (!state) return unavailable(res);
     const board = await new Response(state.stream).json();
     const result = apply(board);
     if (result.error) return res.status(result.status).json({ error: result.error });
+
+    // Use the storage API's version for writes. The delivery CDN may return a weak ETag.
+    const metadata = await head(path);
+    if (!metadata.etag || metadata.etag !== state.blob.etag.replace(/^W\//, '')) continue;
     board.revision++;
     try {
       await put(path, JSON.stringify(board), {
-        ...writeOptions, allowOverwrite: true, ifMatch: state.blob.etag,
+        ...writeOptions, allowOverwrite: true, ifMatch: metadata.etag,
       });
       return res.status(result.status).json({ ok: true, ...result.data });
     } catch (error) {
